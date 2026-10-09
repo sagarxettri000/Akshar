@@ -152,12 +152,13 @@ Released under the MIT License. See [`LICENSE`](LICENSE) for details.
 
 ## Lesson Content Contribution
 
-Four original English-language lessons were contributed for NEB Grade 11 and Grade 12:
-
+Six original English-language lessons were contributed for NEB Grade 11 and Grade 12:
 - Grade 11 Physics — Motion in a Straight Line
 - Grade 11 Chemistry — Atomic Structure
 - Grade 12 Biology — Cell Division
 - Grade 12 Mathematics — Derivatives
+- Grade 11 Chemistry — Chemical Bonding
+- Grade 12 Biology — Basic Principles of Genetics
 
 The lessons are stored in `data/lessons.json` using the application's 7-field lesson schema
 (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) and are loaded by `content.py`.
