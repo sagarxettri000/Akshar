@@ -159,7 +159,29 @@ Four original English-language lessons were contributed for NEB Grade 11 and Gra
 - Grade 12 Biology — Cell Division
 - Grade 12 Mathematics — Derivatives
 
-The lessons are stored in `data/lessons.json` using the application's 7-field lesson schema (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) and are loaded by `content.py`.
+The lessons are stored in `data/lessons.json` using the application's 7-field lesson schema
+(`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) and are loaded by `content.py`.
+
+### Authoring Checklist
+
+When adding a new lesson, use the following checklist to ensure consistency and quality:
+
+- **Clear explanation:** The core concept is explained in accessible language, assuming the target grade level. Avoid dense paragraphs; use short sections with descriptive headings.
+- **Correct examples:** Every formula, equation, or worked example is mathematically/scientifically correct. Units are consistent and SI‑compliant where applicable. Symbols and notation match the conventions used in Nepalese NEB/CEE/IOE curriculum.
+- **Consistent terminology:** Technical terms (e.g., "momentum", "atomic number", "derivative", "continuity") are used uniformly. On first mention, retain the English term in parentheses if it helps learners recognise textbook terminology.
+- **Appropriate difficulty:** Content stays at an introductory‑to‑intermediate level for the stated grade. Do not introduce advanced topics that go beyond the intended scope unless explicitly called out as enrichment.
+- **Short self‑check:** Where useful, include a brief exercise (1‑2 questions) with answers. This reinforces learning and gives readers a way to verify understanding.
+
+### Multilingual content (Nepali / English)
+
+When contributing a Nepali‑language version of a lesson:
+
+- **Preserve meaning, not wording:** Translate naturally; do not translate word‑for‑word. The Nepali version should convey the same concepts, examples, and conclusions as the English source.
+- **Keep equations and units in English:** Mathematical notation, scientific symbols, unit abbreviations (e.g., `m/s²`, `amu), and standard formula symbols remain in English so they render correctly and match curriculum references.
+- **Introduce technical terms in Nepali with English parenthesises:** On first mention, write the Nepali term followed by the English term in parentheses (e.g., "नेट बल (net force)"). This helps learners connect the two languages while reading textbook‑style content.
+- **Do not change the JSON schema:** The 7‑field structure (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) is unchanged for multilingual lessons. Only the `language` field and the `content` text differ.
+- **Name the ID by replacing the language suffix:** If the English lesson ID ends in `‑en`, the Nepali version should end in `‑ne` (e.g., `phy-newton-2-en` → `phy-newton-2‑ne`). This convention applies to lesson pairs that have both English and Nepali versions. The base portion of the ID (everything before the language suffix) stays the same, which keeps the pair linked and prevents duplicate IDs. Existing lessons without a Nepali version (such as `grade11-physics-motion` and `grade12-mathematics-derivatives`) omit the language suffix entirely. For future lesson pairs, use a matching `-en`/`-ne` suffix pattern to keep IDs consistent and searchable.
+- **Validate the same way:** Run `python validate_lessons.py` and `python -m pytest tests/test_validate_lessons.py tests/test_content.py -q` to confirm the new lesson passes all checks.
 
 ### Validating lesson data
 
@@ -175,4 +197,4 @@ Run the lesson-related tests:
 python -m pytest tests/test_validate_lessons.py tests/test_content.py -q
 ```
 
-The validator checks JSON syntax, root structure, required fields, unique IDs, non-empty strings, and valid language codes. All tests use temporary files and never modify the real `data/lessons.json`.
+The validator checks JSON syntax, root structure, required fields, unique IDs, non-empty strings, and valid language codes (`en`, `ne`). All tests use temporary files and never modify the real `data/lessons.json`.

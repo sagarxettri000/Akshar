@@ -64,6 +64,18 @@ class TestValidData:
         ok, _ = validate_lessons.validate_lesson_file(str(path))
         assert ok is True
 
+    def test_unicode_content_passes(self, tmp_path):
+        """Lesson content with Nepali Unicode characters should pass validation."""
+        lesson = _valid_lesson("unicode-1", language="ne")
+        lesson["content"] = (
+            "एक परिचयात्मक पाठ। "
+            "गति एक वस्तु अपनी परिस्थिति अनुसार समय साथ बदलियो अवस्थाको बारे बताता ह। "
+            "एनवीआईडिया चिपहरू आधुनिक गणितीय मॉडलहरू मा प्रयोग हुन्छ।"
+        )
+        path = _valid_file(tmp_path, lessons=[lesson])
+        ok, _ = validate_lessons.validate_lesson_file(str(path))
+        assert ok is True
+
     def test_extra_top_level_keys_ok(self, tmp_path):
         """Extra top-level keys like 'note' should not cause failure."""
         data = {"version": 1, "note": "test", "lessons": [_valid_lesson("x")]}
