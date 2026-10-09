@@ -96,6 +96,9 @@ def render_summary_tab(lesson: dict, api_key: str | None) -> None:
     summary = st.session_state.get(state_key)
     if summary:
         st.markdown(summary)
+        if st.button("Regenerate", key=f"regen-summary::{lesson['id']}"):
+            st.session_state.pop(state_key, None)
+            st.rerun()
         render_ai_notice()
 
 
