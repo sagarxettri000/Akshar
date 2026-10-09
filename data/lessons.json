@@ -30,6 +30,15 @@
       "content": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose. It takes place mainly in the chloroplasts, which contain the green pigment chlorophyll. The overall balanced equation is 6 CO2 + 6 H2O + light energy -> C6H12O6 + 6 O2. The process has two stages: the light-dependent reactions, which occur in the thylakoid membranes and produce ATP and NADPH while releasing oxygen, and the light-independent reactions (the Calvin cycle), which occur in the stroma and use ATP and NADPH to fix carbon dioxide into glucose."
     },
     {
+      "id": "bio-photosynthesis-ne",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Photosynthesis",
+      "title": "प्रकाश संश्लेषण",
+      "language": "ne",
+      "content": "प्रकाश संश्लेषण त्यो प्रक्रिया हो जसमा हरिया वनस्पति, शैवाल र केही ब्याक्टेरियाले प्रकाश ऊर्जालाई ग्लुकोजमा सञ्चित रासायनिक ऊर्जामा परिणत गर्छन्। यो मुख्यतया क्लोरोप्लास्टमा हुन्छ, जसमा हरियो वर्णक क्लोरोफिल हुन्छ। कुल सन्तुलित समीकरण: 6 CO2 + 6 H2O + प्रकाश ऊर्जा -> C6H12O6 + 6 O2। यो प्रक्रियाका दुई चरण छन्: प्रकाश-निर्भर प्रतिक्रिया, जो थाइलाकोइड झिल्लीमा हुन्छ र ATP तथा NADPH उत्पादन गर्दै अक्सिजन निकाल्छ, र प्रकाश-स्वतन्त्र प्रतिक्रिया (क्याल्भिन चक्र), जो स्ट्रोमामा हुन्छ र ATP तथा NADPH प्रयोग गरी कार्बन डाइअक्साइडलाई ग्लुकोजमा स्थिर गर्छ।"
+    },
+    {
       "id": "chem-acids-bases-en",
       "track": "NEB Grade 11",
       "subject": "Chemistry",
@@ -37,6 +46,15 @@
       "title": "Acids and Bases",
       "language": "en",
       "content": "Acids are substances that donate protons (H+ ions) in aqueous solution, while bases accept protons. The pH scale, ranging from 0 to 14, measures the concentration of hydrogen ions: pH less than 7 is acidic, pH equal to 7 is neutral, and pH greater than 7 is basic. Strong acids such as hydrochloric acid (HCl) ionise completely in water, whereas weak acids such as acetic acid (CH3COOH) ionise only partially. Acids react with bases in a neutralisation reaction to form a salt and water, for example HCl + NaOH -> NaCl + H2O."
+    },
+    {
+      "id": "chem-acids-bases-ne",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Acids, Bases and Salts",
+      "title": "अम्ल र क्षार",
+      "language": "ne",
+      "content": "अम्ल ती पदार्थ हुन् जुन जलीय घोलमा प्रोटोन (H+ आयन) दान गर्छन्, भने क्षार प्रोटोन ग्रहण गर्छन्। ० देखि १४ सम्मको pH स्केलले हाइड्रोजन आयनको सान्द्रता मापन गर्छ: pH < 7 अम्लीय, pH = 7 तटस्थ, र pH > 7 क्षारीय। हाइड्रोक्लोरिक अम्ल (HCl) जस्ता बलियो अम्ल पानीमा पूर्ण रूपमा आयनित हुन्छन्, तर एसिटिक अम्ल (CH3COOH) जस्ता कमजोर अम्ल आंशिक रूपमा मात्र आयनित हुन्छन्। अम्ल क्षारसँग उदासीनीकरण प्रतिक्रियामा मिलेर नुन र पानी बनाउँछन्, उदाहरण HCl + NaOH -> NaCl + H2O।"
     },
     {
       "id": "cee-kinematics-en",
@@ -48,6 +66,15 @@
       "content": "For motion in a straight line with uniform acceleration a, the three kinematic equations are: v = u + a t; s = u t + (1/2) a t^2; and v^2 = u^2 + 2 a s. Here u is the initial velocity, v is the final velocity, s is the displacement, and t is the time. These equations apply only when the acceleration is constant and the motion is along a straight line."
     },
     {
+      "id": "cee-kinematics-ne",
+      "track": "CEE",
+      "subject": "Physics",
+      "topic": "Kinematics",
+      "title": "गतिका समीकरणहरू",
+      "language": "ne",
+      "content": "एकनासको त्वरण a सहित सरल रेखामा हुने गतिका लागि तीन गतिक समीकरणहरू हुन्: v = u + a t; s = u t + (1/2) a t^2; र v^2 = u^2 + 2 a s। यहाँ u सुरुको वेग, v अन्तिम वेग, s विस्थापन, र t समय हो। यी समीकरण त्वरण स्थिर र गति सरल रेखामा हुँदा मात्र लागू हुन्छन्।"
+    },
+    {
       "id": "ioe-quadratics-en",
       "track": "IOE",
       "subject": "Mathematics",
@@ -55,6 +82,15 @@
       "title": "Quadratic Equations",
       "language": "en",
       "content": "A quadratic equation in one variable x has the standard form a x^2 + b x + c = 0, where a, b, and c are real numbers and a is not equal to 0. The roots are given by the quadratic formula x = (-b +/- sqrt(b^2 - 4ac)) / (2a). The expression b^2 - 4ac is called the discriminant (D). If D > 0 the equation has two distinct real roots; if D = 0 it has one repeated real root; and if D < 0 it has no real roots (two complex roots). The sum of the roots is -b/a and the product of the roots is c/a."
+    },
+    {
+      "id": "ioe-quadratics-ne",
+      "track": "IOE",
+      "subject": "Mathematics",
+      "topic": "Algebra",
+      "title": "द्विघात समीकरण",
+      "language": "ne",
+      "content": "एउटा चर x मा द्विघात समीकरणको मानक रूप a x^2 + b x + c = 0 हुन्छ, जहाँ a, b, c वास्तविक संख्या र a ≠ 0। मूलहरू द्विघात सूत्रबाट पाइन्छ: x = (-b ± sqrt(b^2 - 4ac)) / (2a)। b^2 - 4ac लाई विभेदक (D) भनिन्छ। D > 0 भए दुई भिन्न वास्तविक मूल; D = 0 भए एउटै दोहोरो वास्तविक मूल; र D < 0 भए वास्तविक मूल हुँदैन (दुई सम्मिश्र मूल)। मूलहरूको योग -b/a र गुणनफल c/a हुन्छ।"
     },
     {
       "id": "grade11-physics-motion",

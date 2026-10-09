@@ -146,7 +146,7 @@ See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, includi
 - [x] Gemma 4 AI service (summaries, grounded Q&A, MCQs, flashcards) with validation and tests
 - [x] Streamlit learning app with an Explain / Ask / Practise / Flashcards flow
 - [x] Grounded bilingual Q&A tutor (English / Nepali replies)
-- [x] Sample bilingual lesson content
+- [x] Bilingual lesson content (English + Nepali across every track)
 - [x] Session-scoped learner progress tracking
 - [ ] Broader, source-attributed curriculum content
 
