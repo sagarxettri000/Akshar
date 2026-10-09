@@ -20,3 +20,6 @@ __pycache__/
 
 # Streamlit local secrets
 .streamlit/secrets.toml
+
+# Vercel local project link
+.vercel
