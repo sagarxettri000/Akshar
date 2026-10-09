@@ -28,6 +28,11 @@ AI_NOTICE = (
 )
 MCQ_COUNT = 3
 FLASHCARD_COUNT = 4
+ASK_LANGUAGE_OPTIONS = {
+    "Auto (match lesson)": None,
+    "English": "en",
+    "नेपाली (Nepali)": "ne",
+}
 
 
 @st.cache_data(show_spinner=False)
@@ -180,6 +185,63 @@ def render_flashcards_tab(lesson: dict, api_key: str | None) -> None:
         render_ai_notice()
 
 
+def render_ask_tab(lesson: dict, api_key: str | None) -> None:
+    state_key = f"chat::{lesson['id']}"
+    if state_key not in st.session_state:
+        st.session_state[state_key] = []
+    history: list[dict] = st.session_state[state_key]
+
+    if not history:
+        st.caption(
+            "Ask a question about this lesson. Gemma 4 answers using only the "
+            "lesson text and says so when the lesson does not cover it."
+        )
+
+    for message in history:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    language_label = st.selectbox(
+        "Answer language",
+        list(ASK_LANGUAGE_OPTIONS),
+        key=f"ask-lang::{lesson['id']}",
+        help="Choose the language Gemma 4 should reply in.",
+    )
+
+    with st.form(key=f"ask-form::{lesson['id']}", clear_on_submit=True):
+        question = st.text_input(
+            "Your question",
+            placeholder="e.g. Why is acceleration inversely proportional to mass?",
+        )
+        submitted = st.form_submit_button("Ask Gemma 4")
+
+    if submitted:
+        if require_api_key(api_key):
+            if not question.strip():
+                st.warning("Please type a question first.")
+            else:
+                history.append({"role": "user", "content": question.strip()})
+                with st.spinner("Gemma 4 is thinking…"):
+                    try:
+                        answer = ai_service.ask_question(
+                            lesson["content"],
+                            question.strip(),
+                            api_key,
+                            history=history[:-1],
+                            language=ASK_LANGUAGE_OPTIONS[language_label],
+                        )
+                        history.append({"role": "assistant", "content": answer})
+                    except AIServiceError as exc:
+                        st.error(f"Could not answer: {exc}")
+                st.rerun()
+
+    if history:
+        if st.button("Clear conversation", key=f"clear-chat::{lesson['id']}"):
+            st.session_state[state_key] = []
+            st.rerun()
+        render_ai_notice()
+
+
 def main() -> None:
     st.set_page_config(
         page_title="Akshar — Learning Platform for Nepal",
@@ -232,11 +294,13 @@ def main() -> None:
     st.caption("Team-authored study notes for this demo, not official NEB/IOE material.")
 
     api_key = get_api_key()
-    tab_summary, tab_practice, tab_flashcards = st.tabs(
-        ["📝 Explain", "🎯 Practise", "🧠 Flashcards"]
+    tab_summary, tab_ask, tab_practice, tab_flashcards = st.tabs(
+        ["📝 Explain", "💬 Ask", "🎯 Practise", "🧠 Flashcards"]
     )
     with tab_summary:
         render_summary_tab(lesson, api_key)
+    with tab_ask:
+        render_ask_tab(lesson, api_key)
     with tab_practice:
         render_practice_tab(lesson, api_key)
     with tab_flashcards:
