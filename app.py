@@ -214,16 +214,6 @@ def main() -> None:
                 "Add `GOOGLE_API_KEY` to `.streamlit/secrets.toml` or your environment."
             )
 
-        st.divider()
-        st.subheader("Your progress")
-        summary = progress.summarize(get_progress())
-        st.caption(f"Lessons practised: **{summary['lessons_practised']}**")
-        st.caption(f"Practice attempts: **{summary['total_attempts']}**")
-        st.caption(f"Average best score: **{summary['average_best_percent']}%**")
-        if st.button("Reset progress"):
-            st.session_state["progress"] = progress.new_state()
-            st.rerun()
-
     lesson = next(item for item in variants if item["language"] == language)
 
     st.subheader(lesson["title"])
@@ -245,6 +235,19 @@ def main() -> None:
         render_practice_tab(lesson, api_key)
     with tab_flashcards:
         render_flashcards_tab(lesson, api_key)
+
+    # Render progress after the tabs so the counters reflect any attempt recorded
+    # during this run — for example, immediately after the learner checks answers.
+    with st.sidebar:
+        st.divider()
+        st.subheader("Your progress")
+        summary = progress.summarize(get_progress())
+        st.caption(f"Lessons practised: **{summary['lessons_practised']}**")
+        st.caption(f"Practice attempts: **{summary['total_attempts']}**")
+        st.caption(f"Average best score: **{summary['average_best_percent']}%**")
+        if st.button("Reset progress"):
+            st.session_state["progress"] = progress.new_state()
+            st.rerun()
 
     st.divider()
     st.caption("Akshar · Team Nepluro · MIT License")
