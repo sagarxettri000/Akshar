@@ -53,6 +53,8 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `tests/` | Unit tests for the AI service and content (no live API calls) |
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Development and testing dependencies |
+| `landing/` | Static landing page deployed to Vercel |
+| `docs/DEPLOYMENT.md` | Step-by-step deployment guide |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
 | `GEMINI.md` | Gemini CLI entry point that imports `AGENTS.md` |
 | `FIRST_PROMPT.md` | Read-only repository audit prompt |
@@ -106,6 +108,15 @@ from ai_service import generate_summary
 
 print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
 ```
+
+## Deployment
+
+| Part | Where | Why |
+|------|-------|-----|
+| `app.py` | [Streamlit Community Cloud](https://share.streamlit.io) | Streamlit needs a long-running Python server with WebSockets — Vercel cannot run it |
+| `landing/` | [Vercel](https://vercel.com) | A static landing page, which Vercel is built for |
+
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, including how to store the API key safely in Streamlit secrets.
 
 ## Design principles
 
