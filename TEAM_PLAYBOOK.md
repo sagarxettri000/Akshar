@@ -1,8 +1,8 @@
-# Nepluro / Akshar — Hackathon Execution Playbook
+# Akshar — Team Playbook
 
 ## Project
 
-**Akshar — Learning Platform for Nepal** · **Team:** Nepluro · **Members:** Sagar Katwal · Dipson Basnet · Dhiraj Shrestha
+**Akshar — Learning Platform for Nepal** · **Team:** Nepluro (Sagar Katwal · Dipson Basnet · Dhiraj Shrestha)
 
 **Problem:** Nepali learners need accessible, understandable, trustworthy support for NEB Grade 11–12 learning and CEE/IOE entrance preparation.
 
@@ -64,7 +64,7 @@ The product should demonstrate education-specific engineering rather than merely
 - A small repeatable evaluation set: known-answer STEM questions, bilingual prompts, an ambiguous question, and a no-evidence case.
 - A real, visible, testable Gemma 4 inference path. Be honest about model size, runtime, hosted/local behavior, latency, and fallbacks.
 
-Do not try to win by claiming features you cannot show. Do not call content official unless its origin is verified. Use only sources the team has permission to use and document their provenance.
+Present only features you can actually demonstrate. Do not call content official unless its origin is verified. Use only sources the team has permission to use, and document their provenance.
 
 ## Demo/story structure
 
@@ -84,7 +84,7 @@ Rehearse from a fresh session and a clean start. Keep a backup recording, but ne
 - **Checkpoint B — shared contract:** Agree on topic/content schema, tutor request/response shape, error format, and citation shape.
 - **Checkpoint C — vertical slices:** Each owner completes a small end-to-end piece; commit and integrate early.
 - **Checkpoint D — integration:** Run the full flow in the actual target environment; fix the most visible reliability issues.
-- **Checkpoint E — judging evidence:** Add setup instructions, architecture/model notes, source attribution, evaluation examples, and demo script.
+- **Checkpoint E — review evidence:** Add setup instructions, architecture/model notes, source attribution, evaluation examples, and a demo script.
 - **Checkpoint F — final rehearsal:** Fresh clone or clean checkout, follow README exactly, verify credentials/config, exercise the happy path and one failure path, then record the demo.
 
 Before submission, check the exact hackathon's current official rules and judging rubric. Different Gemma 4 events may use different criteria or submission requirements.

@@ -1,10 +1,10 @@
 # Akshar — Repository Instructions for AI Coding Agents
 
-> **Team:** Nepluro · **Project:** Akshar — Learning Platform for Nepal
-> **Members:** Sagar Katwal, Dipson Basnet, Dhiraj Shrestha
+> **Project:** Akshar — Learning Platform for Nepal
+> **Team:** Nepluro (Sagar Katwal · Dipson Basnet · Dhiraj Shrestha)
 > **Primary users:** Nepali students studying NEB Grade 11–12 and preparing for CEE/IOE entrance exams.
 
-This file is the canonical, project-wide instruction source. Follow it for every coding task. Existing repository reality takes precedence over assumptions in this document: inspect the codebase before deciding how to implement anything.
+This document is the canonical, tool-agnostic instruction source for everyone who contributes to Akshar — human developers and any AI coding agent, in any editor, environment, or location. Follow it for every task. Where this document and the actual repository disagree, the repository wins: inspect the code before deciding how to implement anything.
 
 ## 1. Mission and priorities
 
@@ -18,7 +18,7 @@ Priorities, in order:
 4. Excellent Nepali/English UX, accessibility, and performance on modest devices or connections.
 5. Clear documentation, reproducible setup, tests, and a compelling live/video demonstration.
 
-Do not promise that Akshar will win. Maximize the team's chances by building and proving a differentiated, honest, working product. A beautiful mockup with fake AI results is not a finished AI feature.
+Prefer a differentiated, honest, working product over impressive-sounding claims. A polished mockup with fabricated AI results is not a finished AI feature.
 
 ## 2. Mandatory first step: understand the repository
 
