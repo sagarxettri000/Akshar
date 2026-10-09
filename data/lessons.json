@@ -1,34 +1,96 @@
-[
-  {
-    "id": "grade11-physics-motion",
-    "grade": "11",
-    "subject": "Physics",
-    "chapter": "Motion in a Straight Line",
-    "exam_tags": ["NEB", "CEE", "IOE"],
-    "content": "Motion in a Straight Line\n\nMotion is the change in position of an object with respect to its surroundings over time. When an object moves along a single direction, we call it motion in a straight line, also known as one-dimensional motion.\n\nKey Concepts\n\nDistance and Displacement\n- Distance is the total length of the path travelled by an object. It is a scalar quantity and is always positive.\n- Displacement is the shortest straight-line distance between the initial and final positions, along with direction. It is a vector quantity and can be positive, negative, or zero.\n\nSpeed and Velocity\n- Speed is the rate of change of distance with time. It is a scalar quantity.\n  Speed = Distance / Time\n- Velocity is the rate of change of displacement with time. It is a vector quantity.\n  Velocity = Displacement / Time\n- Average velocity is total displacement divided by total time taken.\n\nAcceleration\nAcceleration is the rate of change of velocity with time. It is a vector quantity.\n  Acceleration = Change in Velocity / Time\nThe SI unit of acceleration is metre per second squared (m/s^2).\n\nEquations of Motion\nFor an object moving with uniform acceleration along a straight line, three fundamental equations connect initial velocity (u), final velocity (v), acceleration (a), time (t), and displacement (s):\n\n1. v = u + at\n2. s = ut + (1/2)at^2\n3. v^2 = u^2 + 2as\n\nThese equations apply only when acceleration is constant and motion is along a straight line.\n\nGraphical Representation\n- A position-time graph shows how position changes with time. The slope of this graph gives velocity.\n- A velocity-time graph shows how velocity changes with time. The slope gives acceleration, and the area under the curve gives displacement.\n\nFree Fall\nWhen an object falls freely under gravity near the Earth's surface, it experiences constant acceleration g, approximately 9.8 m/s^2, directed downward. The equations of motion apply with a = g (taking downward as positive).\n\nSummary\nMotion in a straight line forms the foundation of kinematics. Understanding the difference between scalar and vector quantities, and mastering the three equations of motion, is essential for solving problems in mechanics."
-  },
-  {
-    "id": "grade11-chemistry-atomic-structure",
-    "grade": "11",
-    "subject": "Chemistry",
-    "chapter": "Atomic Structure",
-    "exam_tags": ["NEB", "CEE", "IOE"],
-    "content": "Atomic Structure\n\nAtomic structure describes how an atom is organised — the arrangement of subatomic particles and the distribution of electrons around the nucleus. Understanding atomic structure explains chemical behaviour, bonding, and the periodic table.\n\nSubatomic Particles\nAn atom consists of three fundamental particles:\n\n- Proton: found in the nucleus, carries a charge of +1, and has a mass of approximately 1 atomic mass unit (amu).\n- Neutron: found in the nucleus, carries no charge, and has a mass of approximately 1 amu.\n- Electron: found in orbitals around the nucleus, carries a charge of -1, and has a negligible mass (about 1/1836 amu).\n\nThe number of protons defines the atomic number (Z), which determines the element. The total number of protons and neutrons gives the mass number (A).\n\nBohr's Model\nNiels Bohr proposed that electrons revolve around the nucleus in fixed circular orbits, or energy levels, without radiating energy. Each orbit corresponds to a specific energy. Electrons jump between orbits by absorbing or emitting energy in discrete packets called quanta.\n\nThe energy of an electron in the nth orbit of a hydrogen atom is:\n  E_n = -13.6 / n^2 eV\nwhere n is the principal quantum number (n = 1, 2, 3, ...).\n\nQuantum Numbers\nThe state of an electron in an atom is described by four quantum numbers:\n\n1. Principal quantum number (n): indicates the energy level or shell (n = 1, 2, 3, ...).\n2. Azimuthal quantum number (l): indicates the subshell or orbital shape (l = 0 to n-1). Values 0, 1, 2, 3 correspond to s, p, d, f subshells.\n3. Magnetic quantum number (m_l): indicates the orientation of the orbital in space (m_l = -l to +l).\n4. Spin quantum number (m_s): indicates the spin direction of the electron (+1/2 or -1/2).\n\nElectron Configuration\nElectrons fill orbitals in order of increasing energy, following three rules:\n\n- Aufbau principle: electrons occupy the lowest energy orbitals first.\n- Pauli exclusion principle: no two electrons in an atom can have the same set of four quantum numbers; an orbital holds at most two electrons with opposite spins.\n- Hund's rule: electrons fill degenerate orbitals singly before pairing up.\n\nFor example, the electron configuration of sodium (Z = 11) is 1s^2 2s^2 2p^6 3s^1.\n\nSummary\nAtomic structure connects the microscopic arrangement of subatomic particles to the macroscopic properties of elements. Mastery of quantum numbers and electron configuration is essential for understanding chemical bonding and periodicity."
-  },
-  {
-    "id": "grade12-biology-cell-division",
-    "grade": "12",
-    "subject": "Biology",
-    "chapter": "Cell Division",
-    "exam_tags": ["NEB", "CEE", "IOE"],
-    "content": "Cell Division\n\nCell division is the process by which a parent cell divides into two or more daughter cells. It is essential for growth, repair, reproduction, and the continuity of life. There are two main types: mitosis and meiosis.\n\nThe Cell Cycle\nThe cell cycle is the series of events a cell goes through from one division to the next. It consists of two main phases:\n\n- Interphase: the period between divisions, during which the cell grows and duplicates its DNA. Interphase includes G1 (cell growth), S (DNA synthesis), and G2 (preparation for division).\n- M phase (Mitotic phase): the period of actual nuclear and cytoplasmic division.\n\nMitosis\nMitosis produces two genetically identical daughter cells, each with the same number of chromosomes as the parent cell. It is used for growth, asexual reproduction, and tissue repair. Mitosis has four stages:\n\n1. Prophase: chromosomes condense and become visible; the nuclear envelope breaks down; spindle fibres form.\n2. Metaphase: chromosomes line up at the cell's equator (metaphase plate); spindle fibres attach to centromeres.\n3. Anaphase: sister chromatids separate and are pulled toward opposite poles of the cell.\n4. Telophase: chromosomes decondense; nuclear envelopes re-form around each set; the cell begins to divide.\n\nCytokinesis, the division of the cytoplasm, usually follows telophase. In animal cells, a cleavage furrow forms; in plant cells, a cell plate forms.\n\nMeiosis\nMeiosis produces four genetically diverse daughter cells, each with half the chromosome number of the parent cell. It occurs in reproductive cells (gametes) and involves two successive divisions: meiosis I and meiosis II.\n\n- Meiosis I (reduction division): homologous chromosomes pair up, exchange genetic material through crossing over, and then separate. This reduces the chromosome number from diploid (2n) to haploid (n).\n- Meiosis II: sister chromatids separate, similar to mitosis, producing four haploid cells.\n\nSignificance of Meiosis\n- Maintains a constant chromosome number across generations.\n- Introduces genetic variation through crossing over and independent assortment, which drives evolution.\n\nComparison\n- Mitosis: one division, two diploid daughter cells, genetically identical, used for growth and repair.\n- Meiosis: two divisions, four haploid daughter cells, genetically diverse, used for sexual reproduction.\n\nSummary\nCell division is fundamental to life. Mitosis ensures growth and repair, while meiosis enables sexual reproduction and genetic diversity. Understanding both processes is key to genetics, development, and medicine."
-  },
-  {
-    "id": "grade12-mathematics-derivatives",
-    "grade": "12",
-    "subject": "Mathematics",
-    "chapter": "Derivatives",
-    "exam_tags": ["NEB", "CEE", "IOE"],
-    "content": "Derivatives\n\nThe derivative of a function measures the rate at which the function's value changes as its input changes. It is a central concept in differential calculus and has wide applications in physics, engineering, economics, and biology.\n\nDefinition of Derivative\nThe derivative of a function f(x) at a point x is defined as the limit of the average rate of change as the interval approaches zero:\n\n  f'(x) = lim(h -> 0) [f(x + h) - f(x)] / h\n\nIf this limit exists, the function is said to be differentiable at that point. The derivative f'(x) represents the instantaneous rate of change of f with respect to x, and geometrically it gives the slope of the tangent line to the curve at that point.\n\nNotation\nDerivatives can be written in several ways:\n- f'(x) (Lagrange notation)\n- dy/dx (Leibniz notation)\n- Df(x) (Euler notation)\n\nBasic Differentiation Rules\n\n1. Power Rule: d/dx [x^n] = n * x^(n-1)\n2. Constant Rule: d/dx [c] = 0, where c is a constant.\n3. Constant Multiple Rule: d/dx [c * f(x)] = c * f'(x)\n4. Sum/Difference Rule: d/dx [f(x) +/- g(x)] = f'(x) +/- g'(x)\n5. Product Rule: d/dx [f(x) * g(x)] = f'(x) * g(x) + f(x) * g'(x)\n6. Quotient Rule: d/dx [f(x) / g(x)] = [f'(x) * g(x) - f(x) * g'(x)] / [g(x)]^2\n7. Chain Rule: d/dx [f(g(x))] = f'(g(x)) * g'(x)\n\nDerivatives of Common Functions\n- d/dx [sin x] = cos x\n- d/dx [cos x] = -sin x\n- d/dx [tan x] = sec^2 x\n- d/dx [e^x] = e^x\n- d/dx [ln x] = 1/x\n\nApplications of Derivatives\n\n- Tangent and Normal Lines: the derivative at a point gives the slope of the tangent line. The normal line is perpendicular to the tangent.\n- Increasing and Decreasing Functions: if f'(x) > 0 on an interval, f is increasing; if f'(x) < 0, f is decreasing.\n- Maxima and Minima: critical points occur where f'(x) = 0 or f'(x) is undefined. The second derivative test helps classify them as local maxima or minima.\n- Rate of Change: in physics, velocity is the derivative of displacement with respect to time, and acceleration is the derivative of velocity.\n\nSummary\nDerivatives provide a precise tool for analysing how quantities change. Mastering the definition, basic rules, and applications of derivatives is essential for advanced mathematics and its real-world uses."
-  }
-]
+{
+  "version": 1,
+  "note": "Team-authored study notes for the Akshar demo. Original text covering standard NEB/IOE/CEE curriculum topics; not official NEB or exam-board material.",
+  "lessons": [
+    {
+      "id": "phy-newton-2-en",
+      "track": "NEB Grade 11",
+      "subject": "Physics",
+      "topic": "Newton's Laws of Motion",
+      "title": "Newton's Second Law",
+      "language": "en",
+      "content": "Newton's second law of motion states that the rate of change of momentum of a body is directly proportional to the applied net force and takes place in the direction of the force. For a body of constant mass this gives the familiar equation F = m a, where F is the net force in newtons, m is the mass in kilograms, and a is the acceleration in metres per second squared. The acceleration is directly proportional to the net force and inversely proportional to the mass. One newton is the force that gives a mass of one kilogram an acceleration of one metre per second squared."
+    },
+    {
+      "id": "phy-newton-2-ne",
+      "track": "NEB Grade 11",
+      "subject": "Physics",
+      "topic": "Newton's Laws of Motion",
+      "title": "न्युटनको दोस्रो नियम",
+      "language": "ne",
+      "content": "न्युटनको दोस्रो नियमअनुसार कुनै वस्तुको संवेग परिवर्तनको दर त्यसमा लाग्ने नेट बलसँग सिधा समानुपाती हुन्छ र त्यो बलकै दिशामा हुन्छ। स्थिर पिण्डको लागि यसले F = m a समीकरण दिन्छ, जहाँ F नेट बल (न्युटन), m पिण्ड (किलोग्राम), र a त्वरण (मिटर प्रति सेकेन्ड वर्ग) हुन्छ। त्वरण नेट बलसँग सिधा समानुपाती र पिण्डसँग व्युत्क्रमानुपाती हुन्छ। एक न्युटन त्यति बल हो जसले एक किलोग्राम पिण्डलाई एक मिटर प्रति सेकेन्ड वर्गको त्वरण दिन्छ।"
+    },
+    {
+      "id": "bio-photosynthesis-en",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Photosynthesis",
+      "title": "Photosynthesis",
+      "language": "en",
+      "content": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose. It takes place mainly in the chloroplasts, which contain the green pigment chlorophyll. The overall balanced equation is 6 CO2 + 6 H2O + light energy -> C6H12O6 + 6 O2. The process has two stages: the light-dependent reactions, which occur in the thylakoid membranes and produce ATP and NADPH while releasing oxygen, and the light-independent reactions (the Calvin cycle), which occur in the stroma and use ATP and NADPH to fix carbon dioxide into glucose."
+    },
+    {
+      "id": "chem-acids-bases-en",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Acids, Bases and Salts",
+      "title": "Acids and Bases",
+      "language": "en",
+      "content": "Acids are substances that donate protons (H+ ions) in aqueous solution, while bases accept protons. The pH scale, ranging from 0 to 14, measures the concentration of hydrogen ions: pH less than 7 is acidic, pH equal to 7 is neutral, and pH greater than 7 is basic. Strong acids such as hydrochloric acid (HCl) ionise completely in water, whereas weak acids such as acetic acid (CH3COOH) ionise only partially. Acids react with bases in a neutralisation reaction to form a salt and water, for example HCl + NaOH -> NaCl + H2O."
+    },
+    {
+      "id": "cee-kinematics-en",
+      "track": "CEE",
+      "subject": "Physics",
+      "topic": "Kinematics",
+      "title": "Equations of Motion",
+      "language": "en",
+      "content": "For motion in a straight line with uniform acceleration a, the three kinematic equations are: v = u + a t; s = u t + (1/2) a t^2; and v^2 = u^2 + 2 a s. Here u is the initial velocity, v is the final velocity, s is the displacement, and t is the time. These equations apply only when the acceleration is constant and the motion is along a straight line."
+    },
+    {
+      "id": "ioe-quadratics-en",
+      "track": "IOE",
+      "subject": "Mathematics",
+      "topic": "Algebra",
+      "title": "Quadratic Equations",
+      "language": "en",
+      "content": "A quadratic equation in one variable x has the standard form a x^2 + b x + c = 0, where a, b, and c are real numbers and a is not equal to 0. The roots are given by the quadratic formula x = (-b +/- sqrt(b^2 - 4ac)) / (2a). The expression b^2 - 4ac is called the discriminant (D). If D > 0 the equation has two distinct real roots; if D = 0 it has one repeated real root; and if D < 0 it has no real roots (two complex roots). The sum of the roots is -b/a and the product of the roots is c/a."
+    },
+    {
+      "id": "grade11-physics-motion",
+      "track": "NEB Grade 11",
+      "subject": "Physics",
+      "topic": "Motion in a Straight Line",
+      "title": "Motion in a Straight Line",
+      "language": "en",
+      "content": "Motion in a Straight Line\n\nMotion is the change in position of an object with respect to its surroundings over time. When an object moves along a single direction, we call it motion in a straight line, also known as one-dimensional motion.\n\nKey Concepts\n\nDistance and Displacement\n- Distance is the total length of the path travelled by an object. It is a scalar quantity and is always positive.\n- Displacement is the shortest straight-line distance between the initial and final positions, along with direction. It is a vector quantity and can be positive, negative, or zero.\n\nSpeed and Velocity\n- Speed is the rate of change of distance with time. It is a scalar quantity.\n  Speed = Distance / Time\n- Velocity is the rate of change of displacement with time. It is a vector quantity.\n  Velocity = Displacement / Time\n- Average velocity is total displacement divided by total time taken.\n\nAcceleration\nAcceleration is the rate of change of velocity with time. It is a vector quantity.\n  Acceleration = Change in Velocity / Time\nThe SI unit of acceleration is metre per second squared (m/s^2).\n\nEquations of Motion\nFor an object moving with uniform acceleration along a straight line, three fundamental equations connect initial velocity (u), final velocity (v), acceleration (a), time (t), and displacement (s):\n\n1. v = u + at\n2. s = ut + (1/2)at^2\n3. v^2 = u^2 + 2as\n\nThese equations apply only when acceleration is constant and motion is along a straight line.\n\nGraphical Representation\n- A position-time graph shows how position changes with time. The slope of this graph gives velocity.\n- A velocity-time graph shows how velocity changes with time. The slope gives acceleration, and the area under the curve gives displacement.\n\nFree Fall\nWhen an object falls freely under gravity near the Earth's surface, it experiences constant acceleration g, approximately 9.8 m/s^2, directed downward. The equations of motion apply with a = g (taking downward as positive).\n\nSummary\nMotion in a straight line forms the foundation of kinematics. Understanding the difference between scalar and vector quantities, and mastering the three equations of motion, is essential for solving problems in mechanics."
+    },
+    {
+      "id": "grade11-chemistry-atomic-structure",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Atomic Structure",
+      "title": "Atomic Structure",
+      "language": "en",
+      "content": "Atomic Structure\n\nAtomic structure describes how an atom is organised — the arrangement of subatomic particles and the distribution of electrons around the nucleus. Understanding atomic structure explains chemical behaviour, bonding, and the periodic table.\n\nSubatomic Particles\nAn atom consists of three fundamental particles:\n\n- Proton: found in the nucleus, carries a charge of +1, and has a mass of approximately 1 atomic mass unit (amu).\n- Neutron: found in the nucleus, carries no charge, and has a mass of approximately 1 amu.\n- Electron: found in orbitals around the nucleus, carries a charge of -1, and has a negligible mass (about 1/1836 amu).\n\nThe number of protons defines the atomic number (Z), which determines the element. The total number of protons and neutrons gives the mass number (A).\n\nBohr's Model\nNiels Bohr proposed that electrons revolve around the nucleus in fixed circular orbits, or energy levels, without radiating energy. Each orbit corresponds to a specific energy. Electrons jump between orbits by absorbing or emitting energy in discrete packets called quanta.\n\nThe energy of an electron in the nth orbit of a hydrogen atom is:\n  E_n = -13.6 / n^2 eV\nwhere n is the principal quantum number (n = 1, 2, 3, ...).\n\nQuantum Numbers\nThe state of an electron in an atom is described by four quantum numbers:\n\n1. Principal quantum number (n): indicates the energy level or shell (n = 1, 2, 3, ...).\n2. Azimuthal quantum number (l): indicates the subshell or orbital shape (l = 0 to n-1). Values 0, 1, 2, 3 correspond to s, p, d, f subshells.\n3. Magnetic quantum number (m_l): indicates the orientation of the orbital in space (m_l = -l to +l).\n4. Spin quantum number (m_s): indicates the spin direction of the electron (+1/2 or -1/2).\n\nElectron Configuration\nElectrons fill orbitals in order of increasing energy, following three rules:\n\n- Aufbau principle: electrons occupy the lowest energy orbitals first.\n- Pauli exclusion principle: no two electrons in an atom can have the same set of four quantum numbers; an orbital holds at most two electrons with opposite spins.\n- Hund's rule: electrons fill degenerate orbitals singly before pairing up.\n\nFor example, the electron configuration of sodium (Z = 11) is 1s^2 2s^2 2p^6 3s^1.\n\nSummary\nAtomic structure connects the microscopic arrangement of subatomic particles to the macroscopic properties of elements. Mastery of quantum numbers and electron configuration is essential for understanding chemical bonding and periodicity."
+    },
+    {
+      "id": "grade12-biology-cell-division",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Cell Division",
+      "title": "Cell Division",
+      "language": "en",
+      "content": "Cell Division\n\nCell division is the process by which a parent cell divides into two or more daughter cells. It is essential for growth, repair, reproduction, and the continuity of life. There are two main types: mitosis and meiosis.\n\nThe Cell Cycle\nThe cell cycle is the series of events a cell goes through from one division to the next. It consists of two main phases:\n\n- Interphase: the period between divisions, during which the cell grows and duplicates its DNA. Interphase includes G1 (cell growth), S (DNA synthesis), and G2 (preparation for division).\n- M phase (Mitotic phase): the period of actual nuclear and cytoplasmic division.\n\nMitosis\nMitosis produces two genetically identical daughter cells, each with the same number of chromosomes as the parent cell. It is used for growth, asexual reproduction, and tissue repair. Mitosis has four stages:\n\n1. Prophase: chromosomes condense and become visible; the nuclear envelope breaks down; spindle fibres form.\n2. Metaphase: chromosomes line up at the cell's equator (metaphase plate); spindle fibres attach to centromeres.\n3. Anaphase: sister chromatids separate and are pulled toward opposite poles of the cell.\n4. Telophase: chromosomes decondense; nuclear envelopes re-form around each set; the cell begins to divide.\n\nCytokinesis, the division of the cytoplasm, usually follows telophase. In animal cells, a cleavage furrow forms; in plant cells, a cell plate forms.\n\nMeiosis\nMeiosis produces four genetically diverse daughter cells, each with half the chromosome number of the parent cell. It occurs in reproductive cells (gametes) and involves two successive divisions: meiosis I and meiosis II.\n\n- Meiosis I (reduction division): homologous chromosomes pair up, exchange genetic material through crossing over, and then separate. This reduces the chromosome number from diploid (2n) to haploid (n).\n- Meiosis II: sister chromatids separate, similar to mitosis, producing four haploid cells.\n\nSignificance of Meiosis\n- Maintains a constant chromosome number across generations.\n- Introduces genetic variation through crossing over and independent assortment, which drives evolution.\n\nComparison\n- Mitosis: one division, two diploid daughter cells, genetically identical, used for growth and repair.\n- Meiosis: two divisions, four haploid daughter cells, genetically diverse, used for sexual reproduction.\n\nSummary\nCell division is fundamental to life. Mitosis ensures growth and repair, while meiosis enables sexual reproduction and genetic diversity. Understanding both processes is key to genetics, development, and medicine."
+    },
+    {
+      "id": "grade12-mathematics-derivatives",
+      "track": "NEB Grade 12",
+      "subject": "Mathematics",
+      "topic": "Derivatives",
+      "title": "Derivatives",
+      "language": "en",
+      "content": "Derivatives\n\nThe derivative of a function measures the rate at which the function's value changes as its input changes. It is a central concept in differential calculus and has wide applications in physics, engineering, economics, and biology.\n\nDefinition of Derivative\nThe derivative of a function f(x) at a point x is defined as the limit of the average rate of change as the interval approaches zero:\n\n  f'(x) = lim(h -> 0) [f(x + h) - f(x)] / h\n\nIf this limit exists, the function is said to be differentiable at that point. The derivative f'(x) represents the instantaneous rate of change of f with respect to x, and geometrically it gives the slope of the tangent line to the curve at that point.\n\nNotation\nDerivatives can be written in several ways:\n- f'(x) (Lagrange notation)\n- dy/dx (Leibniz notation)\n- Df(x) (Euler notation)\n\nBasic Differentiation Rules\n\n1. Power Rule: d/dx [x^n] = n * x^(n-1)\n2. Constant Rule: d/dx [c] = 0, where c is a constant.\n3. Constant Multiple Rule: d/dx [c * f(x)] = c * f'(x)\n4. Sum/Difference Rule: d/dx [f(x) +/- g(x)] = f'(x) +/- g'(x)\n5. Product Rule: d/dx [f(x) * g(x)] = f'(x) * g(x) + f(x) * g'(x)\n6. Quotient Rule: d/dx [f(x) / g(x)] = [f'(x) * g(x) - f(x) * g'(x)] / [g(x)]^2\n7. Chain Rule: d/dx [f(g(x))] = f'(g(x)) * g'(x)\n\nDerivatives of Common Functions\n- d/dx [sin x] = cos x\n- d/dx [cos x] = -sin x\n- d/dx [tan x] = sec^2 x\n- d/dx [e^x] = e^x\n- d/dx [ln x] = 1/x\n\nApplications of Derivatives\n\n- Tangent and Normal Lines: the derivative at a point gives the slope of the tangent line. The normal line is perpendicular to the tangent.\n- Increasing and Decreasing Functions: if f'(x) > 0 on an interval, f is increasing; if f'(x) < 0, f is decreasing.\n- Maxima and Minima: critical points occur where f'(x) = 0 or f'(x) is undefined. The second derivative test helps classify them as local maxima or minima.\n- Rate of Change: in physics, velocity is the derivative of displacement with respect to time, and acceleration is the derivative of velocity.\n\nSummary\nDerivatives provide a precise tool for analysing how quantities change. Mastering the definition, basic rules, and applications of derivatives is essential for advanced mathematics and its real-world uses."
+    }
+  ]
+}
