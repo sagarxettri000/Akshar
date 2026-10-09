@@ -98,3 +98,6 @@ def test_repo_lessons_file_is_valid():
     lessons = content.load_lessons()
     assert len(lessons) >= 3
     assert all(lesson["language"] in content.LANGUAGE_LABELS for lesson in lessons)
+    ids = [lesson["id"] for lesson in lessons]
+    assert len(ids) == len(set(ids)), "lesson ids must be unique"
+    assert all(len(lesson["content"]) > 40 for lesson in lessons)
