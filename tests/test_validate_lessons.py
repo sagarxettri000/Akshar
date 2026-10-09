@@ -77,6 +77,15 @@ class TestValidData:
         assert ok is False
         assert any("empty or non-string 'id'" in m for m in messages)
 
+    def test_non_string_id_fails(self, tmp_path):
+        """ID must be a string; integer should fail."""
+        lesson = _valid_lesson("x")
+        lesson["id"] = 123
+        path = _valid_file(tmp_path, lessons=[lesson])
+        ok, messages = validate_lessons.validate_lesson_file(str(path))
+        assert ok is False
+        assert any("empty or non-string 'id'" in m for m in messages)
+
 
 # ── Malformed JSON ──────────────────────────────────────────────────────────
 
@@ -93,7 +102,7 @@ class TestMalformedJson:
         path.write_text("", encoding="utf-8")
         ok, messages = validate_lessons.validate_lesson_file(str(path))
         assert ok is False
-        assert any("Invalid JSON" in m for m in messages)
+        assert any("is empty" in m for m in messages)
 
     def test_file_not_found(self, tmp_path):
         missing = str(tmp_path / "does-not-exist.json")
@@ -127,9 +136,17 @@ class TestRootStructure:
     def test_empty_lessons_list(self, tmp_path):
         path = _write_json(tmp_path / "lessons.json", {"lessons": []})
         ok, messages = validate_lessons.validate_lesson_file(str(path))
-        # Empty list passes structural checks but yields 0 lessons
-        assert ok is True
-        assert any("0 lesson(s)" in m for m in messages)
+        # Empty list must fail — content.py rejects it
+        assert ok is False
+        assert any("no lessons" in m for m in messages)
+
+    @pytest.mark.parametrize("bad_root", ["a string", 42, None, True])
+    def test_root_is_non_dict_type(self, tmp_path, bad_root):
+        """Root must be a dict; string, integer, null, or boolean should fail."""
+        path = _write_json(tmp_path / "lessons.json", bad_root)
+        ok, messages = validate_lessons.validate_lesson_file(str(path))
+        assert ok is False
+        assert any("expected object" in m for m in messages)
 
 
 # ── Missing required fields ─────────────────────────────────────────────────
@@ -207,6 +224,14 @@ class TestIncorrectTypes:
         assert ok is False
         assert any("not a dictionary" in m for m in messages)
 
+    def test_mixed_valid_and_invalid_lessons(self, tmp_path):
+        """A valid lesson followed by a non-dict entry should fail with correct index."""
+        lessons = [_valid_lesson("valid-1"), "not a dict"]
+        path = _valid_file(tmp_path, lessons=lessons)
+        ok, messages = validate_lessons.validate_lesson_file(str(path))
+        assert ok is False
+        assert any("Lesson 1" in m and "not a dictionary" in m for m in messages)
+
 
 # ── Duplicate IDs ────────────────────────────────────────────────────────────
 
@@ -263,3 +288,59 @@ class TestRealDataFile:
         real_path = repo_root / "data" / "lessons.json"
         ok, messages = validate_lessons.validate_lesson_file(str(real_path))
         assert ok is True, "\n".join(messages)
+
+
+class TestAppLoaderCompatibility:
+    """Verify that data valid per the validator also loads in the real app loader."""
+
+    def test_all_lessons_load_via_content_module(self):
+        """All 10 expected lessons must load through content.load_lessons()."""
+        import content
+
+        repo_root = Path(__file__).resolve().parents[1]
+        real_path = repo_root / "data" / "lessons.json"
+        lessons = content.load_lessons(str(real_path))
+
+        assert len(lessons) == 10, f"Expected 10 lessons, got {len(lessons)}"
+
+        expected_ids = {
+            "phy-newton-2-en",
+            "phy-newton-2-ne",
+            "bio-photosynthesis-en",
+            "chem-acids-bases-en",
+            "cee-kinematics-en",
+            "ioe-quadratics-en",
+            "grade11-physics-motion",
+            "grade11-chemistry-atomic-structure",
+            "grade12-biology-cell-division",
+            "grade12-mathematics-derivatives",
+        }
+        actual_ids = {lesson["id"] for lesson in lessons}
+        assert actual_ids == expected_ids, f"ID mismatch: missing={expected_ids - actual_ids}, extra={actual_ids - expected_ids}"
+
+    def test_validator_and_loader_agree_on_empty_list(self, tmp_path):
+        """Empty lessons list must fail in both validator and content.load_lessons()."""
+        import content
+
+        path = _write_json(tmp_path / "lessons.json", {"lessons": []})
+
+        # Validator must reject
+        ok, messages = validate_lessons.validate_lesson_file(str(path))
+        assert ok is False
+
+        # Loader must also reject
+        with pytest.raises(content.ContentError):
+            content.load_lessons(str(path))
+
+    def test_validator_and_loader_agree_on_real_file(self):
+        """The real data file must pass both the validator and the loader."""
+        import content
+
+        repo_root = Path(__file__).resolve().parents[1]
+        real_path = repo_root / "data" / "lessons.json"
+
+        ok, messages = validate_lessons.validate_lesson_file(str(real_path))
+        assert ok is True, "\n".join(messages)
+
+        lessons = content.load_lessons(str(real_path))
+        assert len(lessons) == 10

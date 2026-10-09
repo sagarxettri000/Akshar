@@ -44,13 +44,20 @@ def validate_lesson_file(path):
     # --- Check 2: Valid JSON ---
     try:
         with open(path, "r", encoding="utf-8") as f:
-            data = json.load(f)
+            raw_text = f.read()
+    except Exception as e:
+        messages.append(f"FAIL: Could not read file '{path}' - {e}")
+        return False, messages
+
+    if not raw_text.strip():
+        messages.append(f"FAIL: File '{path}' is empty")
+        return False, messages
+
+    try:
+        data = json.loads(raw_text)
         messages.append("PASS: JSON parsed successfully")
     except json.JSONDecodeError as e:
-        messages.append(f"FAIL: Invalid JSON - {e}")
-        return False, messages
-    except Exception as e:
-        messages.append(f"FAIL: Could not read file - {e}")
+        messages.append(f"FAIL: Invalid JSON in '{path}' - {e}")
         return False, messages
 
     # --- Check 3: Root is an object with a 'lessons' list ---
@@ -64,6 +71,9 @@ def validate_lesson_file(path):
         messages.append(f"FAIL: 'lessons' is {type(data['lessons']).__name__}, expected list")
         return False, messages
     lessons = data["lessons"]
+    if not lessons:
+        messages.append("FAIL: Lesson file contains no lessons")
+        return False, messages
     messages.append(f"PASS: Root is an object with a 'lessons' list ({len(lessons)} lesson(s))")
 
     # --- Check 4: Every lesson has exactly the required fields ---
