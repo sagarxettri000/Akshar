@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Akshar — Learning Platform for Nepal</title>
+  <meta name="description" content="Akshar helps Nepali students learn NEB Grade 11-12 and prepare for CEE/IOE with clear Nepali/English explanations, practice questions, and flashcards - powered by Gemma 4." />
+  <meta property="og:title" content="Akshar — Learning Platform for Nepal" />
+  <meta property="og:description" content="Learn -> understand -> practise with Gemma 4." />
+  <meta property="og:type" content="website" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top"><span class="devanagari">अक्षर</span> Akshar</a>
+      <nav class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#ai">Gemma 4</a>
+        <a href="#team">Team</a>
+        <a class="ghost" href="https://github.com/sagarxettri000/Akshar" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Team Nepluro · Hackathon build</p>
+        <h1>Understand it, then practise it.</h1>
+        <p class="lead">
+          Akshar helps Nepali students master <strong>NEB Grade 11&ndash;12</strong> and prepare for
+          <strong>CEE / IOE</strong> with clear Nepali/English explanations, practice questions, and
+          flashcards &mdash; with <strong>Gemma 4</strong> doing the real teaching work.
+        </p>
+        <div class="cta">
+          <!-- Replace YOUR-APP.streamlit.app below with your real Streamlit Cloud URL. -->
+          <a class="btn primary" href="https://YOUR-APP.streamlit.app" target="_blank" rel="noopener">Launch the app</a>
+          <a class="btn" href="https://github.com/sagarxettri000/Akshar" target="_blank" rel="noopener">View source</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container narrow">
+        <h2>The problem</h2>
+        <p>
+          Nepali learners preparing for NEB and entrance exams often rely on generic answers or
+          English-only resources that do not match their curriculum or language. Trustworthy,
+          level-appropriate support is uneven &mdash; especially on modest devices and connections.
+          Akshar is built to close that gap.
+        </p>
+      </div>
+    </section>
+
+    <section id="how" class="section alt">
+      <div class="container">
+        <h2>Learn &rarr; understand &rarr; practise</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="step">1</span>
+            <h3>Learn</h3>
+            <p>Choose a track and topic: NEB Grade 11/12, CEE, or IOE, in English or Nepali.</p>
+          </article>
+          <article class="card">
+            <span class="step">2</span>
+            <h3>Understand</h3>
+            <p>Get a clear explanation or summary, with the lesson it is grounded in.</p>
+          </article>
+          <article class="card">
+            <span class="step">3</span>
+            <h3>Practise</h3>
+            <p>Answer validated practice questions, review flashcards, and track your progress.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai" class="section">
+      <div class="container narrow">
+        <h2>Built on Gemma 4</h2>
+        <p>
+          Akshar calls Google&rsquo;s hosted Gemma 4 through the official <code>google-genai</code> SDK
+          (<code>gemma-4-26b-a4b-it</code>). Every result is validated before it reaches the student:
+          JSON is parsed defensively, and each question&rsquo;s options, answer, and explanation are
+          checked. Failures surface as honest errors, never as a fake answer.
+        </p>
+        <ul class="checks">
+          <li>Grounded summaries, multiple-choice questions, and flashcards</li>
+          <li>Strict output validation with clear error types</li>
+          <li>API keys kept in secrets and redacted from errors</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="team" class="section alt">
+      <div class="container">
+        <h2>Team Nepluro</h2>
+        <div class="grid">
+          <article class="card"><h3>Sagar Katwal</h3><p>Learner experience / frontend</p></article>
+          <article class="card"><h3>Dipson Basnet</h3><p>Gemma 4 / AI pipeline</p></article>
+          <article class="card"><h3>Dhiraj Shrestha</h3><p>Learning content, practice &amp; validation</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>Akshar · MIT License · Built by Team Nepluro</span>
+      <a href="https://github.com/sagarxettri000/Akshar" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>
