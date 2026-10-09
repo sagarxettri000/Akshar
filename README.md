@@ -15,7 +15,10 @@ Akshar is an AI-powered educational platform built with Streamlit that provides 
 
 ### Features
 
-- **Curated lesson library** — Original, syllabus-aligned lessons for Grades 11 and 12 across Physics, Chemistry, Biology, and Mathematics.
+**Implemented (prototype):**
+- **Curated lesson library** — Original, syllabus-aligned lessons for Grades 11 and 12 across Physics, Chemistry, Biology, and Mathematics, stored in `data/lessons.json`.
+
+**Planned (pending implementation):**
 - **AI chat assistant** — Powered by Google Gemma, providing explanations and answers to student questions.
 - **Exam tag filtering** — Lessons tagged by relevant exams (NEB, CEE, IOE) to help students focus on what matters.
 - **Simple, clean interface** — Built with Streamlit for ease of use on any device with a browser.

@@ -49,7 +49,7 @@
 
 ### [2:30 – 3:00] Why Gemma
 
-> "We chose Gemma because it's a capable, open-weights model from Google that's accessible via a straightforward API. It handles educational content well — explaining concepts, working through problems, and adapting to different subjects. For a hackathon prototype, it gave us the best balance of quality, speed, and ease of integration."
+> "We chose Gemma because it's a capable language model from Google that's accessible via a straightforward API. It handles educational content well — explaining concepts, working through problems, and adapting to different subjects. For a hackathon prototype, it gave us a good balance of quality, speed, and ease of integration."
 
 ---
 
