@@ -80,7 +80,7 @@
 
 > "As a hackathon prototype, Akshar has some limitations:
 >
-> - We have **6 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus.
+> - We have **10 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus.
 > - AI output, while helpful, should be verified against official textbooks.
 > - The app requires an internet connection and a Gemini API key.
 > - Progress tracking is per-session for now; there are no user accounts yet."

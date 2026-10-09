@@ -135,8 +135,8 @@ See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, includi
 | Member | Focus |
 |--------|-------|
 | Sagar Katwal | Learner experience / frontend |
-| Dipson Basnet | Gemma 4 / AI pipeline |
-| Dhiraj Shrestha | Learning content, practice & validation |
+| Dipson Basnet | Lesson content & validation |
+| Dhiraj Shrestha | Gemma 4 / AI pipeline |
 
 ## Roadmap
 
@@ -152,11 +152,27 @@ Released under the MIT License. See [`LICENSE`](LICENSE) for details.
 
 ## Lesson Content Contribution
 
-Four additional original English-language lessons were contributed for NEB Grade 11 and Grade 12:
+Four original English-language lessons were contributed for NEB Grade 11 and Grade 12:
 
-- Grade 11 Physics — Motion
+- Grade 11 Physics — Motion in a Straight Line
 - Grade 11 Chemistry — Atomic Structure
 - Grade 12 Biology — Cell Division
 - Grade 12 Mathematics — Derivatives
 
-The lessons are stored in `data/lessons.json` using the application's lesson schema and can be loaded by the content module.
+The lessons are stored in `data/lessons.json` using the application's 7-field lesson schema (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) and are loaded by `content.py`.
+
+### Validating lesson data
+
+Run the standalone validator (no dependencies beyond Python 3):
+
+```bash
+python validate_lessons.py
+```
+
+Run the lesson-related tests:
+
+```bash
+python -m pytest tests/test_validate_lessons.py tests/test_content.py -q
+```
+
+The validator checks JSON syntax, root structure, required fields, unique IDs, non-empty strings, and valid language codes. All tests use temporary files and never modify the real `data/lessons.json`.
