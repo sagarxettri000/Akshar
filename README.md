@@ -6,7 +6,7 @@ Akshar helps Nepali students understand concepts, practise exam-style questions,
 
 `NEB` · `CEE` · `IOE` · `Gemma 4` · `Python`
 
-> **Status:** Active hackathon development. The Gemma 4 AI service is implemented and covered by tests; the Streamlit application and curriculum content are being integrated.
+> **Status:** Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; lesson content is being expanded.
 
 ## The problem
 
@@ -45,8 +45,13 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 
 | Path | Purpose |
 |------|---------|
+| `app.py` | Streamlit app — the learn → understand → practise interface |
 | `ai_service.py` | Gemma 4 integration — summaries, MCQs, and flashcards |
-| `tests/test_ai_service.py` | Unit tests for validation, parsing, and error handling (no live API calls) |
+| `content.py` | Lesson loading and validation |
+| `data/lessons.json` | Sample curriculum lessons (team-authored study notes) |
+| `tests/` | Unit tests for the AI service and content (no live API calls) |
+| `requirements.txt` | Runtime dependencies |
+| `requirements-dev.txt` | Development and testing dependencies |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
 | `GEMINI.md` | Gemini CLI entry point that imports `AGENTS.md` |
 | `FIRST_PROMPT.md` | Read-only repository audit prompt |
@@ -58,29 +63,48 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 Requires **Python 3.10+**.
 
 ```bash
-pip install google-genai pytest
+pip install -r requirements-dev.txt
 ```
 
-Get an API key from [Google AI Studio](https://aistudio.google.com/app/apikey) and run a quick check (never commit your key):
+### Configure your API key
 
-```python
-from ai_service import generate_summary, generate_mcqs
+Get a key from [Google AI Studio](https://aistudio.google.com/app/apikey), then copy the example secrets file and fill it in:
 
-lesson = "Photosynthesis converts light energy into chemical energy stored in glucose."
-
-print(generate_summary(lesson, api_key="YOUR_KEY"))
-
-for q in generate_mcqs(lesson, api_key="YOUR_KEY", count=3):
-    print(q["question"], q["options"], q["answer"])
+```bash
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml
 ```
 
-Run the test suite:
+Or set an environment variable:
+
+```bash
+export GOOGLE_API_KEY=your-key-here
+```
+
+`secrets.toml` is gitignored — never commit real keys.
+
+### Run the app
+
+```bash
+streamlit run app.py
+```
+
+Choose a track and topic, read the lesson, then use the **Explain**, **Practise**, and **Flashcards** tabs. AI output is clearly labelled and every question is validated before it is shown.
+
+### Run the tests
 
 ```bash
 python -m pytest tests/ -q
 ```
 
 The tests use mocks and never call the live model.
+
+### Quick script check
+
+```python
+from ai_service import generate_summary
+
+print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
+```
 
 ## Design principles
 
@@ -100,9 +124,10 @@ The tests use mocks and never call the live model.
 ## Roadmap
 
 - [x] Gemma 4 AI service (summaries, MCQs, flashcards) with validation and tests
-- [ ] Streamlit application shell and learner flow
-- [ ] Curriculum content set with source attribution
-- [ ] End-to-end learn → understand → practise demo
+- [x] Streamlit learning app with an Explain / Practise / Flashcards flow
+- [x] Sample bilingual lesson content
+- [ ] Broader, source-attributed curriculum content
+- [ ] Learner progress tracking
 
 ## License
 
