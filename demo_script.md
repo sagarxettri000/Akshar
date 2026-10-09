@@ -1,6 +1,8 @@
 # Akshar — Hackathon Demo Script
 
-**Total time:** ~5 minutes  
+**App:** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
+**Landing page:** <https://akshar-nepluro.vercel.app/>
+**Total time:** ~5 minutes
 **Speakers:** Sagar Katwal, Dipson Basnet, Dhiraj Shrestha
 
 ---
@@ -11,21 +13,17 @@
 
 > "Hi, I'm Dipson. Let me start with the problem we're solving.
 >
-> Students across Nepal preparing for NEB board exams, CEE, and IOE entrance tests face a common challenge: access to affordable, personalised tutoring is limited. Many existing resources are either expensive, not aligned with the Nepali curriculum, or don't adapt to individual student needs.
->
-> We wanted to build something free, accessible, and tailored to the Nepali education system — a study assistant that actually understands what students here are learning."
+> Students across Nepal preparing for NEB board exams, CEE, and IOE entrance tests often can't access affordable, personalised tutoring. Existing resources are expensive, not aligned to the Nepali curriculum, or only in English. We wanted to build something free, accessible, and genuinely useful for students here."
 
 ### [0:30 – 1:00] Our Solution
 
 > "That's why we built **Akshar** — an AI-powered learning platform for Nepal.
 >
-> Akshar combines a curated set of original, syllabus-aligned lessons with Google's Gemma language model. Students can browse lessons by grade, subject, and exam type, and ask questions to get instant explanations.
->
-> We've included sample lessons for Grade 11 Physics, Grade 11 Chemistry, Grade 12 Biology, and Grade 12 Mathematics — all tagged with relevant exams like NEB, CEE, and IOE."
+> Akshar pairs short, original, syllabus-aligned lessons with Google's **Gemma 4** model. A student picks a track — NEB Grade 11/12, CEE, or IOE — and a topic, then reads the lesson and gets an explanation, practice questions, or flashcards in English or Nepali."
 
 ### [1:00 – 1:30] Educational Impact
 
-> "The goal is simple: give every student with an internet connection access to a free, on-demand study assistant. Whether you're in Kathmandu or a rural village, Akshar can help explain concepts, clarify doubts, and support exam preparation — all through a simple web interface that works on any device."
+> "The goal is simple: give every student with an internet connection a free, on-demand study assistant. Whether you're in Kathmandu or a rural village, Akshar helps explain concepts, check understanding, and prepare for exams — through a simple web app that works on any device."
 
 ---
 
@@ -33,23 +31,21 @@
 
 ### [1:30 – 2:00] Technical Overview
 
-> "Thanks, Dipson. I'm Sagar, and I'll walk you through the technical side.
+> "Thanks, Dipson. I'm Sagar, and I'll cover the technical side.
 >
-> Akshar is built with **Python** and **Streamlit** — a lightweight web framework that lets us build interactive apps quickly. The frontend is entirely Streamlit, so it's responsive and works on both desktop and mobile browsers.
->
-> For data, we use a simple **JSON file** to store our lesson content. Each lesson includes the grade, subject, chapter, exam tags, and the full lesson text. This makes it easy to add new lessons without changing any code."
+> Akshar is built in **Python** with **Streamlit**, so the interface is responsive and works on desktop and mobile browsers. Lesson content lives in a single JSON file — each lesson has a track, subject, topic, title, language, and body text — so we can add lessons without changing any code."
 
 ### [2:00 – 2:30] AI Implementation
 
-> "The AI layer uses **Google's Gemma** model through the Gemini API. We built a service module — `ai_service.py` — that handles all communication with the API. When a student asks a question, the app sends the question along with relevant lesson context to Gemma, which then generates a clear, contextual response.
+> "The AI layer is `ai_service.py`, which calls Google's hosted **Gemma 4** model (`gemma-4-26b-a4b-it`) through the official `google-genai` SDK. It exposes three functions: generate a summary, generate multiple-choice questions, and generate flashcards.
 >
-> The API key is configured securely via an environment variable or Streamlit secrets — it's never hardcoded in the source.
+> Critically, we never trust the model blindly. Every response is parsed defensively and validated — options A–D, a single valid answer, a non-empty explanation — before it reaches the student. The API key comes from Streamlit secrets or an environment variable and is redacted from errors; it is never hardcoded."
+
+### [2:30 – 3:00] Why Gemma 4
+
+> "We chose Gemma 4 because it's a capable, open model from Google with a straightforward API, and it handles educational content well across subjects. It gave us the best balance of quality, speed, and ease of integration.
 >
-> The architecture is intentionally simple: Streamlit frontend → Python backend → Gemma API. This keeps the project easy to understand, maintain, and extend."
-
-### [2:30 – 3:00] Why Gemma
-
-> "We chose Gemma because it's a capable, open-weights model from Google that's accessible via a straightforward API. It handles educational content well — explaining concepts, working through problems, and adapting to different subjects. For a hackathon prototype, it gave us the best balance of quality, speed, and ease of integration."
+> The architecture stays deliberately simple: Streamlit UI → Python modules (`ai_service`, `content`, `progress`) → Gemma 4."
 
 ---
 
@@ -57,30 +53,24 @@
 
 ### [3:00 – 3:30] Demo Setup
 
-> "Hi everyone, I'm Dhiraj. Let me show you how Akshar works.
->
-> I've already set up the environment and started the app locally. You can see the main interface here — it's clean and straightforward."
+> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. The app is already deployed on Streamlit Community Cloud, and we also have a landing page on Vercel that links to it."
 
 **Demo steps:**
 
-1. **Show the lesson browser** — "On the left, students can filter by grade, subject, and exam tag. Let me select Grade 11 Physics."
-2. **Open a lesson** — "Here's our Motion in a Straight Line lesson. It covers key definitions, formulas, and explanations — all original content written for the Nepali curriculum."
-3. **Show the AI chat** — "Now, let's say a student doesn't understand a concept. They can type a question right here."
+1. **Choose a lesson** — "In the sidebar I'll pick the NEB Grade 11 track, Physics, Newton's Laws of Motion. We can also switch the lesson language to Nepali."
+2. **Open the lesson** — "Here's Newton's Second Law — our own study notes, and we label them clearly as not official NEB material."
+3. **Explain tab** — "If a student needs a clearer explanation, they click **Generate a summary** and Gemma 4 writes one grounded in this lesson. We show an AI notice so nobody mistakes it for an official source."
 
-### [3:30 – 4:00] Live AI Interaction
+### [3:30 – 4:00] Practice & Progress
 
-> "Let me ask: *'What is the difference between speed and velocity?'*
->
-> Watch how Gemma responds with a clear, contextual explanation — pulling from the lesson content we provided. The student gets an instant, understandable answer without needing to search through a textbook."
+> "Learning needs practice, so they open the **Practise** tab and generate three questions. They choose answers, click **Check answers**, and get feedback for each question plus a score. The sidebar tracks lessons practised, practice attempts, and their average best score — all within the session, so we collect no personal data."
+
+### [4:00 – 4:30] Flashcards & Deployment
 
 **Demo steps:**
 
-4. **Ask a question** in the chat interface and show the AI response.
-5. **Show another subject** — "Let me switch to Grade 12 Mathematics and ask about derivatives. The AI adapts to whatever lesson is loaded."
-
-### [4:00 – 4:30] Deployment & Accessibility
-
-> "Deploying Akshar is straightforward. We push the code to GitHub, connect the repository to Streamlit Community Cloud, add the API key in the secrets section, and click deploy. Within minutes, the app is live and accessible to anyone with a link — no installation required on the student's end."
+4. **Flashcards tab** — "The **Flashcards** tab turns the lesson into quick revision cards."
+5. **Deployment** — "We push to GitHub. Streamlit Community Cloud runs the app and keeps the API key in secrets; Vercel hosts the landing page. Both redeploy automatically on every push."
 
 ---
 
@@ -90,14 +80,14 @@
 
 > "As a hackathon prototype, Akshar has some limitations:
 >
-> - We currently have **4 sample lessons** — this is not the full NEB, CEE, or IOE syllabus.
-> - AI responses, while helpful, should be verified against official textbooks.
+> - We have **6 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus.
+> - AI output, while helpful, should be verified against official textbooks.
 > - The app requires an internet connection and a Gemini API key.
-> - We don't yet have user accounts or progress tracking."
+> - Progress tracking is per-session for now; there are no user accounts yet."
 
 ### Conclusion
 
-> "Our vision is to expand Akshar into a comprehensive learning platform for Nepali students — covering the full syllabus, adding more subjects, and making quality education accessible to everyone.
+> "Our vision is to grow Akshar into a full learning platform for Nepali students — the complete syllabus, more subjects, saved progress, and quality education accessible to everyone.
 >
 > Thank you! We're happy to take any questions."
 
@@ -108,6 +98,6 @@
 | Time | Speaker | Topic |
 |---|---|---|
 | 0:00 – 1:30 | Dipson | Problem, solution, educational impact |
-| 1:30 – 3:00 | Sagar | Technical architecture, AI implementation |
+| 1:30 – 3:00 | Sagar | Technical architecture, Gemma 4 |
 | 3:00 – 4:30 | Dhiraj | Live demo and deployment |
 | 4:30 – 5:00 | All | Limitations and conclusion |
