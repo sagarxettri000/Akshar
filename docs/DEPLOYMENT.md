@@ -40,10 +40,14 @@ to `main` redeploys the app automatically.
 1. Go to <https://vercel.com> → **Add New…** → **Project**.
 2. Import the same GitHub repository.
 3. Set **Root Directory** to `landing`.
-4. **Framework Preset:** Other. Leave **Build Command** and **Output Directory** empty.
-5. Click **Deploy**.
-6. Edit `landing/index.html` and replace `https://YOUR-APP.streamlit.app` with your real
-   Streamlit URL. Commit and push — Vercel redeploys automatically.
+4. Set **Framework Preset** to **Other**.
+   > Vercel may auto-detect this repository as **Python** (because of `requirements.txt`),
+   > which makes the build error out in about a second. Clearing the preset to **Other** is required.
+5. Leave **Build Command** and **Output Directory** empty, then click **Deploy**.
+6. If the URL asks you to log in to Vercel, open **Project → Settings → Deployment Protection**
+   and disable **Vercel Authentication**. The site is then publicly reachable.
+7. `landing/index.html` already points at the live Streamlit app. If the app URL changes,
+   update the link and push — Vercel redeploys automatically.
 
 ## 3. Optional: custom domain
 
