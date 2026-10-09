@@ -48,6 +48,7 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `app.py` | Streamlit app — the learn → understand → practise interface |
 | `ai_service.py` | Gemma 4 integration — summaries, MCQs, and flashcards |
 | `content.py` | Lesson loading and validation |
+| `progress.py` | Session-scoped learner progress tracking |
 | `data/lessons.json` | Sample curriculum lessons (team-authored study notes) |
 | `tests/` | Unit tests for the AI service and content (no live API calls) |
 | `requirements.txt` | Runtime dependencies |
@@ -126,8 +127,8 @@ print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
 - [x] Gemma 4 AI service (summaries, MCQs, flashcards) with validation and tests
 - [x] Streamlit learning app with an Explain / Practise / Flashcards flow
 - [x] Sample bilingual lesson content
+- [x] Session-scoped learner progress tracking
 - [ ] Broader, source-attributed curriculum content
-- [ ] Learner progress tracking
 
 ## License
 
