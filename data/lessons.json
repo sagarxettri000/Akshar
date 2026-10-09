@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "note": "Team-authored study notes for the Akshar demo. Original text covering standard NEB/IOE/CEE curriculum topics; not official NEB or exam-board material.",
+  "lessons": [
+    {
+      "id": "phy-newton-2-en",
+      "track": "NEB Grade 11",
+      "subject": "Physics",
+      "topic": "Newton's Laws of Motion",
+      "title": "Newton's Second Law",
+      "language": "en",
+      "content": "Newton's second law of motion states that the rate of change of momentum of a body is directly proportional to the applied net force and takes place in the direction of the force. For a body of constant mass this gives the familiar equation F = m a, where F is the net force in newtons, m is the mass in kilograms, and a is the acceleration in metres per second squared. The acceleration is directly proportional to the net force and inversely proportional to the mass. One newton is the force that gives a mass of one kilogram an acceleration of one metre per second squared."
+    },
+    {
+      "id": "phy-newton-2-ne",
+      "track": "NEB Grade 11",
+      "subject": "Physics",
+      "topic": "Newton's Laws of Motion",
+      "title": "न्युटनको दोस्रो नियम",
+      "language": "ne",
+      "content": "न्युटनको दोस्रो नियमअनुसार कुनै वस्तुको संवेग परिवर्तनको दर त्यसमा लाग्ने नेट बलसँग सिधा समानुपाती हुन्छ र त्यो बलकै दिशामा हुन्छ। स्थिर पिण्डको लागि यसले F = m a समीकरण दिन्छ, जहाँ F नेट बल (न्युटन), m पिण्ड (किलोग्राम), र a त्वरण (मिटर प्रति सेकेन्ड वर्ग) हुन्छ। त्वरण नेट बलसँग सिधा समानुपाती र पिण्डसँग व्युत्क्रमानुपाती हुन्छ। एक न्युटन त्यति बल हो जसले एक किलोग्राम पिण्डलाई एक मिटर प्रति सेकेन्ड वर्गको त्वरण दिन्छ।"
+    },
+    {
+      "id": "bio-photosynthesis-en",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Photosynthesis",
+      "title": "Photosynthesis",
+      "language": "en",
+      "content": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose. It takes place mainly in the chloroplasts, which contain the green pigment chlorophyll. The overall balanced equation is 6 CO2 + 6 H2O + light energy -> C6H12O6 + 6 O2. The process has two stages: the light-dependent reactions, which occur in the thylakoid membranes and produce ATP and NADPH while releasing oxygen, and the light-independent reactions (the Calvin cycle), which occur in the stroma and use ATP and NADPH to fix carbon dioxide into glucose."
+    },
+    {
+      "id": "chem-acids-bases-en",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Acids, Bases and Salts",
+      "title": "Acids and Bases",
+      "language": "en",
+      "content": "Acids are substances that donate protons (H+ ions) in aqueous solution, while bases accept protons. The pH scale, ranging from 0 to 14, measures the concentration of hydrogen ions: pH less than 7 is acidic, pH equal to 7 is neutral, and pH greater than 7 is basic. Strong acids such as hydrochloric acid (HCl) ionise completely in water, whereas weak acids such as acetic acid (CH3COOH) ionise only partially. Acids react with bases in a neutralisation reaction to form a salt and water, for example HCl + NaOH -> NaCl + H2O."
+    },
+    {
+      "id": "cee-kinematics-en",
+      "track": "CEE",
+      "subject": "Physics",
+      "topic": "Kinematics",
+      "title": "Equations of Motion",
+      "language": "en",
+      "content": "For motion in a straight line with uniform acceleration a, the three kinematic equations are: v = u + a t; s = u t + (1/2) a t^2; and v^2 = u^2 + 2 a s. Here u is the initial velocity, v is the final velocity, s is the displacement, and t is the time. These equations apply only when the acceleration is constant and the motion is along a straight line."
+    },
+    {
+      "id": "ioe-quadratics-en",
+      "track": "IOE",
+      "subject": "Mathematics",
+      "topic": "Algebra",
+      "title": "Quadratic Equations",
+      "language": "en",
+      "content": "A quadratic equation in one variable x has the standard form a x^2 + b x + c = 0, where a, b, and c are real numbers and a is not equal to 0. The roots are given by the quadratic formula x = (-b +/- sqrt(b^2 - 4ac)) / (2a). The expression b^2 - 4ac is called the discriminant (D). If D > 0 the equation has two distinct real roots; if D = 0 it has one repeated real root; and if D < 0 it has no real roots (two complex roots). The sum of the roots is -b/a and the product of the roots is c/a."
+    }
+  ]
+}
