@@ -8,6 +8,11 @@ Akshar helps Nepali students understand concepts, practise exam-style questions,
 
 > **Status:** Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; lesson content is being expanded.
 
+## Live demo
+
+- **App (Streamlit Community Cloud):** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
+- **Landing page (Vercel):** <https://akshar-nepluro.vercel.app/>
+
 ## The problem
 
 Nepali learners preparing for NEB Grade 11–12 and entrance exams (CEE / IOE) often have to rely on generic answers or English-only resources that do not match their curriculum or language. Access to trustworthy, level-appropriate support is uneven, especially on modest devices and connections.
