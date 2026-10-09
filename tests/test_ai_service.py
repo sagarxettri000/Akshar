@@ -232,6 +232,80 @@ def test_generate_flashcards_raises_when_no_valid_cards(monkeypatch):
 
 
 # ---------------------------------------------------------------------------
+# Grounded Q&A tutor
+# ---------------------------------------------------------------------------
+
+
+def test_ask_question_rejects_empty_lesson():
+    with pytest.raises(ai_service.InvalidInputError):
+        ai_service.ask_question("   ", "why?", "key")
+
+
+def test_ask_question_rejects_empty_question():
+    with pytest.raises(ai_service.InvalidInputError):
+        ai_service.ask_question("lesson", "   ", "key")
+
+
+def test_ask_question_rejects_missing_api_key():
+    with pytest.raises(ai_service.InvalidInputError):
+        ai_service.ask_question("lesson", "why?", "")
+
+
+def test_ask_question_rejects_oversized_question():
+    too_long = "x" * (ai_service.MAX_QUESTION_LENGTH + 1)
+    with pytest.raises(ai_service.InvalidInputError):
+        ai_service.ask_question("lesson", too_long, "key")
+
+
+def test_ask_question_rejects_unsupported_language():
+    with pytest.raises(ai_service.InvalidInputError):
+        ai_service.ask_question("lesson", "why?", "key", language="fr")
+
+
+def test_ask_question_returns_trimmed_answer(monkeypatch):
+    monkeypatch.setattr(ai_service, "_generate_text", _fake_generate("  Because F = m a.  "))
+    assert ai_service.ask_question("lesson", "why?", "secret") == "Because F = m a."
+
+
+def test_ask_question_rejects_empty_model_output(monkeypatch):
+    monkeypatch.setattr(ai_service, "_generate_text", _fake_generate("   "))
+    with pytest.raises(ai_service.AIGenerationError):
+        ai_service.ask_question("lesson", "why?", "secret")
+
+
+def test_clean_history_drops_malformed_entries():
+    history = [
+        {"role": "user", "content": "hi"},
+        {"role": "system", "content": "ignored"},
+        {"content": "missing role"},
+        "not a dict",
+        {"role": "assistant", "content": "   "},
+    ]
+    assert ai_service._clean_history(history) == [{"role": "user", "content": "hi"}]
+
+
+def test_clean_history_caps_length():
+    many = [{"role": "user", "content": str(i)} for i in range(20)]
+    assert len(ai_service._clean_history(many)) == ai_service.MAX_HISTORY_MESSAGES
+
+
+def test_ask_prompt_is_grounded_and_sets_language():
+    prompt = ai_service._build_ask_prompt("LESSON BODY", "Why?", [], "ne")
+    assert "ONLY the lesson below" in prompt
+    assert "Nepali" in prompt
+    assert "LESSON BODY" in prompt
+    assert "Why?" in prompt
+
+
+def test_ask_prompt_includes_prior_conversation():
+    history = [{"role": "user", "content": "first"}, {"role": "assistant", "content": "reply"}]
+    prompt = ai_service._build_ask_prompt("lesson", "second", history, None)
+    assert "CONVERSATION SO FAR" in prompt
+    assert "Student: first" in prompt
+    assert "Tutor: reply" in prompt
+
+
+# ---------------------------------------------------------------------------
 # Secret handling and model-call errors
 # ---------------------------------------------------------------------------
 

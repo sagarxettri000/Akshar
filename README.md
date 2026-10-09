@@ -39,8 +39,11 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
   | Function | Returns |
   |----------|---------|
   | `generate_summary(lesson_text, api_key)` | A concise, faithful summary of a lesson |
+  | `ask_question(lesson_text, question, api_key, history=…)` | A grounded answer to a student's question, optionally forced to English or Nepali |
   | `generate_mcqs(lesson_text, api_key, count=5)` | Validated multiple-choice questions |
   | `generate_flashcards(lesson_text, api_key, count=5)` | Validated `question` / `answer` flashcards |
+
+- **Answers stay grounded.** The tutor answers using only the current lesson, keeps a short conversation history for context, and is instructed to say so plainly when the lesson does not cover a question instead of inventing facts. Learners can choose the reply language (match the lesson, English, or Nepali).
 
 - **Model output is never trusted blindly.** Responses are parsed defensively (plain JSON, fenced blocks, or JSON in prose), and every MCQ — options `A`–`D`, a single valid `answer`, a non-empty explanation — and flashcard is validated before the app uses it.
 - **Failures are explicit.** `InvalidInputError`, `AIGenerationError`, and `AIResponseError` let the UI show honest loading/error/retry states instead of presenting a broken result as success.
@@ -51,11 +54,11 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | Path | Purpose |
 |------|---------|
 | `app.py` | Streamlit app — the learn → understand → practise interface |
-| `ai_service.py` | Gemma 4 integration — summaries, MCQs, and flashcards |
+| `ai_service.py` | Gemma 4 integration — summaries, grounded Q&A, MCQs, and flashcards |
 | `content.py` | Lesson loading and validation |
 | `progress.py` | Session-scoped learner progress tracking |
 | `data/lessons.json` | Sample curriculum lessons (team-authored study notes) |
-| `tests/` | Unit tests for the AI service and content (no live API calls) |
+| `tests/` | Unit tests for the AI service, content, and progress (no live API calls) |
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Development and testing dependencies |
 | `landing/` | Static landing page deployed to Vercel |
@@ -96,7 +99,7 @@ export GOOGLE_API_KEY=your-key-here
 streamlit run app.py
 ```
 
-Choose a track and topic, read the lesson, then use the **Explain**, **Practise**, and **Flashcards** tabs. AI output is clearly labelled and every question is validated before it is shown.
+Choose a track and topic, read the lesson, then use the **Explain**, **Ask**, **Practise**, and **Flashcards** tabs. AI output is clearly labelled and every question is validated before it is shown. In **Ask**, type a question and choose whether Gemma 4 replies in English or Nepali.
 
 ### Run the tests
 
@@ -140,9 +143,10 @@ See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, includi
 
 ## Roadmap
 
-- [x] Gemma 4 AI service (summaries, MCQs, flashcards) with validation and tests
-- [x] Streamlit learning app with an Explain / Practise / Flashcards flow
-- [x] Sample bilingual lesson content
+- [x] Gemma 4 AI service (summaries, grounded Q&A, MCQs, flashcards) with validation and tests
+- [x] Streamlit learning app with an Explain / Ask / Practise / Flashcards flow
+- [x] Grounded bilingual Q&A tutor (English / Nepali replies)
+- [x] Bilingual lesson content (English + Nepali across every track)
 - [x] Session-scoped learner progress tracking
 - [ ] Broader, source-attributed curriculum content
 
