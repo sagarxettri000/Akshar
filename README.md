@@ -1,22 +1,52 @@
-﻿# Akshar — Agent Pack for Nepluro
+﻿# Akshar
 
-These files are the canonical agent instructions for the Akshar learning platform, deployed at the repository root to guide coding agents on the Nepluro project.
+**A learning platform for Nepal — built by Team Nepluro.**
 
-## Files
+Akshar helps Nepali students understand concepts, practise exam-style questions, and prepare with confidence for NEB Grade 11–12 and CEE/IOE entrance examinations. It pairs clear Nepali/English explanations with material students can inspect, and uses **Gemma 4** as a genuine part of the learning experience.
 
-- `AGENTS.md` — canonical, project-wide instruction source for AI coding agents. Covers mission, repository audit discipline, Gemma 4 integration, educational accuracy, testing, and Git workflow.
-- `GEMINI.md` — Gemini CLI entry point that imports the canonical rules from `AGENTS.md`.
-- `FIRST_PROMPT.md` — copy/paste prompt for a read-only repository audit before implementation begins.
-- `TEAM_PLAYBOOK.md` — suggested three-person work split, focused learning-loop MVP, fair commit practices, and demo story for the Nepluro team.
+> **Status:** Active hackathon development. This repository currently holds the project documentation and AI-agent guidelines; application code is being added incrementally.
 
-## Recommended order
+## The problem
 
-1. Copy these files into the repository root.
-2. Start a fresh coding-agent session so it loads the instruction file(s).
-3. Paste `FIRST_PROMPT.md` and get a read-only audit. Review the audit as a team.
-4. Send a precise implementation task. Have the AI complete one vertical slice, verify it, inspect the diff, and commit it locally.
-5. Repeat, integrating teammates' work early. Each person must use their own Git identity for their commits.
+Nepali learners preparing for NEB Grade 11–12 and entrance exams (CEE/IOE) often have to rely on generic answers or English-only resources that do not match their curriculum or language. Access to trustworthy, level-appropriate support is uneven, especially on modest devices and connections.
 
-`AGENTS.md` is the canonical source of truth. The `GEMINI.md` import is for Gemini CLI; other tools may have their own context-file conventions. Ensure the coding tool actually loads its instruction file. These files guide an agent but cannot guarantee that every model/tool will obey them.
+Akshar is being built to close that gap.
 
-This pack is tailored for the Akshar project — a learning platform for Nepali students studying NEB Grade 11–12 and preparing for CEE/IOE entrance exams. No application source code was inspected during preparation.
+## What makes Akshar different
+
+Akshar is built around one trustworthy loop: **learn → understand → practise**.
+
+1. Choose a track and topic — NEB Grade 11/12, CEE, or IOE.
+2. Ask a question or open a reviewed practice question.
+3. Get a clear, appropriately leveled explanation in Nepali or English, with source references when curriculum material is used.
+4. Try a related question or a short knowledge check.
+5. Receive encouraging, specific feedback and, where supported, track progress.
+
+Design principles:
+
+- **Grounded, honest answers.** Curriculum answers cite the material actually shown, and clearly label AI-generated explanations and practice questions.
+- **Nepali-first accessibility.** Native Nepali/English support, correct Devanagari and mathematical notation, and readable text on small screens.
+- **Low-bandwidth by design.** Built for modest devices and connections.
+- **A real AI path.** Gemma 4 performs meaningful work in the learner flow — not a label attached to a canned answer.
+
+## Team — Nepluro
+
+| Member | Focus |
+|--------|-------|
+| Sagar Katwal | Learner experience / frontend |
+| Dipson Basnet | Gemma 4 / AI pipeline |
+| Dhiraj Shrestha | Learning content, practice & validation |
+
+## Repository contents
+
+| File | Purpose |
+|------|---------|
+| `AGENTS.md` | Canonical project instructions for AI coding agents |
+| `GEMINI.md` | Gemini CLI entry point that imports `AGENTS.md` |
+| `FIRST_PROMPT.md` | Read-only repository audit prompt |
+| `TEAM_PLAYBOOK.md` | Team work split, MVP scope, and demo plan |
+| `LICENSE` | MIT License |
+
+## License
+
+Released under the MIT License. See [`LICENSE`](LICENSE) for details.
