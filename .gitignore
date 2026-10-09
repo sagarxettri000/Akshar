@@ -12,3 +12,11 @@ desktop.ini
 
 # Logs and local data
 *.log
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Streamlit local secrets
+.streamlit/secrets.toml
