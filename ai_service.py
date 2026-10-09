@@ -93,6 +93,13 @@ def _clean_count(count: int) -> int:
     return count
 
 
+def _redact_secret(message: str, secret: str) -> str:
+    """Return ``message`` with any occurrence of ``secret`` masked."""
+    if secret and secret in message:
+        return message.replace(secret, "***")
+    return message
+
+
 # ---------------------------------------------------------------------------
 # Response parsing and validation
 # ---------------------------------------------------------------------------
@@ -277,12 +284,16 @@ def _extract_response_text(response: Any) -> str:
 
 def _generate_text(prompt: str, api_key: str) -> str:
     """Send one prompt to Gemma 4 and return its text response."""
-    client = _build_client(api_key)
     try:
+        client = _build_client(api_key)
         response = client.models.generate_content(model=MODEL_ID, contents=prompt)
+    except AIServiceError:
+        raise
     except Exception as exc:
         # Never include the API key in the raised message.
-        raise AIGenerationError(f"The Gemma 4 request failed: {exc}") from exc
+        raise AIGenerationError(
+            "The Gemma 4 request failed: " + _redact_secret(str(exc), api_key)
+        ) from exc
 
     text = _extract_response_text(response)
     if not text:

@@ -229,3 +229,36 @@ def test_generate_flashcards_raises_when_no_valid_cards(monkeypatch):
     monkeypatch.setattr(ai_service, "_generate_text", _fake_generate(payload))
     with pytest.raises(ai_service.AIResponseError):
         ai_service.generate_flashcards("lesson", "secret")
+
+
+# ---------------------------------------------------------------------------
+# Secret handling and model-call errors
+# ---------------------------------------------------------------------------
+
+
+def test_redact_secret_masks_key():
+    assert (
+        ai_service._redact_secret("bad key secret123 rejected", "secret123")
+        == "bad key *** rejected"
+    )
+
+
+def test_generate_text_redacts_api_key_in_errors(monkeypatch):
+    class _Boom(Exception):
+        pass
+
+    class _Models:
+        @staticmethod
+        def generate_content(**kwargs):
+            raise _Boom("request rejected for key secret-key-123")
+
+    class _Client:
+        models = _Models()
+
+    monkeypatch.setattr(ai_service, "_build_client", lambda api_key: _Client())
+
+    with pytest.raises(ai_service.AIGenerationError) as excinfo:
+        ai_service._generate_text("prompt", "secret-key-123")
+
+    assert "secret-key-123" not in str(excinfo.value)
+    assert "***" in str(excinfo.value)
