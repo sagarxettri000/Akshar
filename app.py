@@ -18,6 +18,7 @@ from content import (
     ContentError,
     filter_lessons,
     lesson_label,
+    lessons_signature,
     load_lessons,
     unique_values,
 )
@@ -30,8 +31,13 @@ FLASHCARD_COUNT = 4
 
 
 @st.cache_data(show_spinner=False)
-def get_lessons() -> list[dict]:
-    """Load lessons once and cache them for the session."""
+def get_lessons(signature: str) -> list[dict]:
+    """Load lessons, re-reading them whenever ``signature`` changes.
+
+    ``signature`` is derived from the lesson file's path and modification
+    time, so editing ``data/lessons.json`` invalidates the cache without a
+    full app restart.
+    """
     return load_lessons()
 
 
@@ -187,7 +193,7 @@ def main() -> None:
     )
 
     try:
-        lessons = get_lessons()
+        lessons = get_lessons(lessons_signature())
     except ContentError as exc:
         st.error(f"Could not load lesson content: {exc}")
         st.stop()

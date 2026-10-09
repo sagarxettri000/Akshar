@@ -54,6 +54,21 @@ def load_lessons(path: str | Path = DEFAULT_LESSONS_PATH) -> list[dict]:
     return lessons
 
 
+def lessons_signature(path: str | Path = DEFAULT_LESSONS_PATH) -> str:
+    """Return a cache-busting signature for the lesson file.
+
+    Combines the file path with its modification time so that any cached
+    lesson data is invalidated whenever the content on disk changes, even
+    when the app process itself is not restarted.
+    """
+    target = Path(path)
+    try:
+        mtime = target.stat().st_mtime_ns
+    except OSError:
+        mtime = 0
+    return f"{target}:{mtime}"
+
+
 def unique_values(lessons: Iterable[dict], field: str) -> list[str]:
     """Return the distinct values of ``field`` in first-seen order."""
     seen: list[str] = []

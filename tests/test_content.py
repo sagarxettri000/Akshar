@@ -1,6 +1,7 @@
 """Tests for lesson content loading and validation."""
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -92,6 +93,19 @@ def test_filter_and_unique_values():
 def test_lesson_label_falls_back_to_code():
     assert content.lesson_label("en") == "English"
     assert content.lesson_label("xx") == "xx"
+
+
+def test_lessons_signature_is_path_bound():
+    signature = content.lessons_signature()
+    assert "lessons.json" in signature
+
+
+def test_lessons_signature_changes_when_file_changes(tmp_path):
+    path = _write(tmp_path, {"version": 1, "lessons": [VALID_LESSON]})
+    first = content.lessons_signature(path)
+    os.utime(path, (1, 1))
+    second = content.lessons_signature(path)
+    assert first != second
 
 
 def test_repo_lessons_file_is_valid():
