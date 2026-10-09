@@ -12,6 +12,7 @@ import os
 import streamlit as st
 
 import ai_service
+import progress
 from ai_service import AIServiceError
 from content import (
     ContentError,
@@ -55,6 +56,13 @@ def require_api_key(api_key: str | None) -> bool:
         "`.streamlit/secrets.toml` or an environment variable, then reload."
     )
     return False
+
+
+def get_progress() -> dict:
+    """Return this session's progress state, creating it on first use."""
+    if "progress" not in st.session_state:
+        st.session_state["progress"] = progress.new_state()
+    return st.session_state["progress"]
 
 
 def render_ai_notice() -> None:
@@ -134,7 +142,13 @@ def render_practice_tab(lesson: dict, api_key: str | None) -> None:
                     f"Q{index}: The correct answer is **{correct}**. "
                     f"{question['explanation']}"
                 )
-        st.info(f"Score: {score} / {len(questions)}")
+
+        progress.record_attempt(get_progress(), lesson["id"], score, len(questions))
+        best = progress.get_lesson_progress(get_progress(), lesson["id"])
+        st.info(
+            f"Score: {score} / {len(questions)} · "
+            f"Best: {best['best_score']} / {best['best_total']}"
+        )
 
     render_ai_notice()
 
@@ -199,6 +213,16 @@ def main() -> None:
             st.caption(
                 "Add `GOOGLE_API_KEY` to `.streamlit/secrets.toml` or your environment."
             )
+
+        st.divider()
+        st.subheader("Your progress")
+        summary = progress.summarize(get_progress())
+        st.caption(f"Lessons practised: **{summary['lessons_practised']}**")
+        st.caption(f"Practice attempts: **{summary['total_attempts']}**")
+        st.caption(f"Average best score: **{summary['average_best_percent']}%**")
+        if st.button("Reset progress"):
+            st.session_state["progress"] = progress.new_state()
+            st.rerun()
 
     lesson = next(item for item in variants if item["language"] == language)
 
