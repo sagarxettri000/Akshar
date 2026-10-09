@@ -1,4 +1,4 @@
-﻿# Akshar
+# Akshar
 
 **A learning platform for Nepal — built by Team Nepluro.**
 
