@@ -21,7 +21,7 @@ app cannot run on Vercel — the landing page can.
 3. Fill in:
    - **Repository:** `sagarxettri000/Akshar`
    - **Branch:** `main`
-   - **Main file path:** `app.py`
+   - **Main file path:** `app.py` — or leave the default `streamlit_app.py`, which runs the identical app
 4. Open **Advanced settings** → **Secrets** and paste:
 
    ```toml
