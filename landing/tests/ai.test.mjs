@@ -194,6 +194,22 @@ test("rejects an over-long question", () => {
   assert.throws(() => cleanQuestion("x".repeat(1001)), InvalidInputError);
 });
 
+test("trims very long lesson text before sending it to the model", async () => {
+  const longLesson = "A".repeat(12000);
+  let seen;
+
+  await generateSummary(longLesson, {
+    apiKey: "k",
+    fetchImpl: async (_url, init) => {
+      seen = JSON.parse(init.body).contents[0].parts[0].text;
+      return okResponse(geminiReply("summary"));
+    },
+  });
+
+  assert.ok(seen.length < 12000);
+  assert.ok(seen.includes("Content shortened for faster generation"));
+});
+
 test("redacts the API key from error text", () => {
   assert.equal(redactSecret("bad key AIza-secret", "AIza-secret"), "bad key ***");
 });

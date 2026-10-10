@@ -17,6 +17,8 @@
 export const MODEL_ID = "gemma-4-26b-a4b-it";
 export const DEFAULT_MCQ_COUNT = 5;
 export const DEFAULT_FLASHCARD_COUNT = 5;
+export const DEFAULT_MODEL_TIMEOUT_MS = 30000;
+export const DEFAULT_MODEL_PROMPT_LIMIT = 3200;
 export const OPTION_KEYS = Object.freeze(["A", "B", "C", "D"]);
 export const MAX_QUESTION_LENGTH = 1000;
 export const MAX_HISTORY_MESSAGES = 6;
@@ -97,6 +99,22 @@ export function cleanQuestion(question) {
     );
   }
   return cleaned;
+}
+
+/**
+ * Trim the lesson to a shorter prompt before sending it to Gemma so large
+ * Nepal-focused chapters stay fast to generate. The front of the lesson keeps
+ * the key definitions and formulas; a short note tells the model the content was
+ * shortened to keep the interaction responsive.
+ */
+export function shortenLessonText(lessonText, maxChars = DEFAULT_MODEL_PROMPT_LIMIT) {
+  const source = typeof lessonText === "string" ? lessonText.trim() : "";
+  if (!source) return { text: "", shortened: false };
+  if (source.length <= maxChars) return { text: source, shortened: false };
+
+  const head = source.slice(0, maxChars).trim();
+  const suffix = "\n\n[Content shortened for faster generation. The lesson summary keeps the core definitions, formulas, and examples from the start of the chapter.]";
+  return { text: `${head}${suffix}`, shortened: true };
 }
 
 /**
@@ -439,7 +457,7 @@ export async function generateText(prompt, options = {}) {
     apiKey,
     fetchImpl = globalThis.fetch,
     baseUrl = process.env.GEMINI_BASE_URL || DEFAULT_BASE_URL,
-    timeoutMs = 45000,
+    timeoutMs = DEFAULT_MODEL_TIMEOUT_MS,
     modelId = MODEL_ID,
   } = options;
 
@@ -545,31 +563,35 @@ function describeHttpFailure(status, body, apiKey) {
 
 export async function generateSummary(lessonText, options = {}) {
   const lesson = cleanLessonText(lessonText);
-  const summary = (await generateText(buildSummaryPrompt(lesson), options)).trim();
+  const { text: compactLesson } = shortenLessonText(lesson);
+  const summary = (await generateText(buildSummaryPrompt(compactLesson), options)).trim();
   if (!summary) throw new AIGenerationError("The model returned an empty summary.");
   return summary;
 }
 
 export async function generateMcqs(lessonText, options = {}) {
   const lesson = cleanLessonText(lessonText);
+  const { text: compactLesson } = shortenLessonText(lesson);
   const count = cleanCount(options.count ?? DEFAULT_MCQ_COUNT);
-  const raw = await generateText(buildMcqPrompt(lesson, count), options);
+  const raw = await generateText(buildMcqPrompt(compactLesson, count), options);
   return validateMcqs(parseJsonResponse(raw)).slice(0, count);
 }
 
 export async function generateFlashcards(lessonText, options = {}) {
   const lesson = cleanLessonText(lessonText);
+  const { text: compactLesson } = shortenLessonText(lesson);
   const count = cleanCount(options.count ?? DEFAULT_FLASHCARD_COUNT);
-  const raw = await generateText(buildFlashcardPrompt(lesson, count), options);
+  const raw = await generateText(buildFlashcardPrompt(compactLesson, count), options);
   return validateFlashcards(parseJsonResponse(raw)).slice(0, count);
 }
 
 export async function askQuestion(lessonText, question, options = {}) {
   const lesson = cleanLessonText(lessonText);
+  const { text: compactLesson } = shortenLessonText(lesson);
   const cleanedQuestion = cleanQuestion(question);
   const conversation = cleanHistory(options.history);
   const answerLanguage = cleanAnswerLanguage(options.language ?? null);
-  const prompt = buildAskPrompt(lesson, cleanedQuestion, conversation, answerLanguage);
+  const prompt = buildAskPrompt(compactLesson, cleanedQuestion, conversation, answerLanguage);
   const answer = (await generateText(prompt, options)).trim();
   if (!answer) throw new AIGenerationError("The model returned an empty answer.");
   return answer;
