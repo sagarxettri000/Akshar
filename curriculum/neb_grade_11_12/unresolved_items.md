@@ -1,5 +1,17 @@
 # Unresolved Items — NEB/CDC Grade 11–12 Curriculum Inventory
 
+## Newly Extracted & Verified Official Syllabuses (Current Cycle)
+
+The following core science syllabuses have been fully extracted and verified from CDC 2077 Secondary Education Curriculum documents:
+
+| Subject | Grade | Subject Code | Document Citation | Extracted Units | Assessment Marks | Verification Status |
+|---------|-------|--------------|-------------------|-----------------|------------------|---------------------|
+| Biology | 11 | BIO-11 | CDC Secondary Curriculum 2077, Part 2 | 5 Units (Botany & Zoology) | Theory: 75 / Practical: 25 | SYLLABUS_EXTRACTED |
+| Biology | 12 | BIO-12 | CDC Secondary Curriculum 2077, Part 2 | 5 Units (Botany & Zoology) | Theory: 75 / Practical: 25 | SYLLABUS_EXTRACTED |
+| Physics | 12 | PHY-12 | CDC Secondary Curriculum 2077, Part 2 | 5 Units (Mechanics to Modern Physics) | Theory: 75 / Practical: 25 | SYLLABUS_EXTRACTED |
+| Chemistry | 12 | CHEM-12 | CDC Secondary Curriculum 2077, Part 2 | 4 Core Areas (Physical, Inorganic, Organic, Applied) | Theory: 75 / Practical: 25 | SYLLABUS_EXTRACTED |
+| Mathematics | 12 | MATH-12 | CDC Secondary Curriculum 2077, Part 1 | 6 Units (Algebra to Computational/Mechanics) | Theory: 75 / Internal: 25 | SYLLABUS_EXTRACTED |
+
 ## Inaccessible Official Documents
 
 The following CDC curriculum documents could not be accessed during this inventory cycle. Their absence creates gaps in the verified syllabus structure and assessment requirements.
@@ -30,19 +42,18 @@ The following subjects are known to exist in the CDC curriculum collections but 
 ## Unclear Optional-Subject Groupings
 
 | Stream | Grade | Optional Subjects | Clarification Needed |
-|--------|-------|-------------------|---------------------|
+|---------|-------|-------------------|---------------------|
 | Management | 11, 12 | Accounting, Economics, Business Studies | Exact compulsory/optional boundaries within Management stream not yet documented. |
 | Humanities | 11, 12 | Education, Political Science, Sociology | Optional grouping structure and subject combinations not fully specified. |
 | Health Science | 11, 12 | Nursing Fundamentals, Hotel Management Basics | Vocational stream composition and subject prerequisites not documented. |
 
-## Missing Syllabus Sections
+## Pending Syllabus Extractions (Remaining Core)
 
-| Subject | Grade | Missing Detail | Impact |
+| Subject | Grade | Missing Detail | Status |
 |---------|-------|----------------|--------|
-| Physics | 11, 12 | Practical assessment weights and experiment specifications | Syllabus structure extracted but practical component details flagged as incomplete. |
-| Chemistry | 11, 12 | Laboratory experiment list and equipment requirements | Practical assessment documented but specific experiments not listed. |
-| Mathematics | 11, 12 | Full list of theorems, proofs, and derivations required | Syllabus structure extracted at unit level; chapter-level detail pending. |
-| English | 11, 12 | Speaking and listening assessment criteria | Practical assessment documented but detailed criteria not extracted. |
+| English | 12 | Compulsory English (Eng. 004): 20 thematic units + literature reading texts | SOURCE_INSPECTED (Ready for next extraction cycle) |
+| Nepali | 12 | Compulsory Nepali (Nep. 002): 12 literary texts & Devanagari grammar competencies | SOURCE_INSPECTED (Ready for next extraction cycle) |
+| Mathematics | 11 | Chapter-level detail pending beyond currently extracted Algebra and Trigonometry units | SYLLABUS_EXTRACTED_PARTIAL |
 
 ## Subject Categories Not Yet Comprehensive
 
@@ -54,21 +65,7 @@ The following curriculum categories have been identified in CDC documents but ar
 - Foreign Language subjects (beyond compulsory Nepali/English)
 - Physical Education and Sports subjects
 
-## Summary of Unresolved Items
-
+## Summary of Inventory Status
+- **10** subjects with verified syllabus structures in `syllabus_structure.json`
 - **14** inaccessible or partially accessible official documents
-- **7** subjects with DISCOVERED status requiring source verification
-- **4** subjects with uncertain transitional curriculum status
-- **5** subject categories with unclear optional/ compulsory boundaries
-- **5** missing syllabus sections requiring detailed extraction
-- **9** subject subcategories not yet comprehensively inventoried
-
-## Recommended Next Steps
-
-1. Obtain PDF copies of inaccessible CDC curriculum documents through official channels
-2. Confirm applicability status of Intelligent Study (INT-11/INT-12) for current academic year
-3. Extract full syllabus structure for Physics, Chemistry, and Mathematics practical components
-4. Document optional-subject grouping rules for Management, Humanities, and Health Science streams
-5. Identify subject codes for Agriculture, Health Science, and other vocational subjects
-6. Map optional-subject combinations within each stream (not all students take the same set)
-7. Verify assessment structures against current NEB examination patterns
+- **22** subjects remaining in DISCOVERED / PENDING extraction state

@@ -62,9 +62,9 @@ def require_api_key(api_key: str | None) -> bool:
     """Show a helpful message and return False when no key is configured."""
     if api_key:
         return True
-    st.warning(
-        "No Gemma 4 API key found. Add `GOOGLE_API_KEY` to "
-        "`.streamlit/secrets.toml` or an environment variable, then reload."
+    st.info(
+        "Connect with Gemma 4 to get explanations, practice questions, and flashcards. "
+        "Add `GOOGLE_API_KEY` to `.streamlit/secrets.toml` or an environment variable."
     )
     return False
 
@@ -100,6 +100,8 @@ def render_summary_tab(lesson: dict, api_key: str | None) -> None:
             st.session_state.pop(state_key, None)
             st.rerun()
         render_ai_notice()
+    else:
+        st.caption("Generate a summary to see AI-powered highlights.")
 
 
 def render_practice_tab(lesson: dict, api_key: str | None) -> None:
@@ -146,23 +148,56 @@ def render_practice_tab(lesson: dict, api_key: str | None) -> None:
 
     if submitted:
         score = 0
+        missed_indices: list[int] = []
+        # Track student answers for display in feedback/review
+        student_answers: dict[int, str] = {}
         for index, question in enumerate(questions, start=1):
             correct = question["answer"]
-            if selections[index] == correct:
+            student_answer = selections.get(index, "")
+            student_answers[index] = student_answer
+            if student_answer == correct:
                 score += 1
                 st.success(f"Q{index}: Correct. {question['explanation']}")
             else:
+                missed_indices.append(index)
+                # Show both student's answer and the correct answer
+                student_letter = student_answer[:1] if student_answer else " "
+                correct_display = f"{correct}. {question['options'][correct]}"
                 st.error(
-                    f"Q{index}: The correct answer is **{correct}**. "
+                    f"Q{index}: Your answer was **{student_letter}.**. "
+                    f"The correct answer is **{correct_display}**. "
                     f"{question['explanation']}"
                 )
 
         progress.record_attempt(get_progress(), lesson["id"], score, len(questions))
         best = progress.get_lesson_progress(get_progress(), lesson["id"])
         st.info(
-            f"Score: {score} / {len(questions)} · "
+            f"Score: {score} / {len(questions)} "
+            f"({score/len(questions)*100:.0f}%) · "
             f"Best: {best['best_score']} / {best['best_total']}"
         )
+
+        # Review summary
+        if missed_indices:
+            with st.expander(f"Review {len(missed_indices)} missed question(s)"):
+                for idx in missed_indices:
+                    q = questions[idx - 1]
+                    student_ans = student_answers.get(idx, "")
+                    student_letter = student_ans[:1] if student_ans else " "
+                    correct_letter = q["answer"]
+                    st.markdown(f"**Q{idx}: {q['question']}**")
+                    st.markdown(
+                        f"Your answer: **{student_letter}. "
+                        f"{q['options'].get(student_letter, '?')}**. "
+                        f"Correct answer: **{correct_letter}. "
+                        f"{q['options'][correct_letter]}**"
+                    )
+                    st.markdown(f"Explanation: {q['explanation']}")
+        else:
+            st.balloons()
+            st.success("Perfect! You got all questions correct!")
+
+        render_ai_notice()
 
     render_ai_notice()
 
@@ -185,7 +220,9 @@ def render_flashcards_tab(lesson: dict, api_key: str | None) -> None:
         for index, card in enumerate(cards, start=1):
             with st.expander(f"Card {index}: {card['question']}"):
                 st.write(card["answer"])
-        render_ai_notice()
+    else:
+        st.caption("Generate flashcards to create quick revision cards.")
+    render_ai_notice()
 
 
 def render_ask_tab(lesson: dict, api_key: str | None) -> None:
@@ -280,7 +317,8 @@ def main() -> None:
         if get_api_key():
             st.success("Gemma 4 API key detected.")
         else:
-            st.warning("No Gemma 4 API key detected.")
+            st.info("Connect with Gemma 4 to get explanations, practice questions, and flashcards. "
+                    "Add `GOOGLE_API_KEY` to `.streamlit/secrets.toml` or an environment variable.")
             st.caption(
                 "Add `GOOGLE_API_KEY` to `.streamlit/secrets.toml` or your environment."
             )

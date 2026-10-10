@@ -1,0 +1,50 @@
+=== Nepali lesson search tests ===
+
+Test 1: Search English lessons for 'motion':
+  Results: 3
+
+Test 2: Search Nepali lessons for 'गति' (motion):
+  Results: 0
+
+Test 3: Search Nepali lessons for shorter 'गति':
+  Results: 1
+
+Test 4: _normalize_text on Nepali:
+  Original: 'गतिला'
+  Normalized: 'गतिला'
+
+Test 5: Search for 'भौतिक' (physics in Nepali):
+  Results: 0
+
+Test 7: Search for 'गुरुत्व' (gravity):
+  Results: 0
+
+Test 7: Search for 'वेग' (velocity):
+  Results: 0
+
+Test 8: Empty search:
+  Results: 0 (should be 0)
+
+Test 9: Whitespace search:
+  Results: 0 (should be 0)
+
+Test 10: English search 'photosynthesis':
+  Results: 1
+
+Test 11: Search case-insensitive:
+  Results: 1
+
+Test 12: Search whitespace-tolerant:
+  Results: 1
+
+Test 13: lesson_label:
+  en: English
+  ne: नेपाली (Nepali)
+  xx: xx
+
+Test 14: filter_lessons language:
+  English count: 9
+  Nepali count: 5
+  filter language=en: 9
+  filter language=ne: 5
+=== All search tests complete ===

@@ -1,0 +1,273 @@
+Nepali lesson content info:
+  first 50 chars:
+  U+0928 = 'न'
+  U+094D = '्'
+  U+092F = 'य'
+  U+0941 = 'ु'
+  U+091F = 'ट'
+  U+0928 = 'न'
+  U+0915 = 'क'
+  U+094B = 'ो'
+  U+0020 = ' '
+  U+0926 = 'द'
+  U+094B = 'ो'
+  U+0938 = 'स'
+  U+094D = '्'
+  U+0930 = 'र'
+  U+094B = 'ो'
+  U+0020 = ' '
+  U+0928 = 'न'
+  U+093F = 'ि'
+  U+092F = 'य'
+  U+092E = 'म'
+  U+0905 = 'अ'
+  U+0928 = 'न'
+  U+0941 = 'ु'
+  U+0938 = 'स'
+  U+093E = 'ा'
+  U+0930 = 'र'
+  U+0020 = ' '
+  U+0915 = 'क'
+  U+0941 = 'ु'
+  U+0928 = 'न'
+  U+0948 = 'ै'
+  U+0020 = ' '
+  U+0935 = 'व'
+  U+0938 = 'स'
+  U+094D = '्'
+  U+0924 = 'त'
+  U+0941 = 'ु'
+  U+0915 = 'क'
+  U+094B = 'ो'
+  U+0020 = ' '
+  U+0938 = 'स'
+  U+0902 = 'ं'
+  U+0935 = 'व'
+  U+0947 = 'े'
+  U+0917 = 'ग'
+  U+0020 = ' '
+  U+092A = 'प'
+  U+0930 = 'र'
+  U+093F = 'ि'
+  U+0935 = 'व'
+  last 50 chars:
+  char from end 1: U+092A = 'प'
+  char from end 2: U+093F = 'ि'
+  char from end 3: U+0923 = 'ण'
+  char from end 4: U+094D = '्'
+  char from end 5: U+0921 = 'ड'
+  char from end 6: U+0932 = 'ल'
+  char from end 7: U+093E = 'ा'
+  char from end 8: U+0908 = 'ई'
+  char from end 9: U+0020 = ' '
+  char from end 10: U+090F = 'ए'
+  char from end 11: U+0915 = 'क'
+  char from end 12: U+0020 = ' '
+  char from end 13: U+092E = 'म'
+  char from end 14: U+093F = 'ि'
+  char from end 15: U+091F = 'ट'
+  char from end 16: U+0930 = 'र'
+  char from end 17: U+0020 = ' '
+  char from end 18: U+092A = 'प'
+  char from end 19: U+094D = '्'
+  char from end 20: U+0930 = 'र'
+  char from end 21: U+0924 = 'त'
+  char from end 22: U+093F = 'ि'
+  char from end 23: U+0020 = ' '
+  char from end 24: U+0938 = 'स'
+  char from end 25: U+0947 = 'े'
+  char from end 26: U+0915 = 'क'
+  char from end 27: U+0947 = 'े'
+  char from end 28: U+0928 = 'न'
+  char from end 29: U+094D = '्'
+  char from end 30: U+0921 = 'ड'
+  char from end 31: U+0020 = ' '
+  char from end 32: U+0935 = 'व'
+  char from end 33: U+0930 = 'र'
+  char from end 34: U+094D = '्'
+  char from end 35: U+0917 = 'ग'
+  char from end 36: U+0915 = 'क'
+  char from end 37: U+094B = 'ो'
+  char from end 38: U+0020 = ' '
+  char from end 39: U+0924 = 'त'
+  char from end 40: U+094D = '्'
+  char from end 41: U+0935 = 'व'
+  char from end 42: U+0930 = 'र'
+  char from end 43: U+0923 = 'ण'
+  char from end 44: U+0020 = ' '
+  char from end 45: U+0926 = 'द'
+  char from end 46: U+093F = 'ि'
+  char from end 47: U+0928 = 'न'
+  char from end 48: U+094D = '्'
+  char from end 49: U+091B = 'छ'
+  char from end 50: U+0964 = '।'
+  total length: 422
+
+Test _normalize_text on Nepali content:
+Normalized content first 100 chars:
+  U+0928
+  U+094D
+  U+092F
+  U+0941
+  U+091F
+  U+0928
+  U+0915
+  U+094B
+  U+0020
+  U+0926
+  U+094B
+  U+0938
+  U+094D
+  U+0930
+  U+094B
+  U+0020
+  U+0928
+  U+093F
+  U+092F
+  U+092E
+  U+0905
+  U+0928
+  U+0941
+  U+0938
+  U+093E
+  U+0930
+  U+0020
+  U+0915
+  U+0941
+  U+0928
+  U+0948
+  U+0020
+  U+0935
+  U+0938
+  U+094D
+  U+0924
+  U+0941
+  U+0915
+  U+094B
+  U+0020
+  U+0938
+  U+0902
+  U+0935
+  U+0947
+  U+0917
+  U+0020
+  U+092A
+  U+0930
+  U+093F
+  U+0935
+  U+0930
+  U+094D
+  U+0924
+  U+0928
+  U+0915
+  U+094B
+  U+0020
+  U+0926
+  U+0930
+  U+0020
+  U+0924
+  U+094D
+  U+092F
+  U+0938
+  U+092E
+  U+093E
+  U+0020
+  U+0932
+  U+093E
+  U+0917
+  U+094D
+  U+0928
+  U+0947
+  U+0020
+  U+0928
+  U+0947
+  U+091F
+  U+0020
+  U+092C
+  U+0932
+  U+0938
+  U+0901
+  U+0917
+  U+0020
+  U+0938
+  U+093F
+  U+0927
+  U+093E
+  U+0020
+  U+0938
+  U+092E
+  U+093E
+  U+0928
+  U+0941
+  U+092A
+  U+093E
+  U+0924
+  U+0940
+  U+0020
+  U+0939
+Normalized content repr (first 100): 'न्युटनको दोस्रो नियमअनुसार कुनै वस्तुको संवेग परिवर्तनको दर त्यसमा लाग्ने नेट बलसँग सिधा समानुपाती ह'
+
+Normalized query 'फलां': 'मराल'
+Query in normalized content: NO
+Devanagari chars in content: 336
+
+First 3 chars of content:
+  char 1: U+0928
+  char 2: U+094D
+  char 3: U+092F
+
+
+Second Nepali lesson first 50 chars:
+  U+092A
+  U+094D
+  U+0930
+  U+0915
+  U+093E
+  U+0936
+  U+0020
+  U+0938
+  U+0902
+  U+0936
+  U+094D
+  U+0932
+  U+0947
+  U+0937
+  U+0923
+  U+0020
+  U+0924
+  U+094D
+  U+092F
+  U+094B
+  U+0020
+  U+092A
+  U+094D
+  U+0930
+  U+0915
+  U+094D
+  U+0930
+  U+093F
+  U+092F
+  U+093E
+  U+0020
+  U+0939
+  U+094B
+  U+0020
+  U+091C
+  U+0938
+  U+092E
+  U+093E
+  U+0020
+  U+0939
+  U+0930
+  U+093F
+  U+092F
+  U+093E
+  U+0020
+  U+0935
+  U+0928
+  U+0938
+  U+094D
+  U+092A
+
+
+Done.

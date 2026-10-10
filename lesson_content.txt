@@ -1,0 +1,43 @@
+Derivatives
+
+The derivative of a function measures the rate at which the function's value changes as its input changes. It is a central concept in differential calculus and has wide applications in physics, engineering, economics, and biology.
+
+Definition of Derivative
+The derivative of a function f(x) at a point x is defined as the limit of the average rate of change as the interval approaches zero:
+
+  f'(x) = lim(h -> 0) [f(x + h) - f(x)] / h
+
+If this limit exists, the function is said to be differentiable at that point. The derivative f'(x) represents the instantaneous rate of change of f with respect to x, and geometrically it gives the slope of the tangent line to the curve at that point.
+
+Notation
+Derivatives can be written in several ways:
+- f'(x) (Lagrange notation)
+- dy/dx (Leibniz notation)
+- Df(x) (Euler notation)
+
+Basic Differentiation Rules
+
+1. Power Rule: d/dx [x^n] = n * x^(n-1)
+2. Constant Rule: d/dx [c] = 0, where c is a constant.
+3. Constant Multiple Rule: d/dx [c * f(x)] = c * f'(x)
+4. Sum/Difference Rule: d/dx [f(x) +/- g(x)] = f'(x) +/- g'(x)
+5. Product Rule: d/dx [f(x) * g(x)] = f'(x) * g(x) + f(x) * g'(x)
+6. Quotient Rule: d/dx [f(x) / g(x)] = [f'(x) * g(x) - f(x) * g'(x)] / [g(x)]^2
+7. Chain Rule: d/dx [f(g(x))] = f'(g(x)) * g'(x)
+
+Derivatives of Common Functions
+- d/dx [sin x] = cos x
+- d/dx [cos x] = -sin x
+- d/dx [tan x] = sec^2 x
+- d/dx [e^x] = e^x
+- d/dx [ln x] = 1/x
+
+Applications of Derivatives
+
+- Tangent and Normal Lines: the derivative at a point gives the slope of the tangent line. The normal line is perpendicular to the tangent.
+- Increasing and Decreasing Functions: if f'(x) > 0 on an interval, f is increasing; if f'(x) < 0, f is decreasing.
+- Maxima and Minima: critical points occur where f'(x) = 0 or f'(x) is undefined. The second derivative test helps classify them as local maxima or minima.
+- Rate of Change: in physics, velocity is the derivative of displacement with respect to time, and acceleration is the derivative of velocity.
+
+Summary
+Derivatives provide a precise tool for analysing how quantities change. Mastering the definition, basic rules, and applications of derivatives is essential for advanced mathematics and its real-world uses.

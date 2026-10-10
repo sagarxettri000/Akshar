@@ -1,0 +1,136 @@
+Version: 1
+Total lessons: 14
+Lesson 0:
+  id: phy-newton-2-en
+  track: NEB Grade 11
+  subject: Physics
+  topic: Newton's Laws of Motion
+  title: Newton's Second Law
+  language: en
+  content: Newton's second law of motion states that the rate of change of momentum of a bo
+
+Lesson 1:
+  id: phy-newton-2-ne
+  track: NEB Grade 11
+  subject: Physics
+  topic: Newton's Laws of Motion
+  title: न्युटनको दोस्रो नियम
+  language: ne
+  content: न्युटनको दोस्रो नियमअनुसार कुनै वस्तुको संवेग परिवर्तनको दर त्यसमा लाग्ने नेट बल
+
+Lesson 2:
+  id: bio-photosynthesis-en
+  track: NEB Grade 12
+  subject: Biology
+  topic: Photosynthesis
+  title: Photosynthesis
+  language: en
+  content: Photosynthesis is the process by which green plants, algae, and some bacteria co
+
+Lesson 3:
+  id: bio-photosynthesis-ne
+  track: NEB Grade 12
+  subject: Biology
+  topic: Photosynthesis
+  title: प्रकाश संश्लेषण
+  language: ne
+  content: प्रकाश संश्लेषण त्यो प्रक्रिया हो जसमा हरिया वनस्पति, शैवाल र केही ब्याक्टेरियाल
+
+Lesson 4:
+  id: chem-acids-bases-en
+  track: NEB Grade 11
+  subject: Chemistry
+  topic: Acids, Bases and Salts
+  title: Acids and Bases
+  language: en
+  content: Acids are substances that donate protons (H+ ions) in aqueous solution, while ba
+
+Lesson 5:
+  id: chem-acids-bases-ne
+  track: NEB Grade 11
+  subject: Chemistry
+  topic: Acids, Bases and Salts
+  title: अम्ल र क्षार
+  language: ne
+  content: अम्ल ती पदार्थ हुन् जुन जलीय घोलमा प्रोटोन (H+ आयन) दान गर्छन्, भने क्षार प्रोटो
+
+Lesson 6:
+  id: cee-kinematics-en
+  track: CEE
+  subject: Physics
+  topic: Kinematics
+  title: Equations of Motion
+  language: en
+  content: For motion in a straight line with uniform acceleration a, the three kinematic e
+
+Lesson 7:
+  id: cee-kinematics-ne
+  track: CEE
+  subject: Physics
+  topic: Kinematics
+  title: गतिका समीकरणहरू
+  language: ne
+  content: एकनासको त्वरण a सहित सरल रेखामा हुने गतिका लागि तीन गतिक समीकरणहरू हुन्: v = u +
+
+Lesson 8:
+  id: ioe-quadratics-en
+  track: IOE
+  subject: Mathematics
+  topic: Algebra
+  title: Quadratic Equations
+  language: en
+  content: A quadratic equation in one variable x has the standard form a x^2 + b x + c = 0
+
+Lesson 9:
+  id: ioe-quadratics-ne
+  track: IOE
+  subject: Mathematics
+  topic: Algebra
+  title: द्विघात समीकरण
+  language: ne
+  content: एउटा चर x मा द्विघात समीकरणको मानक रूप a x^2 + b x + c = 0 हुन्छ, जहाँ a, b, c व
+
+Lesson 10:
+  id: grade11-physics-motion
+  track: NEB Grade 11
+  subject: Physics
+  topic: Motion in a Straight Line
+  title: Motion in a Straight Line
+  language: en
+  content: Motion in a Straight Line
+
+Motion is the change in position of an object with re
+
+Lesson 11:
+  id: grade11-chemistry-atomic-structure
+  track: NEB Grade 11
+  subject: Chemistry
+  topic: Atomic Structure
+  title: Atomic Structure
+  language: en
+  content: Atomic Structure
+
+Atomic structure describes how an atom is organised — the arra
+
+Lesson 12:
+  id: grade12-biology-cell-division
+  track: NEB Grade 12
+  subject: Biology
+  topic: Cell Division
+  title: Cell Division
+  language: en
+  content: Cell Division
+
+Cell division is the process by which a parent cell divides into 
+
+Lesson 13:
+  id: grade12-mathematics-derivatives
+  track: NEB Grade 12
+  subject: Mathematics
+  topic: Derivatives
+  title: Derivatives
+  language: en
+  content: Derivatives
+
+The derivative of a function measures the rate at which the functio
+

@@ -1,0 +1,23 @@
+_normalize_text tests:
+photosynthesis
+hello world
+नमस्तेदुनिया
+
+
+English
+नेपाली (Nepali)
+xx
+
+English count: 9
+Nepali count: 5
+filter language=ne: 5
+filter language=en: 9
+
+English search photosynthesis: 1
+English search whitespace: 1
+search case match: 1
+Nepali search: 0
+
+empty search: 0
+
+whitespace search: 0

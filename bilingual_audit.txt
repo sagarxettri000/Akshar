@@ -1,0 +1,86 @@
+=== Language Distribution ===
+  en: 9
+  ne: 5
+
+=== All Lessons Summary ===
+Lesson 0: phy-newton-2-en
+  lang=en | track=NEB Grade 11 | sub=Physics | topic=Newton's Laws of Motion | title=Newton's Second Law
+Lesson 1: phy-newton-2-ne
+  lang=ne | track=NEB Grade 11 | sub=Physics | topic=Newton's Laws of Motion | title=न्युटनको दोस्रो नियम
+Lesson 2: bio-photosynthesis-en
+  lang=en | track=NEB Grade 12 | sub=Biology | topic=Photosynthesis | title=Photosynthesis
+Lesson 3: bio-photosynthesis-ne
+  lang=ne | track=NEB Grade 12 | sub=Biology | topic=Photosynthesis | title=प्रकाश संश्लेषण
+Lesson 4: chem-acids-bases-en
+  lang=en | track=NEB Grade 11 | sub=Chemistry | topic=Acids, Bases and Salts | title=Acids and Bases
+Lesson 5: chem-acids-bases-ne
+  lang=ne | track=NEB Grade 11 | sub=Chemistry | topic=Acids, Bases and Salts | title=अम्ल र क्षार
+Lesson 6: cee-kinematics-en
+  lang=en | track=CEE | sub=Physics | topic=Kinematics | title=Equations of Motion
+Lesson 7: cee-kinematics-ne
+  lang=ne | track=CEE | sub=Physics | topic=Kinematics | title=गतिका समीकरणहरू
+Lesson 8: ioe-quadratics-en
+  lang=en | track=IOE | sub=Mathematics | topic=Algebra | title=Quadratic Equations
+Lesson 9: ioe-quadratics-ne
+  lang=ne | track=IOE | sub=Mathematics | topic=Algebra | title=द्विघात समीकरण
+Lesson 10: grade11-physics-motion
+  lang=en | track=NEB Grade 11 | sub=Physics | topic=Motion in a Straight Line | title=Motion in a Straight Line
+Lesson 11: grade11-chemistry-atomic-structure
+  lang=en | track=NEB Grade 11 | sub=Chemistry | topic=Atomic Structure | title=Atomic Structure
+Lesson 12: grade12-biology-cell-division
+  lang=en | track=NEB Grade 12 | sub=Biology | topic=Cell Division | title=Cell Division
+Lesson 13: grade12-mathematics-derivatives
+  lang=en | track=NEB Grade 12 | sub=Mathematics | topic=Derivatives | title=Derivatives
+
+=== _normalize_text Tests ===
+  OK: _normalize_text('  Photosynthesis  ') = 'photosynthesis' (expected 'photosynthesis')
+  OK: _normalize_text('HELLO   WORLD') = 'hello world' (expected 'hello world')
+  OK: _normalize_text('नमस्ते  दुनिया') = 'नमस्ते दुनिया' (expected 'नमस्ते दुनिया')
+  OK: _normalize_text('') = '' (expected '')
+
+=== lesson_label Tests ===
+  OK: lesson_label('en') = 'English' (expected 'English')
+  OK: lesson_label('ne') = 'नेपाली (Nepali)' (expected 'नेपाली (Nepali)')
+  OK: lesson_label('xx') = 'xx' (expected 'xx')
+
+=== filter_lessons language filter ===
+English lessons: 9
+Nepali lessons: 5
+filter_lessons(language='ne'): 5 lessons
+  phy-newton-2-ne: Physics - Newton's Laws of Motion
+  bio-photosynthesis-ne: Biology - Photosynthesis
+  chem-acids-bases-ne: Chemistry - Acids, Bases and Salts
+  cee-kinematics-ne: Physics - Kinematics
+  ioe-quadratics-ne: Mathematics - Algebra
+filter_lessons(language='en'): 9 lessons
+  phy-newton-2-en: Physics - Newton's Laws of Motion
+  bio-photosynthesis-en: Biology - Photosynthesis
+  chem-acids-bases-en: Chemistry - Acids, Bases and Salts
+  cee-kinematics-en: Physics - Kinematics
+  ioe-quadratics-en: Mathematics - Algebra
+  grade11-physics-motion: Physics - Motion in a Straight Line
+  grade11-chemistry-atomic-structure: Chemistry - Atomic Structure
+  grade12-biology-cell-division: Biology - Cell Division
+  grade12-mathematics-derivatives: Mathematics - Derivatives
+filter_lessons(track='NEB Grade 11', language='ne'): 2 lessons
+  phy-newton-2-ne: Physics - Newton's Laws of Motion
+  chem-acids-bases-ne: Chemistry - Acids, Bases and Salts
+
+=== search_lessons tests ===
+search_lessons(English lessons, 'photosynthesis'): 1 results
+  bio-photosynthesis-en: Photosynthesis
+search_lessons(English lessons, '  whitespace  '): 1 results
+search_lessons(English lessons, 'Photosynthesis' case-match): 1 results
+
+=== Nepali content samples ===
+  phy-newton-2-ne: 'न्युटनको दोस्रो नियमअनुसार कुनै वस्तुको संवेग परिवर्तनको दर त्यसमा लाग्ने नेट बलसँग सिधा समानुपाती ह'
+  bio-photosynthesis-ne: 'प्रकाश संश्लेषण त्यो प्रक्रिया हो जसमा हरिया वनस्पति, शैवाल र केही ब्याक्टेरियाले प्रकाश ऊर्जालाई ग्'
+
+=== search_lessons with Nepali query ===
+search_lessons(Nepali lessons, 'फलां'): 0 results
+
+=== Empty search test ===
+search_lessons(lessons, ''): 0 results (should be 0)
+search_lessons(lessons, '   '): 0 results (should be 0)
+
+=== ALL TESTS COMPLETE ===

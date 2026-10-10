@@ -79,21 +79,99 @@ def unique_values(lessons: Iterable[dict], field: str) -> list[str]:
     return seen
 
 
+def _matches_filter(lesson: dict, filter_key: str, filter_value: str) -> bool:
+    """Check if a lesson matches a single key/value filter.
+
+    Handles case-insensitive matching and whitespace normalization so that
+    UI filter choices compose correctly regardless of subtle formatting
+    differences in the lesson data.
+    """
+    lesson_value = lesson.get(filter_key, "").strip().lower()
+    return lesson_value == filter_value.strip().lower()
+
+
 def filter_lessons(
     lessons: Iterable[dict],
     track: str | None = None,
     subject: str | None = None,
     topic: str | None = None,
+    language: str | None = None,
 ) -> list[dict]:
-    """Return lessons matching the given (optional) filters."""
+    """Return lessons matching the given (optional) filters.
+
+    Supported filters (all optional):
+    - ``track``   : exam track (e.g. "NEB Grade 11", "CEE", "IOE")
+    - ``subject`` : subject name (e.g. "Physics", "Chemistry", "Biology", "Mathematics")
+    - ``topic``   : lesson topic (e.g. "Kinematics", "Photosynthesis")
+    - ``language``: language code ("en" or "ne")
+
+    All filters compose together — only lessons matching every supplied
+    filter are returned.  Matching is case- and whitespace-tolerant.
+    """
     result = list(lessons)
     if track is not None:
-        result = [lesson for lesson in result if lesson["track"] == track]
+        result = [lesson for lesson in result if _matches_filter(lesson, "track", track)]
     if subject is not None:
-        result = [lesson for lesson in result if lesson["subject"] == subject]
+        result = [lesson for lesson in result if _matches_filter(lesson, "subject", subject)]
     if topic is not None:
-        result = [lesson for lesson in result if lesson["topic"] == topic]
+        result = [lesson for lesson in result if _matches_filter(lesson, "topic", topic)]
+    if language is not None:
+        result = [lesson for lesson in result if _matches_filter(lesson, "language", language)]
     return result
+
+
+def _normalize_text(text: str) -> str:
+    """Normalize text for case- and whitespace-tolerant comparison.
+
+    - Strips leading/trailing whitespace.
+    - Folds to lowercase.
+    - Collapses internal runs of whitespace to a single space.
+    This lets a user type "photosynthesis" and match "Photosynthesis" or
+    "  photosynthesis  " without needing exact string matches.
+    """
+    import re
+    return re.sub(r"\s+", " ", text.strip().lower())
+
+
+def search_lessons(
+    lessons: Iterable[dict],
+    query: str,
+    fields: tuple[str, ...] = ("title", "topic", "content"),
+) -> list[dict]:
+    """Return lessons whose specified fields match *query*.
+
+    The query is matched against each lesson's values in ``fields`` using
+    normalized (case-insensitive, whitespace-collapsed) text comparison,
+    so ``search_lessons(lessons, "photosynthesis")`` will match a lesson
+    with topic ``"Photosynthesis"`` or content containing the word.
+
+    Parameters
+    - ``lessons``: iterable of lesson dicts (validated lesson records).
+    - ``query``: search string typed by the user.
+    - ``fields``: which lesson fields to search.  Defaults to ``("title",
+      "topic", "content") `` — the most discoverable fields.
+
+    Returns lessons that match *any* of the specified fields.  If *query* is
+    empty or whitespace-only, an empty list is returned (callers should show
+    a helpful message).
+    """
+    q = _normalize_text(query)
+    if not q:
+        return []
+
+    matched: list[dict] = []
+    seen: set[str] = set()
+    for lesson in lessons:
+        for field in fields:
+            value = lesson.get(field, "")
+            if not isinstance(value, str):
+                continue
+            if q in _normalize_text(value):
+                if lesson["id"] not in seen:
+                    seen.add(lesson["id"])
+                    matched.append(lesson)
+                break
+    return matched
 
 
 def lesson_label(language: str) -> str:
