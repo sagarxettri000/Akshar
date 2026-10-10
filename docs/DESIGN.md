@@ -6,7 +6,7 @@ One design system, three places it is expressed:
 |---------|----------------|
 | Streamlit app components and injected CSS | [`ui.py`](../ui.py) (`TOKENS`, `stylesheet()`) |
 | Streamlit's native theme (colours, radii, type) | [`.streamlit/config.toml`](../.streamlit/config.toml) |
-| Static landing page | [`landing/styles.css`](../landing/styles.css) (`:root`) |
+| Web app (Vercel) | [`landing/styles.css`](../landing/styles.css) (`:root`) |
 
 `tests/test_design_tokens.py` compares the three and fails if they drift. To
 change a colour or a radius: edit `ui.TOKENS`, mirror the value in

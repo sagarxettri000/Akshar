@@ -21,8 +21,14 @@ Akshar is built around one trustworthy loop: **learn → understand → practise
 
 ## Live demo
 
-- **App (Streamlit Community Cloud):** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
-- **Landing page (Vercel):** <https://akshar-nepluro.vercel.app/>
+- **Study app (Vercel):** <https://akshar-nepluro.vercel.app/> — the HTML/CSS/JS app in
+  [`landing/`](landing), served as static files plus one serverless Gemma 4 function.
+  It picks up changes on the next Vercel deploy from `main`.
+- **Streamlit app:** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/> — the same
+  learn → understand → practise loop implemented in Streamlit.
+
+Both front ends share one lesson file, one set of prompts, and one set of validators; the
+test suite fails if they drift apart.
 
 ## The problem
 
@@ -62,10 +68,10 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `content.py` | Lesson loading and validation |
 | `progress.py` | Session-scoped learner progress tracking |
 | `data/lessons.json` | Sample curriculum lessons (team-authored study notes) |
-| `tests/` | Unit tests for the AI service, content, and progress (no live API calls) |
+| `tests/` | Unit tests for the AI service, content, progress, design tokens, and the web app — including cross-language prompt/validator parity (no live API calls) |
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Development and testing dependencies |
-| `landing/` | Static landing page deployed to Vercel |
+| `landing/` | **Web app deployed to Vercel** — `index.html`, `app.js`, `styles.css`, `data/lessons.json`, `api/gemma.mjs` (the only place the API key is used), and `scripts/dev.mjs` (local server, optional mock upstream) |
 | `docs/DESIGN.md` | Design system: colour, layout, type, components, accessibility |
 | `docs/DEPLOYMENT.md` | Step-by-step deployment guide |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
@@ -75,6 +81,15 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `LICENSE` | MIT License |
 
 ## Getting started
+
+### The web app (no build step)
+
+```bash
+node landing/scripts/dev.mjs              # http://127.0.0.1:3000
+node landing/scripts/dev.mjs --mock=ok    # run the AI flows without an API key
+```
+
+### The Streamlit app
 
 Requires **Python 3.10+**.
 
@@ -126,8 +141,8 @@ print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
 
 | Part | Where | Why |
 |------|-------|-----|
-| `app.py` | [Streamlit Community Cloud](https://share.streamlit.io) | Streamlit needs a long-running Python server with WebSockets — Vercel cannot run it |
-| `landing/` | [Vercel](https://vercel.com) | A static landing page, which Vercel is built for |
+| `landing/` (the study app) | [Vercel](https://vercel.com) | Static HTML/CSS/JS plus one serverless function — no build step, no npm dependencies |
+| `app.py` (Streamlit) | App runners such as [Streamlit Community Cloud](https://share.streamlit.io) | Its alternative UI needs a long-running Python server with WebSockets |
 
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, including how to store the API key safely in Streamlit secrets.
 

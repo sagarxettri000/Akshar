@@ -1,71 +1,117 @@
-# Deploying Akshar
+# Running and deploying Akshar
 
-Akshar deploys in two parts:
+Akshar has two front ends over the same content, the same prompts, and the same
+validation:
 
-1. **The app** — `app.py` runs on **Streamlit Community Cloud** (free, made for Streamlit).
-2. **The landing page** — `landing/` is a static site hosted on **Vercel**.
+| Front end | Where it runs | What it is |
+|-----------|---------------|------------|
+| **Web app** (`landing/`) | **Vercel** — static files + one serverless function | The deployed product: filters, lesson notes, Explain / Ask / Practise / Flashcards |
+| Streamlit app (`app.py`) | Streamlit Community Cloud or locally | The reference implementation of the same study loop |
 
-Streamlit needs a long-running Python server with a persistent WebSocket and in-memory
-session state. Vercel only runs static sites and short-lived serverless functions, so the
-app cannot run on Vercel — the landing page can.
+The web app is a plain HTML/CSS/JS page plus one Node function
+(`landing/api/gemma.mjs`). It has **no build step and no npm dependencies**, so
+Vercel only needs to serve files and run the function.
 
 ## 0. Prerequisites
 
-- The repository is on GitHub: <https://github.com/sagarxettri000/Akshar>
-- A **fresh** Google AI Studio API key (rotate any key that was shared publicly).
+- The repository on GitHub: <https://github.com/sagarxettri000/Akshar>
+- A **fresh** Google AI Studio API key (rotate any key that was ever shared publicly)
 
-## 1. Deploy the app on Streamlit Community Cloud
+## 1. Run it locally
 
-1. Go to <https://share.streamlit.io> and sign in with GitHub.
-2. Click **Create app** → **Deploy a public app from GitHub**.
-3. Fill in:
-   - **Repository:** `sagarxettri000/Akshar`
-   - **Branch:** `main`
-   - **Main file path:** `app.py` — or leave the default `streamlit_app.py`, which runs the identical app
-4. Open **Advanced settings** → **Secrets** and paste:
+### Web app (no key needed for the reading part)
 
-   ```toml
-   GOOGLE_API_KEY = "your-new-google-ai-studio-key"
-   ```
+```bash
+node landing/scripts/dev.mjs            # http://127.0.0.1:3000
+node landing/scripts/dev.mjs --mock=ok  # + a fake Gemma upstream, key not needed
+node landing/scripts/dev.mjs --mock=fail   # exercise the error state
+node landing/scripts/dev.mjs --mock=empty  # exercise the "nothing usable" state
+```
 
-5. (Optional) Select **Python 3.12**.
-6. Click **Deploy**. Streamlit installs `requirements.txt` and builds the app.
-7. Copy the public URL, for example `https://akshar.streamlit.app`.
+With `--mock`, the real handler, the real prompts, and the real validators run
+against a stand-in upstream — useful for UI work and demos without spending quota.
+Without `--mock`, export a real key first:
 
-The app reads the key from Streamlit secrets — it is never in the repository. Every push
-to `main` redeploys the app automatically.
+```bash
+GOOGLE_API_KEY="your-key" node landing/scripts/dev.mjs
+```
 
-## 2. Deploy the landing page on Vercel
+### Streamlit app
 
-1. Go to <https://vercel.com> → **Add New…** → **Project**.
-2. Import the same GitHub repository.
-3. Set **Root Directory** to `landing`.
-4. Set **Framework Preset** to **Other**.
-   > Vercel may auto-detect this repository as **Python** (because of `requirements.txt`),
-   > which makes the build error out in about a second. Clearing the preset to **Other** is required.
-5. Leave **Build Command** and **Output Directory** empty, then click **Deploy**.
-6. If the URL asks you to log in to Vercel, open **Project → Settings → Deployment Protection**
-   and disable **Vercel Authentication**. The site is then publicly reachable.
-7. `landing/index.html` already points at the live Streamlit app. If the app URL changes,
-   update the link and push — Vercel redeploys automatically.
+```bash
+pip install -r requirements-dev.txt
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml   # then fill in GOOGLE_API_KEY
+streamlit run app.py
+```
 
-## 3. Optional: custom domain
+## 2. Deploy the web app on Vercel
 
-In Vercel → your project → **Settings** → **Domains**, add a domain and follow the DNS
-instructions. You can point a subdomain (for example `app.yourdomain.com`) at the
-Streamlit app by adding it in Streamlit Cloud's app settings.
+1. Go to <https://vercel.com> → **Add New…** → **Project** → import this repository.
+2. Set **Root Directory** to `landing`.
+3. Set **Framework Preset** to **Other**.
+   > Vercel may otherwise detect **Python** from `requirements.txt` and try to build it.
+4. Leave **Build Command** empty and **Output Directory** empty.
+5. Add the environment variable under **Settings → Environment Variables**:
+   - `GOOGLE_API_KEY` = your key (Production and Preview)
+   The key is read only inside `landing/api/gemma.mjs`; it is never sent to the browser.
+6. Click **Deploy**. `landing/vercel.json` registers the function and gives it a
+   60-second budget (`maxDuration: 60`) because a cold Gemma 4 answer can take 20–40 s.
+7. Open the deployment URL. The status chip in the header should read **Gemma 4 ready**.
+   If it reads **AI off — notes only**, the environment variable is missing or was added
+   after the deployment (redeploy after adding it).
+8. If the URL asks you to log in to Vercel, disable **Settings → Deployment Protection →
+   Vercel Authentication** to make it public.
 
-## 4. Security checklist
+### What is served
 
-- [ ] Revoke and rotate any API key that was shared in plain text.
-- [ ] Restrict the new key to the **Generative Language API** in Google AI Studio.
-- [ ] Keep keys only in Streamlit secrets and Vercel environment variables.
-- [ ] Confirm `.streamlit/secrets.toml` is gitignored (it is) and never committed.
-- [ ] Set a spending/quota limit on the key to avoid surprise costs.
+| Route | Source |
+|-------|--------|
+| `/` | `landing/index.html` (the study app) |
+| `/app.js`, `/styles.css` | `landing/app.js`, `landing/styles.css` |
+| `/data/lessons.json` | `landing/data/lessons.json` |
+| `POST /api/gemma` | `landing/api/gemma.mjs` — `{action, lessonId, …}` in, validated JSON out |
+| `GET /api/gemma` | Availability probe: `{ok: true, aiAvailable: true|false}` |
+
+Every push to the production branch redeploys automatically.
+
+## 3. Optional: `main` branch and the Streamlit app
+
+The Streamlit app is still deployable to Streamlit Community Cloud (branch `main`,
+main file `app.py`, secret `GOOGLE_API_KEY`). It is useful for local experiments and as
+a second implementation to compare against, but the Vercel web app is what the team
+shares with students.
+
+## 4. Tests
+
+```bash
+python -m pytest -q                     # Python: AI service, content, design tokens, web assets
+node --test landing/api/ai.test.mjs     # JS: prompts, parsing, validation, transport
+node --test landing/app.test.mjs        # JS: study-selection resolution
+```
+
+`tests/test_web_app.py` fails if the lesson copy served to the browser drifts from
+`data/lessons.json`, if the prompts here stop matching `ai_service.py`, or if the Python
+and JavaScript validators disagree on a shared corpus of model outputs.
+
+## 5. Security checklist
+
+- [ ] Rotate any API key that was ever shared in plain text.
+- [ ] Restrict the key to the **Generative Language API** in Google AI Studio.
+- [ ] Keep the key only in Vercel environment variables (and Streamlit secrets if you run it).
+- [ ] Confirm `.streamlit/secrets.toml` and `.env` are gitignored and never committed.
+- [ ] Set a spending/quota limit on the key.
+- [ ] Keep the function's rate limit in mind: requests are capped best-effort per instance.
 
 ## Troubleshooting
 
-- **"No Gemma 4 API key found."** — Add `GOOGLE_API_KEY` in Streamlit Cloud → Settings → Secrets.
-- **`ModuleNotFoundError: google.genai`** — Make sure `requirements.txt` is at the repository root.
-- **Landing page shows Vercel 404** — Confirm the Vercel project Root Directory is `landing`.
-- **Slow first answer** — The first Gemma 4 call can take 20–40 seconds; later calls are usually faster.
+- **Header says “AI off — notes only”** — `GOOGLE_API_KEY` is not set for that
+  environment (or the deployment predates the variable). Add it, then redeploy.
+- **“Gemma 4 is temporarily unavailable”** — the upstream returned 5xx or the request
+  timed out; retry. The message never contains the key, and a failure is never shown as
+  an answer.
+- **“The Gemma 4 API key was rejected”** — 400/403 from Google: wrong key, or the key is
+  not enabled for the Generative Language API.
+- **`/api/gemma` returns 404** — the Vercel Root Directory is not `landing`.
+- **`Cross-origin request refused`** — the function refuses POSTs whose `Origin` host is
+  neither the deployment host nor localhost.
+- **Slow first answer** — a cold Gemma 4 call can take 20–40 seconds; later calls are faster.
