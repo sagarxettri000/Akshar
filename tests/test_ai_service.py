@@ -295,6 +295,18 @@ def test_ask_prompt_is_grounded_and_sets_language():
     assert "Nepali" in prompt
     assert "LESSON BODY" in prompt
     assert "Why?" in prompt
+    assert ai_service.GROUNDED_DIRECTIVE in prompt
+
+
+def test_forced_answer_language_replaces_the_match_the_lesson_rule():
+    """A forced language must be stated as a rule, not silently ignored."""
+    forced = ai_service._build_ask_prompt("LESSON BODY", "Why?", [], "ne")
+    assert "- Write the answer in Nepali (Devanagari script)." in forced
+    assert ai_service.MATCH_RESPONSE_LANGUAGE not in forced
+
+    matched = ai_service._build_ask_prompt("LESSON BODY", "Why?", [], None)
+    assert ai_service.MATCH_RESPONSE_LANGUAGE in matched
+    assert "Write the answer in Nepali" not in matched
 
 
 def test_ask_prompt_includes_prior_conversation():
