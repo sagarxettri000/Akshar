@@ -182,7 +182,8 @@ Akshar has two front ends but **exactly one student-facing deployment**. This ha
 | **Study app — the product students use** | `landing/` | **Vercel**, project `akshar-nepluro`, Root Directory `landing`, framework preset **Other**, no build command | The only approved deployment: static files plus the single function `landing/api/gemma.mjs` |
 | Reference implementation | `app.py`, `streamlit_app.py` | Streamlit Community Cloud — an **existing** app that follows `main` | Local development, experiments, and side-by-side comparison. **Do not deploy, redeploy, or extend it**, and never present it as the product link. |
 
-- The Vercel project follows the repository's production branch (`main`). A change reaches students only after it is merged there and Vercel deploys it. Until the redesigned `landing/` is merged into `main`, that URL may still serve the previous page — that is expected, and it is never a reason to create another project or deployment.
+- The Vercel project follows the repository's production branch (`main`). A change reaches students only after it is merged there and Vercel deploys it.
+- The redesign that turns `landing/` from a marketing page into the study app is still on a task branch. If `landing/` on the branch you are on is the earlier marketing page, or the live URL still serves it, you are simply on a branch that predates the redesign: say so and carry on with your task. Never respond by deploying the Streamlit app, by creating another deployment, or by rewriting the other branch's work.
 - Streamlit Community Cloud rebuilds the app it watches whenever that branch changes. A push to `main` is therefore a **publish**, not a private save.
 - Verify what a live URL actually serves before describing it in a document, a demo, or a report; a host showing an old commit is a normal, temporary state.
 
