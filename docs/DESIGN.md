@@ -2,8 +2,10 @@
 
 The whole design system lives in one file: [`landing/styles.css`](../landing/styles.css).
 Its `:root` block holds the tokens, and everything below it is the component layer. There is
-no second theme file and no build step — the earlier Python/Streamlit front end, and with it
-the second set of theme tokens, was removed, so there is nothing left to keep in step.
+no second theme file and no build step. **Streamlit is not used in this project**: the
+earlier Python/Streamlit front end and its second set of theme tokens were removed
+deliberately, so this file is the only design system and there is nothing left to keep in
+step.
 
 To change a colour, a radius, or a spacing step: edit the token in `:root` and use it
 everywhere else. Never hard-code a hex value or a magic margin in a component rule.

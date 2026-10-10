@@ -7,8 +7,9 @@ without a key; say so out loud if you demo with the mock).
 **Total time:** ~5 minutes
 **Speakers:** Sagar Katwal, Dipson Basnet, Dhiraj Shrestha
 
-> **Deployment rules:** nothing is deployed, redeployed, or republished for a demo, and there
-> is exactly one published deployment — the Vercel project above. See
+> **Platform and deployment rules:** everything here runs on **Vercel** — one front end, one
+> project. **Streamlit is not used**, and nothing is deployed, redeployed, or republished for
+> a demo. There is exactly one published deployment, the Vercel project above. See
 > [`AGENTS.md` §10](AGENTS.md).
 
 ---

@@ -6,6 +6,11 @@ Akshar helps Nepali students understand concepts, practise exam-style questions,
 
 `NEB` · `CEE` · `IOE` · `Gemma 4` · one static page + one serverless function · no build step
 
+> **This project runs on Vercel only.** One front end ([`landing/`](landing)), one Vercel
+> project, one serverless function. **Streamlit is not used** — the earlier Python/Streamlit
+> app was removed deliberately and must not be reintroduced, not even for a demo or an
+> experiment. Contributors and their coding agents: read [`AGENTS.md` §10](AGENTS.md) first.
+
 ## Status
 
 Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 65 Node tests pass without calling the live model.
@@ -16,9 +21,9 @@ Active hackathon development. The learn → understand → practise flow runs en
   project serves [`landing/`](landing): a static page plus one serverless function. It
   follows `main`, so a change reaches students after it is merged there and deployed.
 
-There is exactly **one published deployment**. Deploying, republishing, switching hosts, or
-adding another project needs an explicit request from a human — [`AGENTS.md` §10](AGENTS.md)
-is binding.
+There is exactly **one published deployment**, and it is on Vercel. Deploying, republishing,
+switching hosts, or adding another project needs an explicit request from a human — and
+nothing is ever deployed on Streamlit. [`AGENTS.md` §10](AGENTS.md) is binding.
 
 ## The learning loop
 

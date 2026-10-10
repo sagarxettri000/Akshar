@@ -1,15 +1,18 @@
 # Running and deploying Akshar
 
-One front end, one deployment: the app in `landing/` is served by a single Vercel project as
-static files plus one serverless function (`landing/api/gemma.mjs`). There is nothing to
-build and no runtime dependency to install.
+**Vercel only.** One front end, one deployment: the app in `landing/` is served by a single
+Vercel project as static files plus one serverless function (`landing/api/gemma.mjs`). There
+is nothing to build and no runtime dependency to install. **Streamlit is not used in this
+project** — there is no Python app to run, no Streamlit deployment to update, and no reason
+to install Python for anything here.
 
 The binding rules are in [`AGENTS.md` §10](../AGENTS.md):
 
 - Never deploy, redeploy, publish, unpublish, or change hosting unless a human explicitly
   asks for it in that task. "Commit and push" is not permission to deploy.
 - Never add, switch, or duplicate a hosting platform or project — no second Vercel project,
-  no Streamlit Cloud app, no Render/Railway/Netlify/Fly/Cloudflare/GitHub Pages site.
+  no Streamlit Cloud app (or app of any other kind), no Render/Railway/Netlify/Fly/Cloudflare/
+  GitHub Pages site.
 - Never push to `main` to store or share work: it is the production branch, so a push
   republishes the site students use. Work on a task branch and let a maintainer merge.
 - Never create a temporary public deployment to test something. Run it locally.
