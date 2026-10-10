@@ -166,7 +166,7 @@ The team explicitly wants regular commits. You are authorized to create **local 
 ### Git operations that require explicit user instruction
 
 - Never push, publish a release, or deploy to production unless explicitly requested.
-- Treat the repository's production branch (`main`) as **published**: pushing to it redeploys the app that Streamlit Community Cloud watches, and, once the Vercel project serves `landing/`, redeploys the student-facing site. Never push to it as a backup or to "show" progress — work on a task branch and let a human merge (§10, §11).
+- Treat the repository's production branch (`main`) as **published**: pushing to it redeploys the app that Streamlit Community Cloud watches, and redeploys the student-facing site that the Vercel project serves from `landing/`. Never push to it as a backup or to "show" progress — work on a task branch and let a human merge (§10, §11).
 - Never use destructive cleanup (`git reset --hard`, `git clean -fdx`), rewrite shared history, force-push, or amend/rebase existing commits unless explicitly requested and the effect is understood.
 - Do not create empty commits, fake contribution activity, or split trivial edits purely to inflate contribution counts.
 - If there is no Git repository, explain that commits were impossible; do not pretend otherwise.
@@ -179,7 +179,7 @@ Akshar has two front ends but **exactly one student-facing deployment**. This ha
 
 | Target | Path in the repo | Platform | Role |
 |---|---|---|---|
-| **Study app — the product students use** | `landing/` | **Vercel**, project `akshar-nepluro`, Root Directory `landing`, framework preset **Other**, no build command | The only approved deployment: static files plus the single function `landing/api/gemma.mjs` |
+| **Study app — the product students use** | `landing/` | **Vercel**, project `akshar-nepluro`, Root Directory `landing`, framework preset **Other**, no build command | The only approved deployment: static files on `main` (`index.html`, `styles.css`, `vercel.json`); branches carrying the study-app redesign also serve the function `landing/api/gemma.mjs` |
 | Reference implementation | `app.py`, `streamlit_app.py` | Streamlit Community Cloud — an **existing** app that follows `main` | Local development, experiments, and side-by-side comparison. **Do not deploy, redeploy, or extend it**, and never present it as the product link. |
 
 - The Vercel project follows the repository's production branch (`main`). A change reaches students only after it is merged there and Vercel deploys it.
@@ -201,10 +201,10 @@ Akshar has two front ends but **exactly one student-facing deployment**. This ha
 
 Do only this, in this order, and report every URL you touched:
 
-1. Verify locally first: `python -m pytest -q`, `node --test landing/tests/*.mjs`, and open the app through `node landing/scripts/dev.mjs`.
-2. Deploy the existing Vercel project for `landing/` (Root Directory `landing`, preset **Other**, no build command). `landing/vercel.json` registers the one function and gives it a 60-second budget.
+1. Verify locally first: `python -m pytest -q` (it passes on `main`). On a branch carrying the study-app redesign, also run `node --test landing/tests/*.mjs` and open the app through `node landing/scripts/dev.mjs` — on `main` those files do not exist; `landing/` is the static marketing page and has nothing further to run.
+2. Deploy the existing Vercel project for `landing/` (Root Directory `landing`, preset **Other**, no build command). On `main`, `landing/vercel.json` only sets security headers and `cleanUrls` and registers no function; on a branch carrying the redesign it also registers the single function and gives it a 60-second budget.
 3. The only environment variable is **`GOOGLE_API_KEY`** — name only, never a value in the repository, a file, chat, a screenshot, or a log. Set it for Production and Preview, then redeploy: a variable added after a deployment is not picked up by it.
-4. Verify the deployed URL, not just the upload: the study app renders; the header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**; `GET /api/gemma` returns `{"ok": true, …}`; `/tests/*` and `/scripts/*` return 404.
+4. Verify the deployed URL, not just the upload. On `main`, the static marketing page renders, `GET /api/gemma` returns 404 because no function exists, and `/tests/*` and `/scripts/*` return 404. On a branch carrying the redesign, the study app renders and the header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**; `GET /api/gemma` returns `{"ok": true, …}`; `/tests/*` and `/scripts/*` return 404.
 5. Report the exact URL and what it serves. Never describe a local dev server or an expiring anonymous deployment as the team's live link.
 
 ### If you find a deployment you did not expect
@@ -213,7 +213,7 @@ Stop and report which URL, platform, branch, and commit it serves. Do not repair
 
 ### Local previews are not deployments
 
-`node landing/scripts/dev.mjs` (with `--mock=ok`, `--mock=fail`, or `--mock=empty` to exercise the states) and `streamlit run app.py` are local tools for development. They are not the demo link, and their output must never be reported as a deployment.
+`streamlit run app.py` and, on branches carrying the study-app redesign, `node landing/scripts/dev.mjs` (with `--mock=ok`, `--mock=fail`, or `--mock=empty` to exercise the states; it does not exist on `main`) are local tools for development. They are not the demo link, and their output must never be reported as a deployment.
 
 ### Documentation drift
 
