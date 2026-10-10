@@ -1,9 +1,10 @@
 /**
  * Gemma 4 pipeline for the Akshar web app (Vercel serverless runtime).
  *
- * Port of `ai_service.py`: the same prompts, the same defensive JSON parsing,
- * the same validation rules, and the same error behaviour. Kept dependency-free
- * so the function has no install step and stays small.
+ * The one Gemma 4 pipeline for the product: every prompt, the defensive JSON
+ * parsing, the validation rules, and the error behaviour live here, so there is a
+ * single place to read and change. Kept dependency-free so the function has no
+ * install step and stays small.
  *
  * The API key is read from the server environment only and is never returned,
  * logged, or echoed in an error message.
@@ -302,7 +303,7 @@ export function validateFlashcards(items) {
 }
 
 /* ------------------------------------------------------------------ *
- * Prompts (kept identical to ai_service.py)
+ * Prompts (the single source of truth)
  * ------------------------------------------------------------------ */
 
 export function buildSummaryPrompt(lessonText) {
@@ -356,7 +357,7 @@ export function buildFlashcardPrompt(lessonText, count) {
 /**
  * Groundedness contract, kept as a named export so tests can assert on it.
  * The language line is separate so a forced answer language replaces the
- * "match the lesson" rule instead of contradicting it (same as ai_service.py).
+ * "match the lesson" rule instead of contradicting it.
  */
 export const GROUNDED_DIRECTIVE =
   "BASE YOUR ANSWER STRICTLY ON THE LESSON TEXT provided below.\n" +
@@ -539,7 +540,7 @@ function describeHttpFailure(status, body, apiKey) {
 }
 
 /* ------------------------------------------------------------------ *
- * Public actions (mirror ai_service.py)
+ * Public actions
  * ------------------------------------------------------------------ */
 
 export async function generateSummary(lessonText, options = {}) {

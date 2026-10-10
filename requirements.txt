@@ -1,3 +1,0 @@
-# Akshar runtime dependencies
-streamlit>=1.36
-google-genai>=1.0

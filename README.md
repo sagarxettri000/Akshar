@@ -4,34 +4,31 @@
 
 Akshar helps Nepali students understand concepts, practise exam-style questions, and prepare with confidence for NEB Grade 11–12 and CEE/IOE entrance examinations. It pairs clear Nepali/English explanations with inspectable material and uses Gemma 4 as a genuine part of the learning experience.
 
-`NEB` · `CEE` · `IOE` · `Gemma 4` · `Python` · `Streamlit`
+`NEB` · `CEE` · `IOE` · `Gemma 4` · one static page + one serverless function · no build step
 
 ## Status
 
-Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are validated and loaded. 138 unit tests pass without calling the live model.
+Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 65 Node tests pass without calling the live model.
+
+## Live link
+
+- **Study app (Vercel):** <https://akshar-nepluro.vercel.app/> — the product link. The Vercel
+  project serves [`landing/`](landing): a static page plus one serverless function. It
+  follows `main`, so a change reaches students after it is merged there and deployed.
+
+There is exactly **one published deployment**. Deploying, republishing, switching hosts, or
+adding another project needs an explicit request from a human — [`AGENTS.md` §10](AGENTS.md)
+is binding.
 
 ## The learning loop
 
 Akshar is built around one trustworthy loop: **learn → understand → practise**.
 
-1. **Choose a track and topic** — NEB Grade 11/12, CEE, or IOE.
+1. **Choose where you are** — an exam goal (NEB, CEE, or IOE), a grade where the track has one, then a subject, a chapter, and the study language (English or Nepali).
 2. **Read the lesson** — original team-authored study notes, clearly labelled as not official NEB/IOE/CEE material.
-3. **Understand** — get an AI-generated summary, ask a question, or review flashcards; Gemma 4 answers using only the selected lesson and says so plainly when the lesson does not cover the question.
-4. **Practise** — generate multiple-choice questions, choose answers, check answers, and review missed questions with explanations. Progress is tracked per session.
-
-## Live demo
-
-- **Study app (Vercel):** <https://akshar-nepluro.vercel.app/> — the HTML/CSS/JS app in
-  [`landing/`](landing), served as static files plus one serverless Gemma 4 function.
-  It picks up changes on the next Vercel deploy from `main`. **This is the product link:**
-  the only deployment the team publishes to students.
-- **Streamlit app (reference implementation, not the product link):**
-  <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/> — the same learn → understand →
-  practise loop implemented in Streamlit, kept for local comparison. It is not a deployment
-  target for contributors; see [`AGENTS.md` §10](AGENTS.md).
-
-Both front ends share one lesson file, one set of prompts, and one set of validators; the
-test suite fails if they drift apart.
+3. **Understand** — an AI-generated explanation, a question you ask yourself, or flashcards; Gemma 4 answers using only the selected lesson and says so plainly when the lesson does not cover the question.
+4. **Practise** — generated multiple-choice questions with per-question marking, a score, and an explanation for every answer. Generated questions are labelled as not official exam questions.
+5. **Track progress** — lessons opened, practice attempts, and best score, kept in the browser's own storage.
 
 ## The problem
 
@@ -41,121 +38,80 @@ Akshar is being built to close that gap.
 
 ## Built on Gemma 4
 
-The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted Gemma 4 model through the official [`google-genai`](https://ai.google.dev/gemma/docs/core/gemma_on_gemini_api) SDK.
+The model call lives in [`landing/lib/ai.mjs`](landing/lib/ai.mjs) and is reached only through [`landing/api/gemma.mjs`](landing/api/gemma.mjs), the one serverless function. The browser sends an action and a lesson id — never a prompt and never a key.
 
-- **Model:** `gemma-4-26b-a4b-it`
+- **Model:** `gemma-4-26b-a4b-it` over the Gemini API (`generateContent`), key in the `x-goog-api-key` header.
 - **Capabilities exposed to the app:**
 
-  | Function | Returns |
-  |----------|---------|
-  | `generate_summary(lesson_text, api_key)` | A concise, faithful summary of a lesson |
-  | `ask_question(lesson_text, question, api_key, history=…)` | A grounded answer to a student's question, optionally forced to English or Nepali |
-  | `generate_mcqs(lesson_text, api_key, count=5)` | Validated multiple-choice questions |
-  | `generate_flashcards(lesson_text, api_key, count=5)` | Validated `question` / `answer` flashcards |
+  | Action | Returns |
+  |--------|---------|
+  | `summary` | A concise, faithful summary of the selected lesson |
+  | `ask` | A grounded answer to a student's question, optionally forced to English or Nepali |
+  | `mcqs` | Validated multiple-choice questions |
+  | `flashcards` | Validated `question` / `answer` flashcards |
 
-- **Answers stay grounded.** The tutor answers using only the current lesson, keeps a short conversation history for context, and is instructed to say so plainly when the lesson does not cover a question instead of inventing facts. Learners can choose the reply language (match the lesson, English, or Nepali).
-
-- **Model output is never trusted blindly.** Responses are parsed defensively (plain JSON, fenced blocks, or JSON in prose), and every MCQ — options A–D, a single valid answer, a non-empty explanation — and flashcard is validated before the app uses it.
-
-- **Failures are explicit.** `InvalidInputError`, `AIGenerationError`, and `AIResponseError` let the UI show honest loading/error/retry states instead of presenting a broken result as success.
-
-- **Secrets stay secret.** The API key is never logged and is redacted from error messages.
+- **Answers stay grounded.** The tutor answers using only the current lesson and is instructed to say so plainly when the lesson does not cover a question instead of inventing facts.
+- **Model output is never trusted blindly.** Responses are parsed defensively (plain JSON, fenced blocks, or JSON inside prose), and every MCQ — options A–D, a single valid answer, a non-empty explanation — and flashcard is validated before the app uses it. Malformed items are dropped rather than shown.
+- **Failures are explicit.** Timeouts, quota/auth errors, and upstream failures produce honest messages, and a failure is never rendered as an answer.
+- **Secrets stay secret.** The key is read from the server environment only, is never returned to the browser, is never logged, and is redacted from error messages.
 
 ## Repository structure
 
 | Path | Purpose |
 |------|---------|
-| `app.py` | Streamlit app — the learn → understand → practise interface |
-| `ui.py` | Design system: tokens, injected stylesheet, shared UI blocks |
-| `ai_service.py` | Gemma 4 integration — summaries, grounded Q&A, MCQs, and flashcards |
-| `content.py` | Lesson loading and validation |
-| `progress.py` | Session-scoped learner progress tracking |
-| `data/lessons.json` | Sample curriculum lessons (team-authored study notes) |
-| `tests/` | Unit tests for the AI service, content, progress, design tokens, and the web app — including cross-language prompt/validator parity (no live API calls) |
-| `requirements.txt` | Runtime dependencies |
-| `requirements-dev.txt` | Development and testing dependencies |
-| `landing/` | **Web app deployed to Vercel** — `index.html`, `app.js`, `styles.css`, `data/lessons.json`, `api/gemma.mjs` (the only place the API key is used; prompts and validation in `lib/ai.mjs`), and `scripts/dev.mjs` (local server, optional mock upstream) |
-| `docs/DESIGN.md` | Design system: colour, layout, type, components, accessibility |
-| `docs/DEPLOYMENT.md` | Step-by-step deployment guide |
+| `landing/index.html` | The app shell |
+| `landing/app.js` | Study state, study-path selection, grading, progress, and the four AI flows |
+| `landing/styles.css` | The whole design system and component layer |
+| `landing/lib/ai.mjs` | Prompts, defensive parsing, validation, and transport — the one Gemma 4 pipeline |
+| `landing/api/gemma.mjs` | The one serverless function; the only place the API key is read |
+| `landing/data/lessons.json` | The lesson file the app serves (21 lessons, English + Nepali) |
+| `landing/scripts/dev.mjs` | Local dev server with an optional mock Gemma upstream; no dependencies |
+| `landing/tests/` | Node tests: AI pipeline, study selection, lesson data, deployment guards |
+| `docs/DEPLOYMENT.md` | Running and deployment guide |
+| `docs/DESIGN.md` | Design system reference |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
 | `GEMINI.md` | Gemini CLI entry point that imports `AGENTS.md` |
-| `FIRST_PROMT.md` | Read-only repository audit prompt |
-| `TEAM_PLAYBOOK.md` | Team work split, MVP scope, and demo plan |
+| `FIRST_PROMPT.md` | Read-only repository audit prompt |
+| `TEAM_PLAYBOOK.md` | Team work split, scope, and demo plan |
 | `LICENSE` | MIT License |
 
 ## Getting started
 
-### The web app (no build step)
+There is nothing to install: the app has no runtime dependencies, no build step, and no package manifest.
 
 ```bash
-node landing/scripts/dev.mjs              # http://127.0.0.1:3000
-node landing/scripts/dev.mjs --mock=ok    # run the AI flows without an API key
+node landing/scripts/dev.mjs                 # http://127.0.0.1:3000 — reading works, AI needs a key
+node landing/scripts/dev.mjs --mock=ok       # same, plus a fake Gemma upstream — no key needed
+node landing/scripts/dev.mjs --mock=fail     # exercise the error state
+node landing/scripts/dev.mjs --mock=empty    # exercise the "nothing usable came back" state
+node landing/scripts/dev.mjs --host=0.0.0.0 --port 3000   # bind all interfaces (containers, previews)
+
+GOOGLE_API_KEY="your-key" node landing/scripts/dev.mjs    # real Gemma 4 calls
 ```
 
-### The Streamlit app
-
-Requires **Python 3.10+**.
-
-```bash
-pip install -r requirements-dev.txt
-```
-
-### Configure your API key
-
-Get a key from [Google AI Studio](https://aistudio.google.com/app/apikey), then copy the example secrets file and fill it in:
-
-```bash
-cp .streamlit/secrets.toml.example .streamlit/secrets.toml
-```
-
-Or set an environment variable:
-
-```bash
-export GOOGLE_API_KEY=your-key-here
-```
-
-`secrets.toml` is gitignored — never commit real keys.
-
-### Run the app
-
-```bash
-streamlit run app.py
-```
-
-Choose a track and topic, read the lesson, then use the **Explain**, **Ask**, **Practise**, and **Flashcards** tabs. AI output is clearly labelled and every question is validated before it is shown. In **Ask**, type a question and choose whether Gemma 4 replies in English or Nepali.
+With `--mock`, the real handler, the real prompts, and the real validators run against a stand-in upstream — the honest way to work on the interface without a key or without spending quota. `--mock` is a development tool: it is never part of a deployment.
 
 ### Run the tests
 
 ```bash
-python -m pytest tests/ -q
+node --test landing/tests/*.mjs
 ```
 
-The tests use mocks and never call the live model.
-
-### Quick script check
-
-```python
-from ai_service import generate_summary
-
-print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
-```
+The tests never call the live model.
 
 ## Deployment
 
-| Part | Where | Why |
-|------|-------|-----|
-| `landing/` (the study app) | [Vercel](https://vercel.com) | Static HTML/CSS/JS plus one serverless function — no build step, no npm dependencies |
-| `app.py` (Streamlit) | Local runs, or the already-existing Streamlit Community Cloud app | Its alternative UI needs a long-running Python server with WebSockets. It is a reference implementation, not the product link — do not deploy it (§10 of [`AGENTS.md`](AGENTS.md)) |
+One Vercel project (Root Directory `landing`, framework preset **Other**, no build command) serves `landing/` as static files plus `landing/api/gemma.mjs`. The only environment variable is `GOOGLE_API_KEY`, set in the host's environment variables — never in the repository, a file, chat, or a log.
 
-See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the Vercel walkthrough, and [`AGENTS.md` §10](AGENTS.md) for the binding deployment rules (one published front end; never deploy without being asked; `GOOGLE_API_KEY` in the host's environment variables only).
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) has the walkthrough; [`AGENTS.md` §10](AGENTS.md) has the binding rules (one published deployment, never deploy without being asked, never add a second host).
 
 ## Design principles
 
 - **Grounded, honest answers.** Curriculum answers cite the material actually shown, and AI-generated explanations and practice questions are clearly labelled.
 - **Nepali-first accessibility.** Native Nepali/English support, correct Devanagari and mathematical notation, and readable text on small screens.
-- **Low-bandwidth by design.** Built for modest devices and connections.
+- **Low-bandwidth by design.** No build step, no webfont download, and no dependency the browser has to fetch beyond the app's own files.
 - **A real AI path.** Gemma 4 performs meaningful work in the learner flow — not a label attached to a canned answer.
-- **One design system.** `ui.py`, `.streamlit/config.toml`, and `landing/styles.css` share the same tokens, checked by `tests/test_design_tokens.py` (see [`docs/DESIGN.md`](docs/DESIGN.md)).
+- **One source of truth per concern.** Lesson data, prompts and validation, study-path logic, and styles each live in exactly one file, checked by the test suite (see [`docs/DESIGN.md`](docs/DESIGN.md)).
 
 ## Team — Nepluro
 
@@ -167,18 +123,19 @@ See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the Vercel walkthrough, and [
 
 ## Roadmap
 
-- [x] Gemma 4 AI service (summaries, grounded Q&A, MCQs, flashcards) with validation and tests
-- [x] Streamlit learning app with Explain / Ask / Practise / Flashcards flow
+- [x] Gemma 4 AI pipeline (summary, grounded Q&A, MCQs, flashcards) with validation and tests
+- [x] Web app with Explain / Ask / Practise / Flashcards flow, served from `landing/`
 - [x] Grounded bilingual Q&A tutor (English / Nepali replies)
 - [x] Bilingual lesson content (English + Nepali across every track)
-- [x] Session-scoped learner progress tracking
+- [x] Browser-local learner progress
+- [x] One front end and one deployment: the earlier Python/Streamlit app was retired
 - [ ] Broader, source-attributed curriculum content
 
 ## License
 
 Released under the MIT License. See [`LICENSE`](LICENSE) for details.
 
-## Lesson Content Contribution
+## Lesson content contribution
 
 Six original English-language lessons were contributed for NEB Grade 11 and Grade 12:
 
@@ -189,7 +146,7 @@ Six original English-language lessons were contributed for NEB Grade 11 and Grad
 - Grade 11 Chemistry — Chemical Bonding
 - Grade 12 Biology — Basic Principles of Genetics
 
-The lessons are stored in `data/lessons.json` using the application's 7-field lesson schema (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) and are loaded by `content.py`.
+All lessons are stored in `landing/data/lessons.json` using the app's 7-field schema (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`). That one file is what the browser and the serverless function both read — there is no second copy to keep in step.
 
 ### Authoring checklist
 
@@ -206,27 +163,19 @@ When adding a new lesson, use the following checklist to ensure consistency and 
 When contributing a Nepali-language version of a lesson:
 
 - **Preserve meaning, not wording:** Translate naturally; do not translate word‑for‑word. The Nepali version should convey the same concepts, examples, and conclusions as the English source.
-- **Keep equations and units in English:** Mathematical notation, scientific symbols, unit abbreviations (e.g., `m/s²`, `amu), and standard formula symbols remain in English so they render correctly and match curriculum references.
-- **Introduce technical terms in Nepali with English parenthesises:** On first mention, write the Nepali term followed by the English term in parentheses (e.g., "नेट बल (net force)"). This helps learners connect the two languages while reading textbook‑style content.
+- **Keep equations and units in English:** Mathematical notation, scientific symbols, unit abbreviations (e.g., `m/s²`, `amu`), and standard formula symbols remain in English so they render correctly and match curriculum references.
+- **Introduce technical terms in Nepali with English parentheses:** On first mention, write the Nepali term followed by the English term in parentheses (e.g., "नेट बल (net force)"). This helps learners connect the two languages while reading textbook‑style content.
 - **Do not change the JSON schema:** The 7-field structure (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) is unchanged for multilingual lessons. Only the `language` field and the `content` text differ.
-- **Name the ID by replacing the language suffix:** If the English lesson ID ends in `-en`, the Nepali version should end in `-ne` (e.g., `phy-newton-2-en` → `phy-newton-2‑ne`). This convention applies to lesson pairs that have both English and Nepali versions. The base portion of the ID (everything before the language suffix) stays the same, which keeps the pair linked and prevents duplicate IDs. Existing lessons without a Nepali version (such as `grade11-physics-motion` and `grade12-mathematics-derivatives`) omit the language suffix entirely. For future lesson pairs, use a matching `-en`/`-ne` suffix pattern to keep IDs consistent and searchable.
-- **Validate the same way:** Run `python validate_lessons.py` and `python -m pytest tests/test_validate_lessons.py tests/test_content.py -q` to confirm the new lesson passes all checks.
+- **Name the ID by replacing the language suffix:** If the English lesson ID ends in `-en`, the Nepali version should end in `-ne` (e.g., `phy-newton-2-en` → `phy-newton-2-ne`). This convention applies to lesson pairs that have both English and Nepali versions. The base portion of the ID (everything before the language suffix) stays the same, which keeps the pair linked and prevents duplicate IDs. Existing lessons without a Nepali version (such as `grade11-physics-motion` and `grade12-mathematics-derivatives`) omit the language suffix entirely. For future lesson pairs, use a matching `-en`/`-ne` suffix pattern to keep IDs consistent and searchable.
+- **Validate the same way:** run `node --test landing/tests/lessons.test.mjs` and confirm the new lesson passes every check.
 
 ### Validating lesson data
 
-Run the standalone validator (no dependencies beyond Python 3):
-
 ```bash
-python validate_lessons.py
+node --test landing/tests/lessons.test.mjs
 ```
 
-Run the lesson-related tests:
-
-```bash
-python -m pytest tests/test_validate_lessons.py tests/test_content.py -q
-```
-
-The validator checks JSON syntax, root structure, required fields, unique IDs, non-empty strings, and valid language codes (`en`, `ne`). All tests use temporary files and never modify the real `data/lessons.json`.
+The checks cover JSON structure, the required fields, unique and non-empty ids, non-empty strings, valid language codes (`en`, `ne`), and that every track and both languages are still covered.
 
 ## Lesson pairs in detail
 

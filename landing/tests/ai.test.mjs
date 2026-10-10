@@ -1,6 +1,6 @@
 /**
- * Tests for the web AI pipeline (port of ai_service.py).
- * Run with: node --test landing/api/
+ * Tests for the Gemma 4 pipeline: prompts, parsing, validation, transport.
+ * Run with: node --test landing/tests/ai.test.mjs
  */
 import assert from "node:assert/strict";
 import test from "node:test";

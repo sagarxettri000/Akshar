@@ -1,7 +1,7 @@
 /**
  * Tests for the study-selection contract in app.js.
- * Mirrors tests/test_content.py::resolve_study_path coverage.
- * Run with: node --test landing/app.test.mjs
+ * Covers resolveSelection and resolveGoalPath, including stale-selection repair.
+ * Run with: node --test landing/tests/app.test.mjs
  */
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -107,7 +107,7 @@ test("an empty lesson list resolves to no lesson instead of throwing", () => {
 });
 
 
-/* ------------------- exam goals and grades (same as content.py) ------------------- */
+/* ------------------- exam goals and grades (study-path helpers) ------------------- */
 
 test("examGoalOf and gradeOf read the track", () => {
   assert.equal(examGoalOf("NEB Grade 11"), "NEB");

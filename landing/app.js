@@ -117,8 +117,8 @@ export function resolveSelection(items, wanted = {}) {
  * Exam goals and grades
  *
  * Tracks encode the exam goal and, for NEB, the grade ("NEB Grade 11").
- * Learners pick a goal first, then a grade where the goal has one — the same
- * model as content.exam_goal_of / grade_of / resolve_goal_path in Python.
+ * Learners pick a goal first, then a grade where the goal has one. This is the
+ * only implementation of that model — see `landing/tests/app.test.mjs`.
  * ------------------------------------------------------------------ */
 
 export const EXAM_GOALS = ["NEB", "CEE", "IOE"];

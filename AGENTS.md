@@ -166,32 +166,33 @@ The team explicitly wants regular commits. You are authorized to create **local 
 ### Git operations that require explicit user instruction
 
 - Never push, publish a release, or deploy to production unless explicitly requested.
-- Treat the repository's production branch (`main`) as **published**: pushing to it redeploys the app that Streamlit Community Cloud watches, and, once the Vercel project serves `landing/`, redeploys the student-facing site. Never push to it as a backup or to "show" progress — work on a task branch and let a human merge (§10, §11).
+- Treat the repository's production branch (`main`) as **published**: pushing to it redeploys the site students use. Never push to it as a backup or to "show" progress — work on a task branch and let a human merge (§10, §11).
 - Never use destructive cleanup (`git reset --hard`, `git clean -fdx`), rewrite shared history, force-push, or amend/rebase existing commits unless explicitly requested and the effect is understood.
 - Do not create empty commits, fake contribution activity, or split trivial edits purely to inflate contribution counts.
 - If there is no Git repository, explain that commits were impossible; do not pretend otherwise.
 
 ## 10. Deployment, hosting, and live environments
 
-Akshar has two front ends but **exactly one student-facing deployment**. This has already gone wrong once: a contributor's coding agent committed and pushed correctly and then published the app on Streamlit Community Cloud, while the product the team shows students is the Vercel web app. Treat this section as binding, and re-read it before any task that mentions hosting, publishing, a live URL, or a demo link.
+Akshar has **one front end**: the web app in `landing/`, deployed as static files plus a single serverless function on one Vercel project. There used to be a second, Python/Streamlit front end; it is gone, and its removal was deliberate — a contributor's coding agent committed and pushed correctly and then published that app on Streamlit Community Cloud, leaving the team with two competing live products and contradictory instructions. Treat this section as binding, and re-read it before any task that mentions hosting, publishing, a live URL, or a demo link.
 
 ### Which front end is deployed where
 
 | Target | Path in the repo | Platform | Role |
 |---|---|---|---|
 | **Study app — the product students use** | `landing/` | **Vercel**, project `akshar-nepluro`, Root Directory `landing`, framework preset **Other**, no build command | The only approved deployment: static files plus the single function `landing/api/gemma.mjs` |
-| Reference implementation | `app.py`, `streamlit_app.py` | Streamlit Community Cloud — an **existing** app that follows `main` | Local development, experiments, and side-by-side comparison. **Do not deploy, redeploy, or extend it**, and never present it as the product link. |
+
+There is no second front end, no Python app, and no app that needs a long-running server. A change that would reintroduce one is a product decision for the humans, not a task detail.
 
 - The Vercel project follows the repository's production branch (`main`). A change reaches students only after it is merged there and Vercel deploys it.
-- The redesign that turns `landing/` from a marketing page into the study app is still on a task branch. If `landing/` on the branch you are on is the earlier marketing page, or the live URL still serves it, you are simply on a branch that predates the redesign: say so and carry on with your task. Never respond by deploying the Streamlit app, by creating another deployment, or by rewriting the other branch's work.
-- Streamlit Community Cloud rebuilds the app it watches whenever that branch changes. A push to `main` is therefore a **publish**, not a private save.
+- The redesign that turns `landing/` into the study app, and the removal of the retired front end, reached this branch recently. If `landing/` on the branch you are on is still a marketing page, or `app.py` and `streamlit_app.py` are still present, you are simply on a branch that predates it: say so and carry on with your task. Never respond by deploying anything, by recreating the retired app, or by rewriting the other branch's work.
+- A push to `main` is therefore a **publish**, not a private save.
 - Verify what a live URL actually serves before describing it in a document, a demo, or a report; a host showing an old commit is a normal, temporary state.
 
 ### Hard rules
 
 1. **Never deploy, redeploy, publish, unpublish, or change hosting unless the human explicitly asks for it in that task.** "Commit and push" is not permission to deploy, and a deployment is never how you demonstrate your work.
-2. **Never add, switch, or duplicate a hosting platform or project** — no new Streamlit Cloud app, no Render/Railway/Netlify/Fly/Cloudflare/GitHub Pages site, and no second Vercel project.
-3. **Do not deploy the Streamlit app**, and never present it as Akshar's live product. If a task appears to need a Streamlit deployment, stop and ask.
+2. **Never add, switch, or duplicate a hosting platform or project** — no Streamlit Cloud app, no Render/Railway/Netlify/Fly/Cloudflare/GitHub Pages site, and no second Vercel project.
+3. **Never reintroduce the retired Python/Streamlit front end** — not as a new app, not as a "reference implementation", and not as a second deployment target. If a task appears to need one, stop and ask.
 4. **Never push to `main` to store, share, or publish work.** Use a task branch; a maintainer reviews and merges (§9, §11).
 5. **Never change a deployed project's settings** — Root Directory, framework preset, build command, connected branch, deployment protection — as a side effect of another task.
 6. **Never create a temporary public deployment to test something.** Run it locally instead.
@@ -201,7 +202,7 @@ Akshar has two front ends but **exactly one student-facing deployment**. This ha
 
 Do only this, in this order, and report every URL you touched:
 
-1. Verify locally first: `python -m pytest -q`, `node --test landing/tests/*.mjs`, and open the app through `node landing/scripts/dev.mjs`.
+1. Verify locally first: `node --test landing/tests/*.mjs`, then open the app through `node landing/scripts/dev.mjs` and exercise the flow you changed.
 2. Deploy the existing Vercel project for `landing/` (Root Directory `landing`, preset **Other**, no build command). `landing/vercel.json` registers the one function and gives it a 60-second budget.
 3. The only environment variable is **`GOOGLE_API_KEY`** — name only, never a value in the repository, a file, chat, a screenshot, or a log. Set it for Production and Preview, then redeploy: a variable added after a deployment is not picked up by it.
 4. Verify the deployed URL, not just the upload: the study app renders; the header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**; `GET /api/gemma` returns `{"ok": true, …}`; `/tests/*` and `/scripts/*` return 404.
@@ -213,11 +214,11 @@ Stop and report which URL, platform, branch, and commit it serves. Do not repair
 
 ### Local previews are not deployments
 
-`node landing/scripts/dev.mjs` (with `--mock=ok`, `--mock=fail`, or `--mock=empty` to exercise the states) and `streamlit run app.py` are local tools for development. They are not the demo link, and their output must never be reported as a deployment.
+`node landing/scripts/dev.mjs` (with `--mock=ok`, `--mock=fail`, or `--mock=empty` to exercise the states) is the local tool for development: there is no build step and no dependency to install. It is not the demo link, and its output must never be reported as a deployment.
 
 ### Documentation drift
 
-Other documents may describe the hosting story differently — a README that calls the Streamlit app "the app", or a `docs/DEPLOYMENT.md` whose first step deploys Streamlit. When that happens, this section is authoritative: follow it, verify the live environment, correct the stale document in the same change, and say so in your report.
+Documents that name a second front end, a Python app, Streamlit, or a second host are stale: this section is authoritative. Follow it, verify the live environment, correct the stale document in the same change, and say so in your report.
 
 ## 11. Three-person collaboration and fair credit
 
@@ -229,13 +230,18 @@ Never fabricate authorship or rewrite history to make participation appear equal
 
 ### Do not rewrite a shared file in parallel
 
-One incident already cost this team a repo-wide conflict: two members redesigned the Streamlit app independently — one moving the design system into `ui.py` with `tests/test_design_tokens.py`, the other inlining it in `app.py` — so the two versions collided in `app.py` and left two competing design systems and two different deployment stories.
+One incident already cost this team a repo-wide conflict: two members redesigned the same screen independently — one moving the design system into a shared module with its own token test, the other inlining it in the same file — so the versions collided, and the tree briefly carried two competing design systems and two different deployment stories. That front end has since been removed; the lesson has not.
 
 Before you restyle or restructure a shared module:
 
 1. Check who touched it, and how recently: `git log --oneline -10 -- <path>`, plus `git fetch --all` and `git log --oneline --all -- <path>` for work on other branches.
 2. Claim the file in the team chat and agree the interface **before** you start: which module owns the design tokens, where shared helpers live.
-3. Keep exactly one source of truth per concern. Design tokens live in `ui.py`, `.streamlit/config.toml`, and `landing/styles.css` and must agree (`tests/test_design_tokens.py`); study-path selection lives in `content.py` and is imported, never re-implemented as private helpers inside `app.py`; prompts and validators exist once per language and are checked against each other by the tests. Extend the shared module instead of writing a second copy.
+3. Keep exactly one source of truth per concern, and extend the shared module instead of writing a second copy:
+   - design tokens and component styles: `landing/styles.css`;
+   - lesson data: `landing/data/lessons.json`, validated by `landing/tests/lessons.test.mjs` — never a second lesson file;
+   - prompts, parsing, and response validation: `landing/lib/ai.mjs`, reached through `landing/api/gemma.mjs` — never a second pipeline;
+   - study-path selection: `landing/app.js`, covered by `landing/tests/app.test.mjs`.
+   - the key: the host's environment variables, read only inside `landing/api/gemma.mjs`.
 4. If a parallel attempt has already been pushed, do not overwrite it: report it and let the humans decide which version stays.
 
 ## 12. Secrets, data, and destructive actions

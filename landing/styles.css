@@ -1,8 +1,8 @@
-/* Akshar web app stylesheet.
+/* Akshar stylesheet — the whole design system.
  *
- * The `--akx-*` custom properties below are the same tokens as `ui.TOKENS` in the
- * Streamlit app and the colours in `.streamlit/config.toml`;
- * `tests/test_design_tokens.py` fails if they drift apart.
+ * The `--akx-*` custom properties below are the only place design tokens are
+ * defined; every component rule uses them. No hard-coded hex values below this
+ * block. See `docs/DESIGN.md`.
  */
 
 :root {
