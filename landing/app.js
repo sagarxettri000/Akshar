@@ -532,19 +532,30 @@ export function dashboardModel(items = [], progress = {}) {
     byId(state.last) ?? openedIds.map(byId).find(Boolean) ?? items[0] ?? null;
   const best = state.best ?? null;
   const attempts = state.attempts ?? 0;
+  const totalChapters = items.length;
+  const opened = openedIds.length;
+  const percent = totalChapters > 0 ? Math.round((opened / totalChapters) * 100) : 0;
   return {
     continueLesson,
-    opened: openedIds.length,
+    opened,
+    totalChapters,
+    percent,
     recent: (state.recent ?? []).map(byId).filter(Boolean),
     attempts,
     best,
     pathways: availableGoals(items).map((goal) => {
       const goalItems = items.filter((l) => examGoalOf(l.track) === goal);
+      const goalOpened = goalItems.filter((l) => openedIds.includes(l.id)).length;
+      const goalTotal = goalItems.length;
+      const goalPercent = goalTotal > 0 ? Math.round((goalOpened / goalTotal) * 100) : 0;
       return {
         goal,
         chapters: uniqueValues(goalItems, "topic").length,
         subjects: uniqueValues(goalItems, "subject").length,
         languages: uniqueValues(goalItems, "language").length,
+        opened: goalOpened,
+        total: goalTotal,
+        percent: goalPercent,
       };
     }),
     bookmarks: (state.bookmarks ?? []).map(byId).filter(Boolean),
@@ -823,6 +834,46 @@ function renderProgress() {
   $("stat-lessons").textContent = String(Object.keys(state.lessons ?? {}).length);
   $("stat-attempts").textContent = String(state.attempts ?? 0);
   $("stat-best").textContent = state.best ? `${state.best.score} / ${state.best.total}` : "—";
+
+  const model = dashboardModel(lessons, state);
+  const percent = model.percent;
+
+  const ringFill = $("progress-ring-fill");
+  if (ringFill) {
+    const circumference = 2 * Math.PI * 52;
+    ringFill.style.strokeDashoffset = String(circumference * (1 - percent / 100));
+  }
+  const percentLabel = $("progress-percent");
+  if (percentLabel) percentLabel.textContent = `${percent}%`;
+
+  const motivation = $("dashboard-motivation");
+  if (motivation) {
+    if (model.opened === 0) {
+      motivation.textContent = "Start your first chapter to begin tracking your progress.";
+    } else if (percent === 100) {
+      motivation.textContent = "Amazing work — you have opened every chapter. Keep practising to retain it all.";
+    } else if (percent >= 50) {
+      motivation.textContent = `You are ${percent}% of the way through. Keep going — you are building real momentum.`;
+    } else {
+      motivation.textContent = `You have opened ${model.opened} of ${model.totalChapters} chapters. Every chapter you start counts.`;
+    }
+  }
+
+  const pathwayContainer = $("dashboard-pathways");
+  if (pathwayContainer) {
+    pathwayContainer.textContent = "";
+    for (const path of model.pathways) {
+      const row = el("div", "dashboard__pathway");
+      const label = el("span", "dashboard__pathway-label", path.goal);
+      const bar = el("div", "dashboard__pathway-bar");
+      const fill = el("span", "dashboard__pathway-fill");
+      fill.style.width = `${path.percent}%`;
+      bar.append(fill);
+      const value = el("span", "dashboard__pathway-value", `${path.percent}%`);
+      row.append(label, bar, value);
+      pathwayContainer.append(row);
+    }
+  }
 }
 
 function renderDashboard() {

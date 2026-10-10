@@ -129,34 +129,36 @@
             <ul class="pathways" id="pathways"></ul>
           </section>
 
-          <section class="card" aria-labelledby="practise-next-heading">
-            <h2 class="card__title" id="practise-next-heading">Practise next</h2>
-            <p class="card__meta" id="practise-next-meta">No practice attempts recorded yet.</p>
-            <p class="card__body" id="practise-next-body">
-              Gemma 4 can write practice questions from the notes you are reading, then mark
-              them and explain every answer.
-            </p>
-            <div class="card__actions">
-              <button class="button" id="practise-next" type="button">Open practice</button>
-            </div>
-          </section>
-
-          <section class="card" aria-labelledby="bookmarks-heading">
-            <h2 class="card__title" id="bookmarks-heading">Bookmarked chapters</h2>
-            <ul class="bookmark-list" id="bookmark-list"></ul>
-            <p class="card__meta" id="bookmarks-empty">
-              Use the bookmark button on a lesson to keep it here.
-            </p>
-          </section>
-
-          <section class="card" aria-labelledby="progress-heading">
+          <section class="card card--dashboard" aria-labelledby="progress-heading">
             <h2 class="card__title" id="progress-heading">Your progress</h2>
             <p class="card__meta">Saved in this browser only. Clearing site data removes it.</p>
-            <dl class="stats" id="stats">
-              <div><dt>Chapters opened</dt><dd id="stat-lessons">0</dd></div>
-              <div><dt>Practice attempts</dt><dd id="stat-attempts">0</dd></div>
-              <div><dt>Best score</dt><dd id="stat-best">—</dd></div>
-            </dl>
+
+            <div class="dashboard">
+              <div class="dashboard__ring-wrap">
+                <svg class="dashboard__ring" viewBox="0 0 120 120" role="img" aria-label="Overall progress ring">
+                  <circle class="dashboard__ring-track" cx="60" cy="60" r="52" />
+                  <circle class="dashboard__ring-fill" id="progress-ring-fill" cx="60" cy="60" r="52" />
+                </svg>
+                <div class="dashboard__ring-label">
+                  <strong id="progress-percent">0%</strong>
+                  <span>complete</span>
+                </div>
+              </div>
+
+              <div class="dashboard__body">
+                <dl class="stats" id="stats">
+                  <div><dt>Chapters opened</dt><dd id="stat-lessons">0</dd></div>
+                  <div><dt>Practice attempts</dt><dd id="stat-attempts">0</dd></div>
+                  <div><dt>Best score</dt><dd id="stat-best">—</dd></div>
+                </dl>
+                <p class="dashboard__motivation" id="dashboard-motivation">
+                  Start your first chapter to begin tracking your progress.
+                </p>
+              </div>
+            </div>
+
+            <div class="dashboard__pathways" id="dashboard-pathways"></div>
+
             <div class="card__actions">
               <button class="button button--quiet" id="progress-reset" type="button">
                 Reset progress
