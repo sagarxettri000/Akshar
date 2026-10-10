@@ -94,5 +94,53 @@
       "IOE"
     ],
     "content": "Chemical Equilibrium\n\nChemical equilibrium is the state of a reversible reaction in which the rates of the forward and reverse reactions become equal. At this stage, the concentrations of reactants and products remain constant although the reaction continues to occur in both directions.\n\nReversible Reactions\nIn a reversible reaction, products can react to reform the original reactants. For example:\nA + B ⇌ C + D\n\nDynamic Equilibrium\nAt equilibrium, the system is dynamic because both forward and reverse reactions continue, but there is no net change in concentrations.\n\nEquilibrium Constant\nFor a general reaction:\naA + bB ⇌ cC + dD\nthe equilibrium constant is given by:\nKc = [C]^c [D]^d / [A]^a [B]^b\nThis expression helps predict the extent of reaction.\n\nLe Chatelier Principle\nIf a system at equilibrium is disturbed by a change in concentration, pressure, temperature, or volume, it shifts in the direction that opposes the change.\n\nFactors Affecting Equilibrium\n- Increase in reactant concentration shifts equilibrium toward products.\n- Increase in product concentration shifts equilibrium toward reactants.\n- Increase in temperature favors the endothermic direction.\n- Pressure changes affect gaseous equilibria depending on the number of moles of gas.\n\nImportance\nChemical equilibrium is important in industrial chemistry, environmental systems, biological processes, and laboratory analysis. Understanding it helps improve reaction efficiency and predict product yield."
+  },
+  {
+    "id": "grade11-physics-newtons-laws",
+    "grade": "11",
+    "subject": "Physics",
+    "chapter": "Newton's Laws of Motion",
+    "exam_tags": [
+      "NEB",
+      "CEE",
+      "IOE"
+    ],
+    "content": "Newton's Laws of Motion\n\nSir Isaac Newton described three fundamental laws that explain the relationship between motion and force. These laws form the foundation of classical mechanics and are widely used in physics, engineering, and everyday life.\n\nFirst Law of Motion\nA body continues in its state of rest or uniform motion unless acted upon by an external force. This law is also called the law of inertia.\n\nInertia\nInertia is the tendency of a body to resist any change in its state of rest or motion. Greater mass means greater inertia.\n\nSecond Law of Motion\nThe rate of change of momentum of a body is directly proportional to the applied force and takes place in the direction of the force.\n\nMathematically, F = ma\nwhere F is force, m is mass, and a is acceleration.\n\nThird Law of Motion\nFor every action, there is an equal and opposite reaction. When one body exerts a force on another, the second body exerts a force of equal magnitude in the opposite direction.\n\nApplications\nThese laws explain why a passenger lurches forward when a vehicle suddenly stops, why rockets move upward, and how forces cause changes in motion. They are essential for understanding many real-world systems."
+  },
+  {
+    "id": "grade11-chemistry-periodic-table",
+    "grade": "11",
+    "subject": "Chemistry",
+    "chapter": "Periodic Table",
+    "exam_tags": [
+      "NEB",
+      "CEE",
+      "IOE"
+    ],
+    "content": "Periodic Table\n\nThe periodic table is a tabular arrangement of chemical elements in order of increasing atomic number. It groups elements with similar chemical properties together and helps predict their behaviour.\n\nPeriods and Groups\n- A period is a horizontal row.\n- A group is a vertical column.\nElements in the same group usually have similar valence electron configurations and show similar chemical properties.\n\nClassification\nElements are broadly classified as metals, non-metals, and metalloids. Metals are generally good conductors of heat and electricity, while non-metals are poor conductors.\n\nTrends in the Periodic Table\nAcross a period, atomic radius generally decreases and electronegativity increases. Down a group, atomic radius increases and metallic character becomes stronger.\n\nImportance\nThe periodic table helps chemists understand atomic structure, bonding, reactivity, and the relationship between different elements. It is one of the most important tools in chemistry."
+  },
+  {
+    "id": "grade12-biology-genetics",
+    "grade": "12",
+    "subject": "Biology",
+    "chapter": "Genetics",
+    "exam_tags": [
+      "NEB",
+      "CEE",
+      "IOE"
+    ],
+    "content": "Genetics\n\nGenetics is the branch of biology that studies heredity and variation in living organisms. It explains how traits are passed from parents to offspring through genes.\n\nGenes and Chromosomes\nGenes are units of heredity located on chromosomes. Each chromosome contains many genes. DNA carries the genetic information that determines inherited traits.\n\nMendel's Laws\nGregor Mendel formulated the basic laws of inheritance:\n- Law of Dominance\n- Law of Segregation\n- Law of Independent Assortment\nThese laws explain how traits are inherited in a predictable way.\n\nDominant and Recessive Traits\nA dominant trait appears when at least one dominant allele is present. A recessive trait appears only when both alleles are recessive.\n\nVariation\nVariation is the difference between individuals of the same species. It arises through mutation, recombination, and environmental influence.\n\nImportance\nGenetics is essential for understanding evolution, disease inheritance, crop improvement, and medical research."
+  },
+  {
+    "id": "grade12-mathematics-integration",
+    "grade": "12",
+    "subject": "Mathematics",
+    "chapter": "Integration",
+    "exam_tags": [
+      "NEB",
+      "CEE",
+      "IOE"
+    ],
+    "content": "Integration\n\nIntegration is the reverse process of differentiation. It is used to find the accumulated value of a quantity, the area under a curve, and the total change in a system.\n\nIndefinite Integration\nAn indefinite integral of a function f(x) is a family of functions F(x) such that F'(x) = f(x). It is written as:\n? f(x) dx = F(x) + C\nwhere C is the constant of integration.\n\nBasic Rules\n- ? x^n dx = x^(n+1)/(n+1) + C, for n ? -1\n- ? 1/x dx = ln|x| + C\n- ? e^x dx = e^x + C\n- ? sin x dx = -cos x + C\n- ? cos x dx = sin x + C\n\nDefinite Integrals\nA definite integral is evaluated between two limits and gives the net accumulated value over an interval:\n?_a^b f(x) dx\nThis is often used to calculate area under curves.\n\nApplications\nIntegration is used in physics, economics, statistics, and engineering to compute displacement, total cost, and accumulated quantities."
   }
 ]
