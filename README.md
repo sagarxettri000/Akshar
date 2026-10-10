@@ -1,15 +1,6 @@
-﻿# Akshar Project Update
+﻿# Progress note 1
 
-This repository now includes a larger NEB-aligned lesson set for selected Grade 11 and 12 topics.
+Repository update 1. 
+Verified at: 2026-10-10 15:23:47
+Owner: b4snet
 
-## Progress
-- Added more curriculum-aligned lesson chapters and content.
-- Structured the lesson data in a consistent JSON format.
-- Verified the lesson entries against the validation script.
-- Updated the project snapshot for visible progress tracking.
-
-## Last verified
-Updated at: $ts
-
-## Ownership
-Author: b4snet
