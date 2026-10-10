@@ -115,3 +115,58 @@ def test_repo_lessons_file_is_valid():
     ids = [lesson["id"] for lesson in lessons]
     assert len(ids) == len(set(ids)), "lesson ids must be unique"
     assert all(len(lesson["content"]) > 40 for lesson in lessons)
+
+
+# ---------------------------------------------------------------------------
+# Study-path resolution
+# ---------------------------------------------------------------------------
+
+
+def test_resolve_study_path_keeps_a_valid_selection():
+    lessons = content.load_lessons()
+    resolved = content.resolve_study_path(
+        lessons,
+        track="CEE",
+        subject="Physics",
+        topic="Kinematics",
+        language="ne",
+    )
+    assert resolved["lesson"]["id"] == "cee-kinematics-ne"
+    assert resolved["language"] == "ne"
+
+
+def test_resolve_study_path_falls_back_when_a_child_is_stale():
+    """A selectbox hands back a stale value when its options change.
+
+    The old app passed that value straight into ``next(...)`` over an empty
+    lesson list and crashed with StopIteration. Each level must fall back to a
+    value that exists under its parent.
+    """
+    lessons = content.load_lessons()
+    resolved = content.resolve_study_path(
+        lessons,
+        track="IOE",
+        subject="Mathematics",
+        topic="Kinematics",
+        language="xx",
+    )
+    assert resolved["topic"] == "Algebra"
+    assert resolved["language"] == "en"
+    assert resolved["lesson"]["id"] == "ioe-quadratics-en"
+
+
+def test_resolve_study_path_always_matches_the_requested_track():
+    lessons = content.load_lessons()
+    for track in content.unique_values(lessons, "track"):
+        resolved = content.resolve_study_path(
+            lessons, track=track, subject="Nope", topic="Nope", language="xx"
+        )
+        assert resolved["lesson"] is not None
+        assert resolved["lesson"]["track"] == track
+        assert resolved["track"] == track
+
+
+def test_resolve_study_path_handles_no_lessons():
+    resolved = content.resolve_study_path([])
+    assert resolved["lesson"] is None
+    assert resolved["variants"] == []

@@ -99,3 +99,61 @@ def filter_lessons(
 def lesson_label(language: str) -> str:
     """Return a human-readable label for a language code."""
     return LANGUAGE_LABELS.get(language, language)
+
+
+def resolve_study_path(
+    lessons: Iterable[dict],
+    track: str | None = None,
+    subject: str | None = None,
+    topic: str | None = None,
+    language: str | None = None,
+) -> dict:
+    """Coerce a cascading track/subject/topic/language choice into a real lesson.
+
+    Each level falls back to the first value available under its chosen parent.
+    Without this, changing a parent selection can leave a child pointing at a
+    value that no longer exists — which previously produced an empty lesson list
+    and crashed the app with ``StopIteration``.
+
+    Returns ``{"track", "subject", "topic", "language", "variants", "lesson"}``.
+    ``lesson`` is ``None`` only when ``lessons`` is empty.
+    """
+    lessons = list(lessons)
+    if not lessons:
+        return {
+            "track": None,
+            "subject": None,
+            "topic": None,
+            "language": None,
+            "variants": [],
+            "lesson": None,
+        }
+
+    def pick(options: list[str], value: str | None) -> str:
+        return value if value in options else options[0]
+
+    chosen_track = pick(unique_values(lessons, "track"), track)
+    chosen_subject = pick(
+        unique_values(filter_lessons(lessons, track=chosen_track), "subject"), subject
+    )
+    chosen_topic = pick(
+        unique_values(
+            filter_lessons(lessons, track=chosen_track, subject=chosen_subject), "topic"
+        ),
+        topic,
+    )
+    variants = filter_lessons(
+        lessons, track=chosen_track, subject=chosen_subject, topic=chosen_topic
+    )
+    chosen_language = pick(unique_values(variants, "language"), language)
+    lesson = next(
+        (item for item in variants if item["language"] == chosen_language), variants[0]
+    )
+    return {
+        "track": chosen_track,
+        "subject": chosen_subject,
+        "topic": chosen_topic,
+        "language": chosen_language,
+        "variants": variants,
+        "lesson": lesson,
+    }
