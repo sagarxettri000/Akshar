@@ -1,187 +1,280 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Akshar — Learning Platform for Nepal</title>
-  <meta name="description" content="Akshar helps Nepali students study NEB Grade 11-12 and prepare for CEE and IOE with bilingual study notes, grounded Gemma 4 explanations, and practice questions." />
-  <meta property="og:title" content="Akshar — Learning Platform for Nepal" />
-  <meta property="og:description" content="Learn, understand, practise. Bilingual study notes with Gemma 4 explanations and practice for NEB Grade 11-12, CEE, and IOE." />
-  <meta property="og:type" content="website" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Akshar — study notes, grounded explanations, practice</title>
+    <meta
+      name="description"
+      content="Akshar is a study companion for students in Nepal preparing for NEB Grade 11–12, CEE, and IOE. Read the notes, ask Gemma 4 about the part you are stuck on, then check yourself."
+    />
+    <meta name="theme-color" content="#0f6e5a" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' x='4' font-size='22'%3E%E0%A4%85%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#study">Skip to the study area</a>
 
-  <header class="site-header">
-    <div class="shell site-header__inner">
-      <a class="brand" href="#main"><span lang="ne">अक्षर</span> Akshar</a>
-      <nav class="site-nav" aria-label="Main">
-        <a href="#how">How it works</a>
-        <a href="#gemma">Gemma 4</a>
-        <a href="#content">Content and limits</a>
-        <a class="nav-cta" href="https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/" target="_blank" rel="noopener">Open Akshar</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main">
-    <section class="hero">
-      <div class="shell">
-        <h1>Understand it, then practise it.</h1>
-        <p class="hero__lead">
-          Akshar is a study companion for students in Nepal preparing for
-          <strong>NEB Grade 11&ndash;12</strong>, <strong>CEE</strong>, and
-          <strong>IOE</strong>. Read short study notes in English or Nepali, ask
-          Gemma 4 about the part you are stuck on, then check yourself with
-          practice questions.
-        </p>
-        <div class="hero__actions">
-          <a class="button button--primary" href="https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/" target="_blank" rel="noopener">Open the app</a>
-          <a class="button" href="https://github.com/sagarxettri000/Akshar" target="_blank" rel="noopener">Read the source on GitHub</a>
-        </div>
-        <p class="hero__status">
-          Hackathon build. The study notes are our own, written for this demo —
-          not official NEB, CEE, or IOE material. AI answers are labelled as AI
-          answers inside the app.
+    <header class="site-header">
+      <div class="site-header__inner shell">
+        <a class="brand" href="#top"><span lang="ne">अक्षर</span> Akshar</a>
+        <nav class="site-nav" aria-label="Page sections">
+          <a href="#study">Study</a>
+          <a href="#sources">Sources &amp; limits</a>
+          <a href="https://github.com/sagarxettri000/Akshar" rel="noopener">Source code</a>
+        </nav>
+        <p class="status" id="ai-status" data-state="checking">
+          <span class="status__dot" aria-hidden="true"></span>
+          <span class="status__text" id="ai-status-text">Checking Gemma 4…</span>
         </p>
       </div>
-    </section>
+    </header>
 
-    <section class="section" id="how">
-      <div class="shell">
-        <h2>How studying with Akshar works</h2>
-        <p class="section-intro">
-          One loop, repeated until a topic holds: read it, get it explained, then
-          prove it to yourself.
+    <main id="top" class="shell">
+      <div class="masthead">
+        <h1 class="masthead__title"><span lang="ne">अक्षर</span> Akshar</h1>
+        <p class="masthead__lead">
+          Study notes, grounded explanations, and practice for NEB Grade 11–12, CEE, and IOE —
+          in English or Nepali.
         </p>
-        <ol class="steps">
-          <li>
-            <span class="steps__number" aria-hidden="true">1</span>
-            <div>
-              <h3>Choose what to study</h3>
-              <p>
-                Pick a track (NEB Grade 11, NEB Grade 12, CEE, or IOE), then the
-                subject, topic, and language of the notes. Every level only
-                offers lessons that actually exist.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span class="steps__number" aria-hidden="true">2</span>
-            <div>
-              <h3>Read, then ask</h3>
-              <p>
-                The study notes stay on screen as the source. Ask a question in
-                English or Nepali and Gemma 4 answers from those notes only — and
-                says so when the notes do not cover something.
-              </p>
-            </div>
-          </li>
-          <li>
-            <span class="steps__number" aria-hidden="true">3</span>
-            <div>
-              <h3>Practise and check</h3>
-              <p>
-                Generate a short set of multiple-choice questions, answer them
-                all, then see which were right and why. Flashcards are there for
-                a quick recall pass before an exam.
-              </p>
-            </div>
-          </li>
+        <ol class="flow" aria-label="How a study session runs">
+          <li>Learn</li>
+          <li>Understand</li>
+          <li>Practise</li>
         </ol>
       </div>
-    </section>
 
-    <section class="section" id="gemma">
-      <div class="shell">
-        <h2>What Gemma 4 does here</h2>
-        <p class="section-intro">
-          Gemma 4 is not a badge on this page — it does the teaching work. Akshar
-          calls Google's hosted model <code>gemma-4-26b-a4b-it</code> through the
-          official <code>google-genai</code> SDK, grounded on the lesson you are
-          reading.
-        </p>
-        <div class="split">
+      <p class="note note--warning" id="ai-off" hidden>
+        <span class="note__label">AI features are off</span>
+        No Gemma 4 API key is configured on the server, so explanations, practice and
+        flashcards are unavailable. Reading the study notes still works. Set
+        <code>GOOGLE_API_KEY</code> in the deployment environment to switch them on.
+      </p>
+
+      <p class="note note--danger" id="load-error" hidden>
+        <span class="note__label">Could not load the lessons</span>
+        <span id="load-error-text">The lesson file could not be read.</span>
+      </p>
+
+      <section class="study" id="study" aria-labelledby="study-heading">
+        <h2 class="section-title" id="study-heading">Choose what to study</h2>
+        <div class="filters">
+          <div class="field">
+            <label for="f-track">Track</label>
+            <select id="f-track"></select>
+          </div>
+          <div class="field">
+            <label for="f-subject">Subject</label>
+            <select id="f-subject"></select>
+          </div>
+          <div class="field">
+            <label for="f-topic">Topic</label>
+            <select id="f-topic"></select>
+          </div>
+          <div class="field">
+            <label for="f-language">Language</label>
+            <select id="f-language"></select>
+          </div>
+        </div>
+        <p class="path" id="path"></p>
+
+        <article class="lesson" aria-labelledby="lesson-title">
+          <h2 class="lesson__title" id="lesson-title"></h2>
+          <p class="chips" id="lesson-chips"></p>
+          <details class="source" id="lesson-source" open>
+            <summary>Study notes — the source for everything below</summary>
+            <div class="prose" id="lesson-content" lang="en"></div>
+            <p class="note note--source">
+              <span class="note__label" id="source-label">Source</span>
+              <span id="source-body"
+                >Team-authored study notes written for Akshar. Not official NEB, CEE, or IOE
+                material.</span
+              >
+            </p>
+          </details>
+        </article>
+
+        <section class="ai" aria-labelledby="ai-heading">
+          <h2 class="section-title" id="ai-heading">Study help from Gemma 4</h2>
+          <p class="ai__intro">
+            Every answer below is generated from the notes you have open and is labelled as
+            AI-generated. Generated questions are checked for structure, not for truth — treat
+            them as a prompt to check yourself against the notes.
+          </p>
+
+          <div class="tabs" role="tablist" aria-label="Study help">
+            <button class="tab" id="tab-explain" role="tab" aria-selected="true" aria-controls="panel-explain">
+              Explain
+            </button>
+            <button class="tab" id="tab-ask" role="tab" aria-selected="false" aria-controls="panel-ask" tabindex="-1">
+              Ask Gemma 4
+            </button>
+            <button class="tab" id="tab-practise" role="tab" aria-selected="false" aria-controls="panel-practise" tabindex="-1">
+              Practise
+            </button>
+            <button class="tab" id="tab-flashcards" role="tab" aria-selected="false" aria-controls="panel-flashcards" tabindex="-1">
+              Flashcards
+            </button>
+          </div>
+
+          <div class="panel" id="panel-explain" role="tabpanel" aria-labelledby="tab-explain" tabindex="0">
+            <div class="panel__actions">
+              <button class="button button--primary" id="summary-run" type="button">
+                Explain this lesson
+              </button>
+              <button class="button" id="summary-reset" type="button" hidden>Generate again</button>
+            </div>
+            <p class="empty" id="summary-empty">
+              Gemma 4 writes a short summary of the notes above, in the language of the notes.
+            </p>
+            <div class="result" id="summary-result" hidden></div>
+            <p class="state" id="summary-state" hidden role="status"></p>
+          </div>
+
+          <div class="panel" id="panel-ask" role="tabpanel" aria-labelledby="tab-ask" tabindex="0" hidden>
+            <form class="ask" id="ask-form">
+              <label for="ask-input">Your question about this lesson</label>
+              <div class="ask__row">
+                <input
+                  id="ask-input"
+                  name="question"
+                  type="text"
+                  maxlength="1000"
+                  autocomplete="off"
+                  placeholder="e.g. Why is acceleration inversely proportional to mass?"
+                  aria-describedby="ask-hint"
+                />
+                <button class="button button--primary" id="ask-submit" type="submit">Ask</button>
+              </div>
+              <label class="ask__language">
+                Answer language
+                <select id="ask-language" aria-describedby="ask-hint">
+                  <option value="">Match the lesson</option>
+                  <option value="en">English</option>
+                  <option value="ne">Nepali</option>
+                </select>
+              </label>
+              <p class="hint" id="ask-hint">
+                Answers come only from the notes above. If the notes do not cover something,
+                Gemma 4 says so instead of guessing.
+              </p>
+            </form>
+            <p class="empty" id="ask-empty">
+              Ask about the part you are stuck on — one question at a time.
+            </p>
+            <div class="thread" id="ask-thread"></div>
+            <p class="state" id="ask-state" hidden role="status"></p>
+            <button class="button" id="ask-clear" type="button" hidden>Clear this conversation</button>
+          </div>
+
+          <div class="panel" id="panel-practise" role="tabpanel" aria-labelledby="tab-practise" tabindex="0" hidden>
+            <div class="panel__actions">
+              <button class="button button--primary" id="practice-run" type="button">
+                Write practice questions
+              </button>
+              <label class="count">
+                Questions
+                <select id="practice-count">
+                  <option value="3">3</option>
+                  <option value="5" selected>5</option>
+                  <option value="10">10</option>
+                </select>
+              </label>
+            </div>
+            <p class="empty" id="practice-empty">
+              Akshar writes multiple-choice questions from the notes above, then marks them and
+              explains every answer.
+            </p>
+            <p class="state" id="practice-state" hidden role="status"></p>
+            <form class="quiz" id="quiz" hidden></form>
+          </div>
+
+          <div class="panel" id="panel-flashcards" role="tabpanel" aria-labelledby="tab-flashcards" tabindex="0" hidden>
+            <div class="panel__actions">
+              <button class="button button--primary" id="flashcards-run" type="button">
+                Build flashcards
+              </button>
+              <label class="count">
+                Cards
+                <select id="flashcards-count">
+                  <option value="5" selected>5</option>
+                  <option value="8">8</option>
+                  <option value="10">10</option>
+                </select>
+              </label>
+            </div>
+            <p class="empty" id="flashcards-empty">
+              Prompt-and-answer cards for a quick recall pass before an exam.
+            </p>
+            <p class="state" id="flashcards-state" hidden role="status"></p>
+            <div class="cards" id="flashcards-list" hidden></div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="progress" aria-labelledby="progress-heading">
+        <h2 class="section-title" id="progress-heading">Your progress</h2>
+        <p class="hint">Saved in this browser only. Clearing site data removes it.</p>
+        <dl class="stats" id="stats">
+          <div><dt>Lessons opened</dt><dd id="stat-lessons">0</dd></div>
+          <div><dt>Practice attempts</dt><dd id="stat-attempts">0</dd></div>
+          <div><dt>Best score</dt><dd id="stat-best">—</dd></div>
+        </dl>
+        <button class="button" id="progress-reset" type="button">Reset progress</button>
+      </aside>
+
+      <section class="about" id="sources" aria-labelledby="sources-heading">
+        <h2 class="section-title" id="sources-heading">Sources and limits</h2>
+        <div class="about__grid">
           <div>
-            <ul class="capabilities">
-              <li><b>Explain</b><span>Summarises the lesson you have open.</span></li>
-              <li><b>Ask</b><span>Answers your question from the lesson, in English or Nepali.</span></li>
-              <li><b>Practise</b><span>Writes multiple-choice questions with an explanation for each answer.</span></li>
-              <li><b>Flashcards</b><span>Builds prompt-and-answer cards for recall practice.</span></li>
+            <h3>The notes are the source</h3>
+            <p>
+              Lesson notes are written by our team for standard NEB Grade 11–12, CEE, and IOE
+              topics, in English and Nepali. They are original text for this build: not official
+              NEB, CEE, or IOE material, and no past papers or copyrighted textbooks are copied.
+              Source-attributed curriculum material is the next thing we are building.
+            </p>
+          </div>
+          <div>
+            <h3>Gemma 4 is the study aid</h3>
+            <p>
+              Akshar calls Google's hosted <code>gemma-4-26b-a4b-it</code> through the Gemini
+              API, grounded on the lesson on screen. Explanations, questions, and flashcards are
+              labelled as AI-generated wherever you read them, and are never presented as
+              official exam material.
+            </p>
+          </div>
+          <div>
+            <h3>How output is checked</h3>
+            <p>
+              Responses are parsed defensively — plain JSON, fenced blocks, or JSON inside a
+              sentence. A question needs four options A–D, exactly one marked answer, and a
+              non-empty explanation before it is shown; malformed items are dropped. A failed
+              call is shown as an error, never as an answer. The API key stays on the server and
+              is redacted from messages.
+            </p>
+          </div>
+          <div>
+            <h3>Team Nepluro</h3>
+            <ul class="team">
+              <li><strong>Sagar Katwal</strong> — learner experience and frontend</li>
+              <li><strong>Dipson Basnet</strong> — Gemma 4 and the AI pipeline</li>
+              <li><strong>Dhiraj Shrestha</strong> — learning content, practice, validation</li>
             </ul>
           </div>
-          <div>
-            <div class="note">
-              <span class="note__label">How the output is checked</span>
-              <ul>
-                <li>Responses are parsed defensively — plain JSON, fenced blocks, or JSON inside a sentence.</li>
-                <li>Every question needs four options A&ndash;D, exactly one marked answer, and a non-empty explanation before it is shown.</li>
-                <li>Malformed items are dropped and logged without their content; a failed call is shown as an error, never as an answer.</li>
-                <li>The API key is never logged and is redacted from error messages.</li>
-              </ul>
-            </div>
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
-    <section class="section" id="content">
-      <div class="shell">
-        <h2>What the content is — and is not</h2>
-        <p class="section-intro">
-          Source material and AI output are kept visibly separate, because a
-          student needs to know which one they are reading.
+    <footer class="site-footer">
+      <div class="site-footer__inner shell">
+        <p>Akshar · MIT License · Built for students in Nepal</p>
+        <p class="site-footer__note">
+          Study notes in this build are our own and are not official NEB, CEE, or IOE material.
         </p>
-        <div class="split">
-          <div class="note note--source">
-            <span class="note__label">Study notes — the source</span>
-            <p>
-              Curated lesson notes written by our team covering standard NEB,
-              CEE, and IOE topics, in English and Nepali, with formulas written
-              out in plain text.
-            </p>
-            <p>
-              They are original text for this demo: not official NEB, CEE, or IOE
-              material, and no past papers or copyrighted textbooks are copied.
-              Source-attributed curriculum material is the next thing we are
-              building.
-            </p>
-          </div>
-          <div class="note">
-            <span class="note__label">Gemma 4 output — a study aid</span>
-            <p>
-              Explanations, practice questions, and flashcards are generated from
-              the lesson on screen and labelled as AI-generated where you read
-              them. They are not official exam questions.
-            </p>
-            <p>
-              Generated questions are checked for structure, not for truth. Treat
-              an answer as a prompt to check your understanding against the notes,
-              not as a final authority.
-            </p>
-          </div>
-        </div>
       </div>
-    </section>
+    </footer>
 
-    <section class="section" id="team">
-      <div class="shell">
-        <h2>Built by Team Nepluro</h2>
-        <ul class="team">
-          <li><b>Sagar Katwal</b><span>Learner experience and frontend</span></li>
-          <li><b>Dipson Basnet</b><span>Gemma 4 and the AI pipeline</span></li>
-          <li><b>Dhiraj Shrestha</b><span>Learning content, practice, and validation</span></li>
-        </ul>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="shell site-footer__inner">
-      <span>Akshar · MIT License · Built for students in Nepal</span>
-      <a href="https://github.com/sagarxettri000/Akshar" target="_blank" rel="noopener">GitHub repository</a>
-    </div>
-  </footer>
-</body>
+    <script type="module" src="app.js"></script>
+  </body>
 </html>
