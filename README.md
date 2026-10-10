@@ -14,8 +14,7 @@ Akshar helps Nepali students understand concepts, practise exam-style questions,
 
 ## Status
 
-Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 94 Node tests pass without calling the live model. The interface is a dashboard-led study experience: dashboard → chapter → lesson → practice or exam → results and review → back to learning.
-
+Active hackathon development. The learn → understand → practise flow can be exercised end-to-end against a mocked Gemma upstream; a real Gemma 4 key path exists but has never been run end-to-end, and the live deployment currently reports **AI off — notes only**; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and a Node test suite exercises it without ever calling the live model — its exact current state is reported under **Run the tests**. The interface is a dashboard-led study experience: dashboard → chapter → lesson → practice or exam → results and review → back to learning.
 ## Live link
 
 - **Study app (Vercel):** <https://akshar-nepluro.vercel.app/> — the product link. The Vercel
@@ -105,10 +104,12 @@ With `--mock`, the real handler, the real prompts, and the real validators run a
 node --test landing/tests/*.mjs
 ```
 
-The tests never call the live model, and they are the project's CI: validation, study-path
+The tests never call the live model, and they are the project's quality gate: validation, study-path
 resolution, dashboard and reading-progress behaviour, quiz scoring, lesson data, and the
 deployment guards (one registered function, security headers, the key read only on the
 server, no key anywhere under `landing/`).
+
+**Current state (verified 2026-10-10):** `52 tests, 45 pass, 7 fail` in a clean clone. `app.test.mjs`, `dashboard.test.mjs`, and `lesson-blocks.test.mjs` fail on any platform because, with no `package.json`, Node loads `landing/app.js` as CommonJS and their named imports fail. `deploy.test.mjs` fails on Windows only — it builds paths from `URL.pathname`, which yields `/C:/…`. These are test-harness defects, not app defects: a healthy run fails **only these seven**. Fix them rather than working around them.
 
 ## Deployment
 

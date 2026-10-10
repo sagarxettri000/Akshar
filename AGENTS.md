@@ -210,7 +210,7 @@ That table has one row, and it is the whole deployment story. There is no second
 
 Do only this, in this order, and report every URL you touched:
 
-1. Verify locally first: `node --test landing/tests/*.mjs`, then open the app through `node landing/scripts/dev.mjs` and exercise the flow you changed.
+1. Verify locally first: `node --test landing/tests/*.mjs` — the only acceptable failures are the test-harness defects documented in README **Run the tests**. Any other failure blocks the deploy. Then open the app through `node landing/scripts/dev.mjs` and exercise the flow you changed.
 2. Deploy the existing Vercel project for `landing/` (Root Directory `landing`, preset **Other**, no build command). `landing/vercel.json` registers the one function and gives it a 60-second budget.
 3. The only environment variable is **`GOOGLE_API_KEY`** — name only, never a value in the repository, a file, chat, a screenshot, or a log. Set it for Production and Preview, then redeploy: a variable added after a deployment is not picked up by it.
 4. Verify the deployed URL, not just the upload: the study app renders; the header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**; `GET /api/gemma` returns `{"ok": true, …}`; `/tests/*` and `/scripts/*` return 404.
