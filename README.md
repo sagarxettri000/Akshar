@@ -23,9 +23,12 @@ Akshar is built around one trustworthy loop: **learn → understand → practise
 
 - **Study app (Vercel):** <https://akshar-nepluro.vercel.app/> — the HTML/CSS/JS app in
   [`landing/`](landing), served as static files plus one serverless Gemma 4 function.
-  It picks up changes on the next Vercel deploy from `main`.
-- **Streamlit app:** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/> — the same
-  learn → understand → practise loop implemented in Streamlit.
+  It picks up changes on the next Vercel deploy from `main`. **This is the product link:**
+  the only deployment the team publishes to students.
+- **Streamlit app (reference implementation, not the product link):**
+  <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/> — the same learn → understand →
+  practise loop implemented in Streamlit, kept for local comparison. It is not a deployment
+  target for contributors; see [`AGENTS.md` §10](AGENTS.md).
 
 Both front ends share one lesson file, one set of prompts, and one set of validators; the
 test suite fails if they drift apart.
@@ -142,9 +145,9 @@ print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
 | Part | Where | Why |
 |------|-------|-----|
 | `landing/` (the study app) | [Vercel](https://vercel.com) | Static HTML/CSS/JS plus one serverless function — no build step, no npm dependencies |
-| `app.py` (Streamlit) | App runners such as [Streamlit Community Cloud](https://share.streamlit.io) | Its alternative UI needs a long-running Python server with WebSockets |
+| `app.py` (Streamlit) | Local runs, or the already-existing Streamlit Community Cloud app | Its alternative UI needs a long-running Python server with WebSockets. It is a reference implementation, not the product link — do not deploy it (§10 of [`AGENTS.md`](AGENTS.md)) |
 
-See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, including how to store the API key safely in Streamlit secrets.
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the Vercel walkthrough, and [`AGENTS.md` §10](AGENTS.md) for the binding deployment rules (one published front end; never deploy without being asked; `GOOGLE_API_KEY` in the host's environment variables only).
 
 ## Design principles
 

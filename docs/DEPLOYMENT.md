@@ -74,12 +74,21 @@ streamlit run app.py
 
 Every push to the production branch redeploys automatically.
 
-## 3. Optional: `main` branch and the Streamlit app
+## 3. The Streamlit app (reference implementation — do not deploy it)
 
-The Streamlit app is still deployable to Streamlit Community Cloud (branch `main`,
-main file `app.py`, secret `GOOGLE_API_KEY`). It is useful for local experiments and as
-a second implementation to compare against, but the Vercel web app is what the team
-shares with students.
+An existing Streamlit Community Cloud app follows `main` and rebuilds whenever that
+branch changes. **Do not create, redeploy, or repurpose a Streamlit deployment:** it is a
+local reference implementation to compare against, and the Vercel web app in `landing/`
+is the only student-facing deployment. Contributors and their coding agents should also
+read the binding rules in [`AGENTS.md` §10](../AGENTS.md).
+
+Run it locally when you want to compare the two front ends:
+
+```bash
+pip install -r requirements-dev.txt
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml   # then fill in GOOGLE_API_KEY
+streamlit run app.py
+```
 
 ## 4. Tests
 
