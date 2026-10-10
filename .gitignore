@@ -18,8 +18,16 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 
+# Virtual environments
+.venv/
+venv/
+env/
+
 # Streamlit local secrets
 .streamlit/secrets.toml
 
 # Vercel local project link
 .vercel
+
+# Local audit artifacts (screenshots from axe/Playwright runs)
+.audit-shots/
