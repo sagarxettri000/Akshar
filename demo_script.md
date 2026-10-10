@@ -1,7 +1,13 @@
 # Akshar — Hackathon Demo Script
 
-**App:** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
-**Landing page:** <https://akshar-nepluro.vercel.app/>
+**Product deployment (Vercel):** <https://akshar-nepluro.vercel.app/> — the Vercel project
+serves `landing/` (on this branch still the earlier landing page; the study-app redesign
+merges from a task branch).
+**Streamlit app (reference implementation):** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
+— the walkthrough below follows this front end, which we run locally with `streamlit run app.py`.
+
+> **Deployment rules:** nothing is deployed, redeployed, or republished for a demo, and the
+> Streamlit app is never presented as the product link — see [`AGENTS.md` §10](AGENTS.md).
 **Total time:** ~5 minutes
 **Speakers:** Sagar Katwal, Dipson Basnet, Dhiraj Shrestha
 
@@ -53,7 +59,7 @@
 
 ### [3:00 – 3:30] Demo Setup
 
-> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. The app is already deployed on Streamlit Community Cloud, and we also have a landing page on Vercel that links to it."
+> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. The front end I'm walking through is our Streamlit reference implementation; the front end we publish to students is the Vercel web app in `landing/`."
 
 **Demo steps:**
 
@@ -75,7 +81,7 @@
 
 5. **Flashcards tab** — The **Flashcards** tab turns the lesson into quick revision cards.
 
-6. **Deployment** — We push to GitHub. Streamlit Community Cloud runs the app and keeps the API key in secrets; Vercel hosts the landing page. Both redeploy automatically on every push.
+6. **Deployment** — There is one published deployment: the Vercel project for `landing/`, which picks up changes on a merge to `main`. The Streamlit app you are watching is the reference implementation we run locally, so nothing is deployed or redeployed for this demo.
 
 ---
 

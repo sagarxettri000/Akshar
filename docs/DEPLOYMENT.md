@@ -1,71 +1,75 @@
-# Deploying Akshar
+# Running and deploying Akshar
 
-Akshar deploys in two parts:
+There is **exactly one published deployment**: the Vercel project for `landing/`. The
+Streamlit app in `app.py` is a reference implementation for local comparison. The binding
+rules are in [`AGENTS.md` §10](../AGENTS.md):
 
-1. **The app** — `app.py` runs on **Streamlit Community Cloud** (free, made for Streamlit).
-2. **The landing page** — `landing/` is a static site hosted on **Vercel**.
+- Never deploy, redeploy, publish, unpublish, or change hosting unless a human explicitly
+  asks for it in that task. "Commit and push" is not permission to deploy.
+- Never add, switch, or duplicate a hosting platform or project — no new Streamlit Cloud
+  app, no Render/Railway/Netlify/Fly/Cloudflare/GitHub Pages site, no second Vercel project.
+- Never push to `main` to store or share work: it is the production branch, so a push
+  republishes both the app Streamlit Community Cloud watches and the Vercel project. Work on
+  a task branch and let a maintainer merge.
+- Never create a temporary public deployment to test something. Run it locally.
 
-Streamlit needs a long-running Python server with a persistent WebSocket and in-memory
-session state. Vercel only runs static sites and short-lived serverless functions, so the
-app cannot run on Vercel — the landing page can.
+| Front end | Where it is published | Notes |
+|---|---|---|
+| `landing/` — the product | Vercel project `akshar-nepluro`, Root Directory `landing` | On this branch `landing/` is still the earlier landing page; the study-app redesign is on a task branch and goes live when it is merged here |
+| `app.py` — reference implementation | An **existing** Streamlit Community Cloud app that follows `main` | Kept for local comparison and experiments. **Do not deploy or redeploy it.** |
 
 ## 0. Prerequisites
 
-- The repository is on GitHub: <https://github.com/sagarxettri000/Akshar>
-- A **fresh** Google AI Studio API key (rotate any key that was shared publicly).
+- The repository on GitHub: <https://github.com/sagarxettri000/Akshar>
+- A **fresh** Google AI Studio API key (rotate any key that was ever shared publicly)
 
-## 1. Deploy the app on Streamlit Community Cloud
+## 1. Run it locally
 
-1. Go to <https://share.streamlit.io> and sign in with GitHub.
-2. Click **Create app** → **Deploy a public app from GitHub**.
-3. Fill in:
-   - **Repository:** `sagarxettri000/Akshar`
-   - **Branch:** `main`
-   - **Main file path:** `app.py` — or leave the default `streamlit_app.py`, which runs the identical app
-4. Open **Advanced settings** → **Secrets** and paste:
+```bash
+pip install -r requirements-dev.txt
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml   # then fill in GOOGLE_API_KEY
+streamlit run app.py
+```
 
-   ```toml
-   GOOGLE_API_KEY = "your-new-google-ai-studio-key"
-   ```
+The landing page has no build step: open `landing/index.html` directly in a browser.
 
-5. (Optional) Select **Python 3.12**.
-6. Click **Deploy**. Streamlit installs `requirements.txt` and builds the app.
-7. Copy the public URL, for example `https://akshar.streamlit.app`.
+## 2. The Vercel project (the published front end)
 
-The app reads the key from Streamlit secrets — it is never in the repository. Every push
-to `main` redeploys the app automatically.
+It already exists, so you normally do not touch it. If it ever has to be recreated:
 
-## 2. Deploy the landing page on Vercel
+1. Vercel → **Add New…** → **Project** → import this repository.
+2. **Root Directory** = `landing`, **Framework Preset** = **Other**, Build Command and
+   Output Directory empty.
+   > Vercel may otherwise detect **Python** from `requirements.txt` and fail the build.
+3. Environment variables: `GOOGLE_API_KEY` for Production and Preview — needed once the
+   study app's serverless function is in `landing/`. A variable added after a deployment is
+   not picked up by it, so redeploy afterwards.
+4. Deploy, then check what the URL actually serves rather than trusting the upload.
 
-1. Go to <https://vercel.com> → **Add New…** → **Project**.
-2. Import the same GitHub repository.
-3. Set **Root Directory** to `landing`.
-4. Set **Framework Preset** to **Other**.
-   > Vercel may auto-detect this repository as **Python** (because of `requirements.txt`),
-   > which makes the build error out in about a second. Clearing the preset to **Other** is required.
-5. Leave **Build Command** and **Output Directory** empty, then click **Deploy**.
-6. If the URL asks you to log in to Vercel, open **Project → Settings → Deployment Protection**
-   and disable **Vercel Authentication**. The site is then publicly reachable.
-7. `landing/index.html` already points at the live Streamlit app. If the app URL changes,
-   update the link and push — Vercel redeploys automatically.
+Do not change the project's Root Directory, framework preset, connected branch, or
+deployment protection as a side effect of another task.
 
-## 3. Optional: custom domain
+## 3. The Streamlit app (reference implementation — do not deploy it)
 
-In Vercel → your project → **Settings** → **Domains**, add a domain and follow the DNS
-instructions. You can point a subdomain (for example `app.yourdomain.com`) at the
-Streamlit app by adding it in Streamlit Cloud's app settings.
+An existing Streamlit Community Cloud app follows `main` and rebuilds whenever that branch
+changes. Do not create, redeploy, or repurpose a Streamlit deployment: it is a local
+reference implementation, and the Vercel web app is the one published front end.
 
 ## 4. Security checklist
 
 - [ ] Revoke and rotate any API key that was shared in plain text.
-- [ ] Restrict the new key to the **Generative Language API** in Google AI Studio.
-- [ ] Keep keys only in Streamlit secrets and Vercel environment variables.
-- [ ] Confirm `.streamlit/secrets.toml` is gitignored (it is) and never committed.
+- [ ] Restrict the key to the **Generative Language API** in Google AI Studio.
+- [ ] Keep the key in the host's environment variables (Vercel) and in a local, gitignored
+      `.streamlit/secrets.toml` for local Streamlit runs — never in the repository, a file,
+      chat, a screenshot, or a log.
+- [ ] Confirm `.streamlit/secrets.toml` and `.env` are gitignored (they are) and never committed.
 - [ ] Set a spending/quota limit on the key to avoid surprise costs.
 
 ## Troubleshooting
 
-- **"No Gemma 4 API key found."** — Add `GOOGLE_API_KEY` in Streamlit Cloud → Settings → Secrets.
-- **`ModuleNotFoundError: google.genai`** — Make sure `requirements.txt` is at the repository root.
-- **Landing page shows Vercel 404** — Confirm the Vercel project Root Directory is `landing`.
-- **Slow first answer** — The first Gemma 4 call can take 20–40 seconds; later calls are usually faster.
+- **"No Gemma 4 API key found."** — a local Streamlit run needs `GOOGLE_API_KEY` in
+  `.streamlit/secrets.toml` or the environment.
+- **The Vercel URL returns 404** — the project's Root Directory is not `landing`.
+- **`ModuleNotFoundError: google.genai`** — `requirements.txt` must stay at the repository root.
+- **Slow first answer** — the first Gemma 4 call can take 20–40 seconds; later calls are
+  usually faster.

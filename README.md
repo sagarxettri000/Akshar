@@ -8,7 +8,7 @@ Akshar helps Nepali students understand concepts, practise exam-style questions,
 
 ## Status
 
-Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are validated and loaded. 138 unit tests pass without calling the live model.
+Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are validated and loaded. 131 unit tests pass without calling the live model.
 
 ## The learning loop
 
@@ -19,10 +19,19 @@ Akshar is built around one trustworthy loop: **learn → understand → practise
 3. **Understand** — get an AI-generated summary, ask a question, or review flashcards; Gemma 4 answers using only the selected lesson and says so plainly when the lesson does not cover the question.
 4. **Practise** — generate multiple-choice questions, choose answers, check answers, and review missed questions with explanations. Progress is tracked per session.
 
-## Live demo
+## Live links
 
-- **App (Streamlit Community Cloud):** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
-- **Landing page (Vercel):** <https://akshar-nepluro.vercel.app/>
+- **Study app (Vercel) — the product link:** <https://akshar-nepluro.vercel.app/> — the
+  Vercel project serves `landing/`. On this branch `landing/` is still the earlier landing
+  page; the study-app redesign of `landing/` is on a task branch and goes live when it is
+  merged here.
+- **Streamlit app — reference implementation:** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
+  — the original Python front end, kept for local comparison. **Do not deploy, redeploy, or
+  extend it**, and never present it as the product link.
+
+There is exactly **one published deployment**: the Vercel project for `landing/`. Deploying,
+republishing, switching hosts, or adding another project needs an explicit request from a
+human — [`AGENTS.md` §10](AGENTS.md) is binding.
 
 ## The problem
 
@@ -56,7 +65,7 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 
 | Path | Purpose |
 |------|---------|
-| `app.py` | Streamlit app — the learn → understand → practise interface |
+| `app.py` | Streamlit reference implementation of the learn → understand → practise loop (not the published front end — see `AGENTS.md` §10) |
 | `ai_service.py` | Gemma 4 integration — summaries, grounded Q&A, MCQs, and flashcards |
 | `content.py` | Lesson loading and validation |
 | `progress.py` | Session-scoped learner progress tracking |
@@ -64,11 +73,11 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `tests/` | Unit tests for the AI service, content, and progress (no live API calls) |
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Development and testing dependencies |
-| `landing/` | Static landing page deployed to Vercel |
-| `docs/DEPLOYMENT.md` | Step-by-step deployment guide |
+| `landing/` | Served by the Vercel project: the landing page today, the study app once the redesign branch merges |
+| `docs/DEPLOYMENT.md` | Running and deployment guide — read `AGENTS.md` §10 first |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
 | `GEMINI.md` | Gemini CLI entry point that imports `AGENTS.md` |
-| `FIRST_PROMT.md` | Read-only repository audit prompt |
+| `FIRST_PROMPT.md` | Read-only repository audit prompt |
 | `TEAM_PLAYBOOK.md` | Team work split, MVP scope, and demo plan |
 | `LICENSE` | MIT License |
 
@@ -122,12 +131,18 @@ print(generate_summary("Newton's second law: F = m a.", api_key="YOUR_KEY"))
 
 ## Deployment
 
-| Part | Where | Why |
-|------|-------|-----|
-| `app.py` | [Streamlit Community Cloud](https://share.streamlit.io) | Streamlit needs a long-running Python server with WebSockets — Vercel cannot run it |
-| `landing/` | [Vercel](https://vercel.com) | A static landing page, which Vercel is built for |
+There is **one published deployment**: the Vercel project for `landing/` (Root Directory
+`landing`, framework preset **Other**, no build command). The Streamlit app in `app.py` is a
+reference implementation we run locally with `streamlit run app.py`; it is not a deployment
+target.
 
-See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, including how to store the API key safely in Streamlit secrets.
+Never deploy, redeploy, publish, unpublish, switch hosts, or add a hosting project unless a
+human explicitly asks for it in that task — [`AGENTS.md` §10](AGENTS.md) is binding. The
+only environment variable this project may need is `GOOGLE_API_KEY`, set in the host's
+environment variables (and in a local, gitignored `.streamlit/secrets.toml` for local runs);
+only its **name** ever belongs in a document.
+
+[`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) has the walkthrough.
 
 ## Design principles
 
