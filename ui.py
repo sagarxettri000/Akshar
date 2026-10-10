@@ -836,10 +836,11 @@ def stats_list(rows: list[tuple[str, str]]) -> None:
 
 
 def score_summary(score: int, total: int, best: str) -> None:
-    """Show this attempt's real score next to the session's real best."""
+    """Show this attempt's real score (with percentage) and the session's real best."""
+    pct = f" ({round(score / total * 100)}%)" if total else ""
     _html_block(
         f'<div class="akx-score">'
-        f'<span class="akx-score__value">{esc(score)} / {esc(total)}</span>'
+        f'<span class="akx-score__value">{esc(score)} / {esc(total)}{pct}</span>'
         f'<span class="akx-score__label">correct on this attempt</span>'
         f'<span class="akx-score__label">{esc(best)}</span>'
         f"</div>"

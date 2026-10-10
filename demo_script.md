@@ -57,10 +57,13 @@
 
 **Demo steps:**
 
-1. **Choose a lesson** — "In the sidebar I'll pick the NEB Grade 11 track, Physics, Newton's Laws of Motion. We can also switch the lesson language to Nepali."
-2. **Open the lesson** — "Here's Newton's Second Law — our own study notes, and we label them clearly as not official NEB material."
-3. **Explain tab** — "If a student needs a clearer explanation, they click **Generate a summary** and Gemma 4 writes one grounded in this lesson. We show an AI notice so nobody mistakes it for an official source."
-4. **Ask tab** — "Better still, the student can ask their own question. Gemma 4 answers using only this lesson, tells them when the lesson doesn't cover something instead of inventing facts, and can reply in **Nepali** if they switch the answer language."
+1. **Choose a lesson** — In the sidebar, pick the NEB Grade 11 track, Physics, Newton's Laws of Motion. Switch the lesson language to Nepali to see bilingual support.
+
+2. **Open the lesson** — Here's Newton's Second Law — our own study notes, clearly labelled as not official NEB material.
+
+3. **Explain tab** — If a student needs a clearer explanation, they click **Generate a summary** and Gemma 4 writes one grounded in this lesson. We show an AI notice so nobody mistakes it for an official source.
+
+4. **Ask tab** — Better still, the student can ask their own question. Gemma 4 answers using only this lesson, tells them when the lesson doesn't cover something instead of inventing facts, and can reply in **Nepali** if they switch the answer language.
 
 ### [3:30 – 4:00] Practice & Progress
 
@@ -70,8 +73,9 @@
 
 **Demo steps:**
 
-5. **Flashcards tab** — "The **Flashcards** tab turns the lesson into quick revision cards."
-6. **Deployment** — "We push to GitHub. Streamlit Community Cloud runs the app and keeps the API key in secrets; Vercel hosts the landing page. Both redeploy automatically on every push."
+5. **Flashcards tab** — The **Flashcards** tab turns the lesson into quick revision cards.
+
+6. **Deployment** — We push to GitHub. Streamlit Community Cloud runs the app and keeps the API key in secrets; Vercel hosts the landing page. Both redeploy automatically on every push.
 
 ---
 
@@ -81,7 +85,7 @@
 
 > "As a hackathon prototype, Akshar has some limitations:
 >
-> - We have **14 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus — with the core lessons available in both English and Nepali.
+> - We have **21 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus; core lessons are available in both English and Nepali.
 > - AI output, while helpful, should be verified against official textbooks.
 > - The app requires an internet connection and a Gemini API key.
 > - Progress tracking is per-session for now; there are no user accounts yet."
