@@ -189,6 +189,8 @@
                 material.</span
               >
             </p>
+            <p class="source__references-label" id="source-references-label" hidden>Related official references</p>
+            <ul class="source__links" id="source-links" hidden></ul>
           </details>
           <div class="lesson-nav">
             <button class="button button--quiet" id="prev-lesson" type="button">← Previous chapter</button>
@@ -198,10 +200,10 @@
 
         <section class="ai" aria-labelledby="ai-heading">
           <h2 class="section-title" id="ai-heading">Study help from Gemma 4</h2>
-          <p class="ai__intro">
+          <p class="ai__intro" id="ai-intro">
             Every answer below is generated from the notes you have open and is labelled as
-            AI-generated. Generated questions are checked for structure, not for truth — treat
-            them as a prompt to check yourself against the notes.
+            AI-generated. Practice questions include a quoted lesson excerpt, but their answers
+            are not independently verified — check them against the notes.
           </p>
 
           <div class="tabs" role="tablist" aria-label="Study help">
@@ -315,8 +317,9 @@
               </label>
             </fieldset>
             <p class="empty" id="practice-empty">
-              Akshar writes multiple-choice questions from the notes above, then marks them and
-              explains every answer. These are generated questions, not official exam papers.
+              Akshar writes multiple-choice questions from the notes above. Each includes a
+              matching excerpt for checking; answer accuracy still needs your review. These are
+              generated questions, not official exam papers.
             </p>
             <p class="state" id="practice-state" hidden role="status"></p>
             <div class="quiz-progress" id="quiz-progress" hidden>

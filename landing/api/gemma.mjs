@@ -139,10 +139,19 @@ export default async function handler(req, res) {
   // Status probe: tells the page whether AI features are configured, without
   // touching the model or spending quota.
   if (req.method === "GET" || req.method === "HEAD") {
-    const configured = Boolean(
-      (process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || "").trim(),
-    );
-    return json(res, 200, { ok: true, aiAvailable: configured });
+    const configured = Boolean((process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || "").trim());
+    let localMock = false;
+    try {
+      const hostname = new URL(process.env.GEMINI_BASE_URL || "").hostname;
+      localMock = ["localhost", "127.0.0.1", "::1"].includes(hostname);
+    } catch {
+      localMock = false;
+    }
+    return json(res, 200, {
+      ok: true,
+      aiAvailable: configured,
+      provider: localMock ? "mock" : configured ? "gemma" : "off",
+    });
   }
   if (req.method !== "POST") {
     res.setHeader("allow", "GET, POST");

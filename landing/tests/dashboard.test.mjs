@@ -12,6 +12,7 @@ import {
   TEXT_SIZES,
   chapterNeighbours,
   dashboardModel,
+  formatGenerationDuration,
   nextTextSize,
   quizSummary,
   readingProgress,
@@ -37,6 +38,12 @@ const NEB = [
   lesson("CEE", "Physics", "Kinematics"),
   lesson("IOE", "Mathematics", "Algebra"),
 ];
+
+test("generation timings never round a sub-second response down to zero", () => {
+  assert.equal(formatGenerationDuration(80), "under 1 s");
+  assert.equal(formatGenerationDuration(1400), "1 s");
+  assert.equal(formatGenerationDuration(61500), "1 min 2 s");
+});
 
 /* ------------------------------ reading progress ------------------------------ */
 
