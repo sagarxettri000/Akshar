@@ -1,14 +1,15 @@
-﻿# Akshar Project Status
+﻿# Akshar Project Update
 
-This project tracks NEB-aligned lesson data and supporting curriculum material for Grade 11 and 12 subjects.
+This repository now includes a larger NEB-aligned lesson set for selected Grade 11 and 12 topics.
 
-## Status update
-- Lesson inventory has been expanded with additional chapters and topic content.
-- Validation checks are run to ensure all lesson entries comply with the project schema.
-- The project remains in active development for educational content enrichment.
+## Progress
+- Added more curriculum-aligned lesson chapters and content.
+- Structured the lesson data in a consistent JSON format.
+- Verified the lesson entries against the validation script.
+- Updated the project snapshot for visible progress tracking.
 
-## Timestamp
+## Last verified
 Updated at: $ts
 
-## Notes
-This note is intentionally visible in the repository history as a concrete project update.
+## Ownership
+Author: b4snet
