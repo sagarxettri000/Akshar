@@ -1,0 +1,4 @@
+# Local dev tooling and tests are not part of the deployed site.
+scripts/
+tests/
+*.test.mjs

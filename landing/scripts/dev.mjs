@@ -3,6 +3,7 @@
  * Local dev server for the Vercel app — no dependencies, no Vercel account.
  *
  *   node landing/scripts/dev.mjs                  # static + /api/gemma (real key from env)
+ *   node landing/scripts/dev.mjs --host=0.0.0.0    # bind all interfaces (containers/previews)
  *   node landing/scripts/dev.mjs --mock=ok        # + a fake Gemma upstream, no key needed
  *   node landing/scripts/dev.mjs --mock=fail      # + upstream that always fails (error states)
  *   node landing/scripts/dev.mjs --mock=empty     # + upstream that returns nothing usable
@@ -38,6 +39,7 @@ function parseArgs(argv) {
 const args = parseArgs(process.argv.slice(2));
 
 const port = Number(args.port ?? 3000);
+const host = args.host ?? "127.0.0.1";
 const mockMode = args.mock ?? null;
 
 const TYPES = {
@@ -153,11 +155,11 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, host, () => {
   const mode = mockMode
     ? `mock upstream (${mockMode}) on 127.0.0.1:${mockPort}`
     : "real Gemma 4 API";
   const ai = (process.env.GOOGLE_API_KEY || "").trim() ? "AI on" : "AI off (no GOOGLE_API_KEY)";
-  console.log(`Akshar web app → http://127.0.0.1:${port}`);
+  console.log(`Akshar web app → http://${host === "0.0.0.0" ? "127.0.0.1" : host}:${port}`);
   console.log(`  ${ai} · ${mode}`);
 });
