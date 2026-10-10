@@ -619,17 +619,48 @@ function showView(name, { focus = false } = {}) {
     panel.hidden = panel.dataset.viewPanel !== target;
   }
   for (const link of document.querySelectorAll("a[data-view]")) {
-    if (link.dataset.view === target) link.setAttribute("aria-current", "page");
-    else link.removeAttribute("aria-current");
+    if (link.dataset.view === target) {
+      link.setAttribute("aria-current", "page");
+      link.classList.add("nav-item--active");
+    } else {
+      link.removeAttribute("aria-current");
+      link.classList.remove("nav-item--active");
+    }
   }
   if (location.hash !== `#${target}`) history.replaceState(null, "", `#${target}`);
   if (target === "study") updateReadingProgress();
+  updateGreeting(target);
   if (focus) {
     // Focus the view without letting the browser scroll it back into view: the
     // new view belongs at the top of the page, filters included.
     $("main").focus({ preventScroll: true });
   }
   window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function updateGreeting(view) {
+  const greeting = $("topbar-greeting");
+  const sub = $("topbar-sub");
+  if (!greeting || !sub) return;
+  if (view === "home") {
+    const model = dashboardModel(lessons, progressState());
+    if (model.opened === 0) {
+      greeting.textContent = "Welcome to Akshar";
+      sub.textContent = "Start your first chapter to begin tracking your progress.";
+    } else if (model.percent === 100) {
+      greeting.textContent = "All chapters opened";
+      sub.textContent = "Amazing work — keep practising to retain it all.";
+    } else {
+      greeting.textContent = `Welcome back`;
+      sub.textContent = `You have opened ${model.opened} of ${model.totalChapters} chapters. Keep going.`;
+    }
+  } else if (view === "study") {
+    greeting.textContent = "Study";
+    sub.textContent = "Pick a chapter, read the notes, and practise.";
+  } else {
+    greeting.textContent = "Sources & limits";
+    sub.textContent = "How Akshar uses notes and AI.";
+  }
 }
 
 function wireViews() {
