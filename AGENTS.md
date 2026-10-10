@@ -166,7 +166,7 @@ The team explicitly wants regular commits. You are authorized to create **local 
 ### Git operations that require explicit user instruction
 
 - Never push, publish a release, or deploy to production unless explicitly requested.
-- Treat the repository's production branch (`main`) as **published**: pushing to it redeploys the app that Streamlit Community Cloud watches, and, once the Vercel project serves `landing/`, redeploys the student-facing site. Never push to it as a backup or to "show" progress — work on a task branch and let a human merge (§10, §11).
+- Treat the repository's production branch (`main`) as **published**: pushing to it redeploys the app that Streamlit Community Cloud watches, and redeploys the student-facing site that the Vercel project serves from `landing/`. Never push to it as a backup or to "show" progress — work on a task branch and let a human merge (§10, §11).
 - Never use destructive cleanup (`git reset --hard`, `git clean -fdx`), rewrite shared history, force-push, or amend/rebase existing commits unless explicitly requested and the effect is understood.
 - Do not create empty commits, fake contribution activity, or split trivial edits purely to inflate contribution counts.
 - If there is no Git repository, explain that commits were impossible; do not pretend otherwise.
