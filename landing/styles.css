@@ -720,7 +720,19 @@ select:disabled { background: var(--akx-surface-sunken); color: var(--akx-ink-su
   to { background-position: -100% 0; }
 }
 
-.turn__body { margin: 0; white-space: pre-wrap; }
+.turn__body { margin: 0; }
+.generated-content > :last-child { margin-bottom: 0; }
+.generated-content__heading {
+  margin: var(--akx-space-3) 0 var(--akx-space-1);
+  font-size: var(--akx-text-body);
+}
+.generated-content__heading:first-child { margin-top: 0; }
+.generated-math {
+  font-family: var(--akx-mono);
+  font-size: 0.95em;
+  white-space: normal;
+}
+.generated-content .prose__formula { max-width: 100%; overflow-wrap: anywhere; }
 
 /* -------------------------------------------------------------- quiz -- */
 

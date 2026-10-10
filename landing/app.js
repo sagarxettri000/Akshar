@@ -3,8 +3,8 @@
  *
  * Reads lesson content from ./data/lessons.json and sends only a lesson id to
  * /api/gemma — the model key never reaches the browser, and neither does the
- * prompt. Everything the model returns is untrusted text: it is inserted with
- * textContent, never as HTML.
+ * prompt. Everything the model returns is untrusted text: it is rendered as
+ * text nodes, never interpreted as HTML.
  *
  * Layout of this file:
  *   1. storage and progress
@@ -740,6 +740,82 @@ function renderLessonContent(text, language) {
   }
 }
 
+function appendInlineText(container, text) {
+  const pattern = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\$[^$]+\$)/g;
+  let start = 0;
+  for (const match of String(text).matchAll(pattern)) {
+    if (match.index > start) container.append(document.createTextNode(text.slice(start, match.index)));
+    const token = match[0];
+    if (token.startsWith("**")) {
+      container.append(el("strong", null, token.slice(2, -2)));
+    } else if (token.startsWith("*")) {
+      container.append(el("em", null, token.slice(1, -1)));
+    } else if (token.startsWith("`")) {
+      container.append(el("code", null, token.slice(1, -1)));
+    } else {
+      container.append(el("span", "generated-math", readableMath(token.slice(1, -1))));
+    }
+    start = match.index + token.length;
+  }
+  if (start < text.length) container.append(document.createTextNode(text.slice(start)));
+}
+
+function readableMath(expression) {
+  return expression
+    .replace(/\\(?:text|mathrm)\{([^{}]*)\}/g, "$1")
+    .replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, "($1)/($2)")
+    .replace(/\\times\b/g, "×")
+    .replace(/\\cdot\b/g, "·")
+    .replace(/\\approx\b/g, "≈")
+    .replace(/\\degree\b/g, "°")
+    .trim();
+}
+
+function appendFormattedContent(container, text) {
+  container.textContent = "";
+  const normalized = String(text)
+    .replace(/\r\n?/g, "\n")
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+    .trim();
+  for (const block of classifyLessonBlocks(normalized)) {
+    if (block.type === "heading") {
+      const heading = el("h3", "generated-content__heading");
+      appendInlineText(heading, block.text);
+      container.append(heading);
+    } else if (block.type === "bullets" || block.type === "steps") {
+      const list = document.createElement(block.type === "steps" ? "ol" : "ul");
+      for (const item of block.items) {
+        const row = document.createElement("li");
+        appendInlineText(row, item);
+        list.append(row);
+      }
+      container.append(list);
+    } else if (block.type === "formula") {
+      const formula = el("p", "prose__formula");
+      appendInlineText(formula, block.text);
+      container.append(formula);
+    } else if (block.type === "definition") {
+      const definition = el("p", "prose__definition");
+      definition.append(el("span", "prose__term", `${block.term}: `));
+      appendInlineText(definition, block.text);
+      container.append(definition);
+    } else if (block.type === "labelled") {
+      const labelled = document.createElement("p");
+      labelled.append(el("strong", null, `${block.label}: `));
+      appendInlineText(labelled, block.text);
+      container.append(labelled);
+    } else if (block.type === "diagram") {
+      const diagram = document.createElement("pre");
+      diagram.textContent = block.lines.join("\n");
+      container.append(diagram);
+    } else {
+      const paragraph = document.createElement("p");
+      appendInlineText(paragraph, block.text);
+      container.append(paragraph);
+    }
+  }
+}
+
 function renderProgress() {
   const state = progressState();
   $("stat-lessons").textContent = String(Object.keys(state.lessons ?? {}).length);
@@ -1196,10 +1272,10 @@ function renderSummary(text) {
   const box = $("summary-result");
   box.hidden = false;
   box.textContent = "";
-  box.append(
-    el("strong", "disclosure", aiMock ? "Local mock response · not Gemma 4" : "AI-generated summary · Gemma 4"),
-    el("p", null, text),
-  );
+  box.append(el("strong", "disclosure", aiMock ? "Local mock response · not Gemma 4" : "AI-generated summary · Gemma 4"));
+  const content = el("div", "generated-content");
+  appendFormattedContent(content, text);
+  box.append(content);
 }
 
 function wireExplain() {
@@ -1246,9 +1322,12 @@ function renderThread() {
   thread.textContent = "";
   for (const turn of askHistory) {
     const wrap = el("div", `turn turn--${turn.role === "user" ? "user" : "assistant"}`);
+    const body = el("div", "turn__body");
+    if (turn.role === "assistant") appendFormattedContent(body, turn.content);
+    else body.textContent = turn.content;
     wrap.append(
       el("span", "turn__role", turn.role === "user" ? "You" : aiMock ? "Local mock response" : "Gemma 4 · AI-generated"),
-      el("p", "turn__body", turn.content),
+      body,
     );
     thread.append(wrap);
   }
@@ -1382,7 +1461,7 @@ function markQuestion(index) {
   const verdict = correct
     ? `Correct. ${question.explanation}`
     : `Not correct — the answer is ${question.answer}. ${question.explanation}`;
-  feedback.textContent = `${verdict} Lesson evidence: “${question.evidence}”`;
+  appendFormattedContent(feedback, `${verdict}\n\nLesson evidence: “${question.evidence}”`);
 }
 
 function chooseAnswer(index, value) {
@@ -1404,7 +1483,10 @@ function renderQuizForm() {
   practiceQuestions.forEach((question, index) => {
     const fieldset = el("fieldset", "question");
     fieldset.dataset.index = String(index);
-    fieldset.append(el("legend", null, `Q${index + 1}. ${question.question}`));
+    const legend = el("legend");
+    legend.append(document.createTextNode(`Q${index + 1}. `));
+    appendInlineText(legend, question.question);
+    fieldset.append(legend);
     for (const key of ["A", "B", "C", "D"]) {
       const row = el("label", "option");
       const input = document.createElement("input");
@@ -1412,10 +1494,13 @@ function renderQuizForm() {
       input.name = `q${index}`;
       input.value = key;
       input.addEventListener("change", () => chooseAnswer(index, key));
-      row.append(input, el("span", "option__text", `${key}. ${question.options[key]}`));
+      const optionText = el("span", "option__text");
+      optionText.append(document.createTextNode(`${key}. `));
+      appendInlineText(optionText, question.options[key]);
+      row.append(input, optionText);
       fieldset.append(row);
     }
-    const feedback = el("p", "feedback");
+    const feedback = el("div", "feedback generated-content");
     feedback.hidden = true;
     fieldset.append(feedback);
     form.append(fieldset);
@@ -1469,11 +1554,17 @@ function wrapReview(review, index, question, chosen) {
   const item = el("div", "review__item");
   const verdict = !chosen ? "not answered" : chosen === question.answer ? "correct" : "not correct";
   item.append(el("p", "review__verdict", `Q${index + 1} — ${verdict}.`));
-  item.append(
-    el("p", null, `Correct answer: ${question.answer}. ${question.options[question.answer]}`),
-  );
-  item.append(el("p", null, `Why: ${question.explanation}`));
-  item.append(el("p", null, `Lesson evidence: “${question.evidence}”`));
+  const answer = el("p");
+  answer.append(el("strong", null, "Correct answer: "));
+  appendInlineText(answer, `${question.answer}. ${question.options[question.answer]}`);
+  item.append(answer);
+  const explanation = el("div", "generated-content");
+  appendFormattedContent(explanation, `Why: ${question.explanation}`);
+  item.append(explanation);
+  const evidence = el("p");
+  evidence.append(el("strong", null, "Lesson evidence: "));
+  appendInlineText(evidence, `“${question.evidence}”`);
+  item.append(evidence);
   if (chosen) item.append(el("p", "review__yours", `You chose ${chosen}.`));
   review.append(item);
 }
@@ -1622,8 +1713,13 @@ function renderCards(cards) {
   list.hidden = false;
   cards.forEach((card, index) => {
     const details = el("details", "card");
-    details.append(el("summary", null, `Card ${index + 1} · ${card.question}`));
-    details.append(el("p", "card__answer", card.answer));
+    const heading = el("summary");
+    heading.append(document.createTextNode(`Card ${index + 1} · `));
+    appendInlineText(heading, card.question);
+    details.append(heading);
+    const answer = el("div", "card__answer generated-content");
+    appendFormattedContent(answer, card.answer);
+    details.append(answer);
     list.append(details);
   });
 }
