@@ -590,7 +590,6 @@ function renderQuizForm() {
       input.type = "radio";
       input.name = `q${index}`;
       input.value = key;
-      input.required = true;
       row.append(input, el("span", null, `${key}. ${question.options[key]}`));
       fieldset.append(row);
     }
@@ -601,23 +600,28 @@ function renderQuizForm() {
   submit.type = "submit";
   form.append(submit);
 
-  form.addEventListener(
-    "submit",
-    (event) => {
-      event.preventDefault();
-      const answers = new Map();
-      practiceQuestions.forEach((_question, index) => {
-        const picked = form.querySelector(`input[name="q${index}"]:checked`);
-        if (picked) answers.set(index, picked.value);
-      });
-      if (answers.size < practiceQuestions.length) {
-        setState("practice-state", "error", "Answer every question before marking.");
-        return;
-      }
-      renderQuizGraded(answers);
-    },
-    { once: true },
-  );
+  // Assigned rather than added: re-rendering the quiz replaces the handler, and
+  // an invalid submit must not consume it.
+  form.onsubmit = (event) => {
+    event.preventDefault();
+    const answers = new Map();
+    practiceQuestions.forEach((_question, index) => {
+      const picked = form.querySelector(`input[name="q${index}"]:checked`);
+      if (picked) answers.set(index, picked.value);
+    });
+    if (answers.size < practiceQuestions.length) {
+      const missing = practiceQuestions.findIndex((_q, index) => !answers.has(index));
+      setState(
+        "practice-state",
+        "error",
+        `Answer every question before marking — Q${missing + 1} is still blank.`,
+      );
+      form.querySelector(`input[name="q${missing}"]`)?.focus();
+      return;
+    }
+    form.onsubmit = null;
+    renderQuizGraded(answers);
+  };
 }
 
 function wirePractice() {
