@@ -83,11 +83,13 @@ the production branch redeploys automatically.
    progress.
 2. Opening a pathway reaches **Study**, and the goal → grade → subject → chapter → language
    filters cascade (the grade step is disabled for CEE/IOE, which have no grades).
-3. A chapter opens as a lesson with its source panel, and **Practise** can write and mark a
-   set while the AI is available.
-4. The header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**.
-5. `GET /api/gemma` returns `{"ok": true, …}`.
-6. `/tests/*` and `/scripts/*` return 404.
+3. A chapter opens as a lesson: section titles, lists, equations, examples and any diagrams
+   are rendered with the notes' own structure, and the source panel labels them.
+4. **Practise** can write and mark a set while the AI is available, and the result reports the
+   score, the split, and the time actually spent in the tab.
+5. The header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**.
+6. `GET /api/gemma` returns `{"ok": true, …}`.
+7. `/tests/*` and `/scripts/*` return 404.
 
 ## 3. Tests
 
@@ -100,6 +102,7 @@ node --test landing/tests/*.mjs
 | `landing/tests/ai.test.mjs` | Prompts, defensive parsing, MCQ and flashcard validation, transport errors |
 | `landing/tests/app.test.mjs` | Study-path resolution, including stale-selection repair |
 | `landing/tests/dashboard.test.mjs` | The dashboard model, reading progress, quiz scoring, suggested questions, text sizes |
+| `landing/tests/lesson-blocks.test.mjs` | How lesson text becomes headings, lists, equations, diagrams and labelled blocks — including a word-for-word check over every shipped lesson |
 | `landing/tests/lessons.test.mjs` | Lesson data: structure, required fields, unique ids, language codes, track/language coverage |
 | `landing/tests/deploy.test.mjs` | Function registration and budget, security headers, key stays server-side, no secret value committed under `landing/` |
 

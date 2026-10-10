@@ -68,7 +68,8 @@ never goes edge to edge: paragraphs stop at the reading measure.
   helper text), `--akx-text-body` 1rem, `--akx-text-lead` 1.125rem. Page headings are
   `clamp(1.6rem, 3.4vw, 2.35rem)`; the lesson title and section titles step down from there.
 - Transitions are `--akx-transition` (180 ms ease) and only ever on colour, background,
-  border, and transform. `prefers-reduced-motion: reduce` disables them and smooth scrolling.
+  border, and transform. `prefers-reduced-motion: reduce` disables them, the answer skeleton's
+  animation, and smooth scrolling.
 
 ## Components
 
@@ -84,16 +85,25 @@ never goes edge to edge: paragraphs stop at the reading measure.
 | `.stats`, `.stat`, `.count-chip` | Real browser-local numbers and the correct/incorrect/unanswered split |
 | `.filters`, `.field`, `.count`, `.path`, `.path__sep` | The cascading goal → grade → subject → chapter → language controls; the grade step is disabled for the ungraded CEE/IOE tracks, and the breadcrumb shows the resolved path |
 | `.lesson`, `.reading`, `.reading__fill`, `.lesson__head`, `.lesson-toolbar`, `.prose`, `.chips` | The reading surface: sticky reading-progress bar, chapter title and chips, text-size, bookmark, and the lesson body |
+| `.prose__heading`, `.prose__list--formula`, `.prose__formula`, `.prose__diagram`, `.prose__definition`, `.prose__term` | The notes' own structure: section titles, bullet and step lists, monospaced equations, aligned tables, and term-and-meaning lines |
+| `.prose__block`, `.prose__block--example`, `--note`, `--misconception`, `--exercise`, `.prose__block-label` | Labelled teaching blocks (`Example:`, `Note:`, `Misconception:`, …), each with its own tint and label colour |
+| `.recent`, `.recent__label`, `.recent__item` | Recently studied chapters on the dashboard, newest first, from saved activity |
 | `.lesson-nav` | Previous / next chapter in lesson-file order, keeping the reader's language |
 | `.note`, `.note--source`, `.note--warning`, `.note--danger`, `.source`, `.disclosure` | Provenance and honesty: the source panel labels the notes, warnings state what is missing |
 | `.tabs`, `.tab`, `.panel` | Study help: Explain / Ask / Practise / Flashcards as ARIA tabs with roving `tabindex` |
 | `.assistant`, `.assistant__context`, `.assistant__label`, `.thread`, `.turn`, `.turn--assistant`, `.suggestions`, `.suggestion`, `.ask`, `.ask__row`, `.ask__language` | The assistant: lesson context, labelled AI turns, suggested questions as buttons (they fill the input, they do not send), answer language, retry, and return-to-lesson |
 | `.quiz`, `.question`, `.option`, `.option--correct`, `.option--wrong`, `.option__mark`, `.feedback`, `.modes`, `.mode`, `.quiz-progress`, `.quiz-progress__fill` | The practice set: practice/exam modes, answered/unanswered states, progress counter and bar, immediate feedback in practice mode |
 | `.dialog`, `.dialog__title`, `.dialog__body`, `.dialog__actions` | Confirm-before-submit for a blank answer, dismissible with Escape |
-| `.result-card`, `.score`, `.score--hero`, `.result-counts`, `.result-facts`, `.result-revisit`, `.result-actions`, `.review`, `.review__item`, `.review__verdict`, `.review__yours` | The results screen: score first, then the split, accuracy, what to revise, and every question reviewed with the correct answer and why |
+| `.result-card`, `.score`, `.score--hero`, `.result-counts`, `.result-facts`, `.result-facts--quiet`, `.result-revisit`, `.result-actions`, `.review`, `.review__item`, `.review__verdict`, `.review__yours` | The results screen: score first, then the split, accuracy, the time actually spent on the set, what to revise, and every question reviewed with the correct answer and why |
 | `.cards`, `.card__answer` | Flashcards |
 | `.state`, `.empty`, `.hint`, `.toast` | Loading, error, empty, and saved-item feedback; the toast is `role="status"` |
+| `.turn--pending`, `.skeleton-line` | The placeholder answer shown while Gemma 4 is working (`aria-hidden`, with `aria-busy` on the thread), removed when the answer lands or fails |
 | `.button`, `.button--primary`, `.button--quiet`, `.button--ghost`, `.button--lg`, `.icon-button` | Controls, with hover, pressed, disabled, loading, and focus states |
+
+The notes are parsed by one pure function, `classifyLessonBlocks()` in
+[`landing/app.js`](../landing/app.js), so the reading styles, the keyboard flow, and the tests
+all work from the same rules; no lesson word is dropped or rewritten on the way to the screen
+(checked across all 21 lessons by `landing/tests/lesson-blocks.test.mjs`).
 
 Provenance is structural, not decorative: lesson text sits in a bordered source panel, AI
 output carries an AI label inside the result, and practice questions are marked as generated

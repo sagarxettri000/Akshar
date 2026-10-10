@@ -14,7 +14,7 @@ Akshar helps Nepali students understand concepts, practise exam-style questions,
 
 ## Status
 
-Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 81 Node tests pass without calling the live model. The interface is a dashboard-led study experience: dashboard → chapter → lesson → practice or exam → results and review → back to learning.
+Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 94 Node tests pass without calling the live model. The interface is a dashboard-led study experience: dashboard → chapter → lesson → practice or exam → results and review → back to learning.
 
 ## Live link
 
@@ -32,10 +32,10 @@ Akshar is built around one trustworthy loop: **learn → understand → practise
 
 1. **Start from the dashboard** — it answers three questions and nothing else: what to continue, what to practise next, and how far you have got. Every number on it comes from saved activity or the lesson file; before you study anything it says so and offers a starting chapter instead of inventing progress.
 2. **Choose where you are** — an exam goal (NEB, CEE, or IOE) as a pathway or in the filters, a grade where the track has one, then a subject, a chapter, and the study language (English or Nepali).
-3. **Read the lesson** — original team-authored study notes, clearly labelled as not official NEB/IOE/CEE material, with a reading-progress indicator, a text-size control, a bookmark, and previous/next chapter navigation.
+3. **Read the lesson** — original team-authored study notes, laid out the way notes should be: section titles, lists, worked examples, misconceptions, equations and diagrams each get their own style, with a reading-progress indicator, a text-size control, a bookmark, and previous/next chapter navigation.
 4. **Understand** — an AI-generated explanation, a question you ask yourself, or flashcards; Gemma 4 answers using only the selected lesson and says so plainly when the lesson does not cover the question.
 5. **Practise** — generated multiple-choice questions in **practice** mode (each answer marked as you go, with the explanation) or **exam** mode (no correctness until you submit, with a confirmation if a question is still blank). Generated questions are labelled as not official exam questions.
-6. **Review the result** — the score leads, followed by correct / incorrect / unanswered, your accuracy, what to revise, and a question-by-question review against the notes, then new questions, a retry, or back to the dashboard.
+6. **Review the result** — the score leads, followed by correct / incorrect / unanswered, your accuracy, the time you actually spent on the set, what to revise, and a question-by-question review against the notes, then new questions, a retry, or back to the dashboard.
 7. **Track progress** — chapters opened, practice attempts, and best score, kept in the browser's own storage.
 
 ## The problem
@@ -74,7 +74,7 @@ The model call lives in [`landing/lib/ai.mjs`](landing/lib/ai.mjs) and is reache
 | `landing/api/gemma.mjs` | The one serverless function; the only place the API key is read |
 | `landing/data/lessons.json` | The lesson file the app serves (21 lessons, English + Nepali) |
 | `landing/scripts/dev.mjs` | Local dev server with an optional mock Gemma upstream; no dependencies |
-| `landing/tests/` | Node tests: AI pipeline, dashboard and study selection, reading progress, quiz scoring, lesson data, deployment guards |
+| `landing/tests/` | Node tests: AI pipeline, dashboard and study selection, reading progress, quiz scoring, lesson rendering, lesson data, deployment guards |
 | `docs/DEPLOYMENT.md` | Running and deployment guide |
 | `docs/DESIGN.md` | Design system reference |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
