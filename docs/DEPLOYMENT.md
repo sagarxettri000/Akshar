@@ -78,10 +78,16 @@ the production branch redeploys automatically.
 
 ### Verify the deployment, not the upload
 
-1. The study app renders and the goal → grade → subject → chapter filters cascade.
-2. The header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**.
-3. `GET /api/gemma` returns `{"ok": true, …}`.
-4. `/tests/*` and `/scripts/*` return 404.
+1. The **dashboard** renders: pathways list NEB, CEE, and IOE, and **Continue learning** is
+   honest on a fresh browser ("Nothing studied yet in this browser") instead of claiming
+   progress.
+2. Opening a pathway reaches **Study**, and the goal → grade → subject → chapter → language
+   filters cascade (the grade step is disabled for CEE/IOE, which have no grades).
+3. A chapter opens as a lesson with its source panel, and **Practise** can write and mark a
+   set while the AI is available.
+4. The header chip reads **Gemma 4 ready** or, without a key, the honest **AI off — notes only**.
+5. `GET /api/gemma` returns `{"ok": true, …}`.
+6. `/tests/*` and `/scripts/*` return 404.
 
 ## 3. Tests
 
@@ -93,6 +99,7 @@ node --test landing/tests/*.mjs
 |------|--------|
 | `landing/tests/ai.test.mjs` | Prompts, defensive parsing, MCQ and flashcard validation, transport errors |
 | `landing/tests/app.test.mjs` | Study-path resolution, including stale-selection repair |
+| `landing/tests/dashboard.test.mjs` | The dashboard model, reading progress, quiz scoring, suggested questions, text sizes |
 | `landing/tests/lessons.test.mjs` | Lesson data: structure, required fields, unique ids, language codes, track/language coverage |
 | `landing/tests/deploy.test.mjs` | Function registration and budget, security headers, key stays server-side, no secret value committed under `landing/` |
 

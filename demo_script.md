@@ -62,27 +62,30 @@ without a key; say so out loud if you demo with the mock).
 
 ### [3:00 – 3:30] Demo Setup
 
-> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. This is the deployed app — one Vercel project, no other host involved."
+> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. This is the deployed app — one Vercel project, no other host involved, and nothing is deployed or redeployed while we talk."
 
 **Demo steps:**
 
-1. **Choose what to study** — Set the exam goal to **NEB**, keep the grade, then pick Physics and Newton's Laws of Motion. Switch the **Language** to Nepali to show bilingual support; the breadcrumb under the filters tracks every choice.
-2. **Read the lesson** — Here are our own study notes, in the **SOURCE** panel, labelled as not official NEB material.
-3. **Explain tab** — Click **Explain this lesson** and Gemma 4 writes an explanation grounded in that lesson, labelled as AI-generated so nobody mistakes it for an official source.
-4. **Ask tab** — Better still, the student asks their own question. Gemma 4 answers using only this lesson, tells them when the lesson doesn't cover something instead of inventing facts, and can reply in **Nepali** if they set the answer language.
+1. **The dashboard** — This is what a student sees first. **Continue learning** is empty on a fresh browser and says so honestly: no invented streaks or completion, just a starting chapter. **Learning pathways** shows NEB, CEE, and IOE with their real chapter, subject, and language counts, and **Practise next** recommends from real attempts.
+2. **Open a pathway** — NEB takes us into **Study**. Set the exam goal to **NEB**, keep the grade, then pick Physics and Newton's Laws of Motion. Switch the **Language** to Nepali to show bilingual support; the breadcrumb under the filters tracks every choice.
+3. **Read the lesson** — Our own study notes, in the **SOURCE** panel, labelled as not official NEB material, with a reading-progress bar, a text-size control, a bookmark, and previous/next chapter navigation.
+4. **Explain tab** — Click **Explain this lesson** and Gemma 4 writes an explanation grounded in that lesson, labelled as AI-generated so nobody mistakes it for an official source.
+5. **Ask tab** — Better still, the student asks their own question. The assistant suggests a few from the chapter on screen, Gemma 4 answers using only this lesson, tells them when the lesson doesn't cover something instead of inventing facts, and can reply in **Nepali** if they set the answer language.
 
 ### [3:30 – 4:00] Practice & Progress
 
-> "Learning needs practice, so they open the **Practise** tab, choose **5** questions, and click **Write practice questions**. They answer them, mark the set, and get a score plus a review of every answer — including the ones they got wrong, with an explanation. The panel reminds them these questions are generated, not official exam questions.
+> "Learning needs practice, so they open the **Practise** tab and choose a mode. In **practice** mode every answer is marked straight away with the reason; in **exam** mode nothing is revealed until they mark the whole set, and if a question is still blank the app asks before it submits. The progress bar counts the questions they have answered.
 >
-> The **Your progress** panel shows lessons opened, practice attempts, and their best score — all stored in the browser, so we collect no personal data and need no accounts."
+> The result leads with the score, then the correct / incorrect / unanswered split, their accuracy, what to revise, and a review of every question against the notes — with new questions, a retry, or a way back to the dashboard. The panel reminds them these questions are generated, not official exam questions.
+>
+> Back on the **dashboard**, **Continue learning** now names the chapter they just studied, and **Your progress** shows chapters opened, practice attempts, and their best score — all stored in the browser, so we collect no personal data and need no accounts."
 
 ### [4:00 – 4:30] Flashcards & Deployment
 
 **Demo steps:**
 
-5. **Flashcards tab** — The **Flashcards** tab turns the lesson into quick revision cards with **Build flashcards**.
-6. **Deployment** — One Vercel project serves `landing/` and runs the one function; it redeploys automatically when a change is merged into `main`. Our CI is the Node test suite — the AI pipeline, the study-path logic, the lesson data, and the deployment guards. Nothing is deployed or redeployed for this demo.
+6. **Flashcards tab** — The **Flashcards** tab turns the lesson into quick revision cards with **Build flashcards**.
+7. **Deployment** — One Vercel project serves `landing/` and runs the one function; it redeploys automatically when a change is merged into `main`. Our CI is the Node test suite — the AI pipeline, the dashboard and study-path logic, reading progress, quiz scoring, the lesson data, and the deployment guards. Nothing is deployed or redeployed for this demo.
 
 ---
 

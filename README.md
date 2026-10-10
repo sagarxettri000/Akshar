@@ -1,19 +1,20 @@
 # Akshar
 
-**A learning platform for Nepal — built by Team Nepluro.**
+**A learning platform for Nepal — built by Team Nepluro.** *(Vercel only: one front end, one project.)*
 
 Akshar helps Nepali students understand concepts, practise exam-style questions, and prepare with confidence for NEB Grade 11–12 and CEE/IOE entrance examinations. It pairs clear Nepali/English explanations with inspectable material and uses Gemma 4 as a genuine part of the learning experience.
 
 `NEB` · `CEE` · `IOE` · `Gemma 4` · one static page + one serverless function · no build step
 
 > **This project runs on Vercel only.** One front end ([`landing/`](landing)), one Vercel
-> project, one serverless function. **Streamlit is not used** — the earlier Python/Streamlit
-> app was removed deliberately and must not be reintroduced, not even for a demo or an
-> experiment. Contributors and their coding agents: read [`AGENTS.md` §10](AGENTS.md) first.
+> project, one serverless function — nothing else, anywhere. **Streamlit is not used in this
+> project and must never be added**, not as a second app, not as a "reference implementation",
+> not for a demo, and not for an experiment. Contributors and their coding agents: read
+> [`AGENTS.md` §10](AGENTS.md) first.
 
 ## Status
 
-Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 65 Node tests pass without calling the live model.
+Active hackathon development. The learn → understand → practise flow runs end-to-end with Gemma 4; all 21 lessons (12 English, 9 Nepali) are served from a single lesson file, and 81 Node tests pass without calling the live model. The interface is a dashboard-led study experience: dashboard → chapter → lesson → practice or exam → results and review → back to learning.
 
 ## Live link
 
@@ -29,11 +30,13 @@ nothing is ever deployed on Streamlit. [`AGENTS.md` §10](AGENTS.md) is binding.
 
 Akshar is built around one trustworthy loop: **learn → understand → practise**.
 
-1. **Choose where you are** — an exam goal (NEB, CEE, or IOE), a grade where the track has one, then a subject, a chapter, and the study language (English or Nepali).
-2. **Read the lesson** — original team-authored study notes, clearly labelled as not official NEB/IOE/CEE material.
-3. **Understand** — an AI-generated explanation, a question you ask yourself, or flashcards; Gemma 4 answers using only the selected lesson and says so plainly when the lesson does not cover the question.
-4. **Practise** — generated multiple-choice questions with per-question marking, a score, and an explanation for every answer. Generated questions are labelled as not official exam questions.
-5. **Track progress** — lessons opened, practice attempts, and best score, kept in the browser's own storage.
+1. **Start from the dashboard** — it answers three questions and nothing else: what to continue, what to practise next, and how far you have got. Every number on it comes from saved activity or the lesson file; before you study anything it says so and offers a starting chapter instead of inventing progress.
+2. **Choose where you are** — an exam goal (NEB, CEE, or IOE) as a pathway or in the filters, a grade where the track has one, then a subject, a chapter, and the study language (English or Nepali).
+3. **Read the lesson** — original team-authored study notes, clearly labelled as not official NEB/IOE/CEE material, with a reading-progress indicator, a text-size control, a bookmark, and previous/next chapter navigation.
+4. **Understand** — an AI-generated explanation, a question you ask yourself, or flashcards; Gemma 4 answers using only the selected lesson and says so plainly when the lesson does not cover the question.
+5. **Practise** — generated multiple-choice questions in **practice** mode (each answer marked as you go, with the explanation) or **exam** mode (no correctness until you submit, with a confirmation if a question is still blank). Generated questions are labelled as not official exam questions.
+6. **Review the result** — the score leads, followed by correct / incorrect / unanswered, your accuracy, what to revise, and a question-by-question review against the notes, then new questions, a retry, or back to the dashboard.
+7. **Track progress** — chapters opened, practice attempts, and best score, kept in the browser's own storage.
 
 ## The problem
 
@@ -65,13 +68,13 @@ The model call lives in [`landing/lib/ai.mjs`](landing/lib/ai.mjs) and is reache
 | Path | Purpose |
 |------|---------|
 | `landing/index.html` | The app shell |
-| `landing/app.js` | Study state, study-path selection, grading, progress, and the four AI flows |
+| `landing/app.js` | View routing, dashboard, study-path selection, lesson tools, quiz and results, progress, and the four AI flows |
 | `landing/styles.css` | The whole design system and component layer |
 | `landing/lib/ai.mjs` | Prompts, defensive parsing, validation, and transport — the one Gemma 4 pipeline |
 | `landing/api/gemma.mjs` | The one serverless function; the only place the API key is read |
 | `landing/data/lessons.json` | The lesson file the app serves (21 lessons, English + Nepali) |
 | `landing/scripts/dev.mjs` | Local dev server with an optional mock Gemma upstream; no dependencies |
-| `landing/tests/` | Node tests: AI pipeline, study selection, lesson data, deployment guards |
+| `landing/tests/` | Node tests: AI pipeline, dashboard and study selection, reading progress, quiz scoring, lesson data, deployment guards |
 | `docs/DEPLOYMENT.md` | Running and deployment guide |
 | `docs/DESIGN.md` | Design system reference |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
@@ -102,7 +105,10 @@ With `--mock`, the real handler, the real prompts, and the real validators run a
 node --test landing/tests/*.mjs
 ```
 
-The tests never call the live model.
+The tests never call the live model, and they are the project's CI: validation, study-path
+resolution, dashboard and reading-progress behaviour, quiz scoring, lesson data, and the
+deployment guards (one registered function, security headers, the key read only on the
+server, no key anywhere under `landing/`).
 
 ## Deployment
 
@@ -133,7 +139,7 @@ One Vercel project (Root Directory `landing`, framework preset **Other**, no bui
 - [x] Grounded bilingual Q&A tutor (English / Nepali replies)
 - [x] Bilingual lesson content (English + Nepali across every track)
 - [x] Browser-local learner progress
-- [x] One front end and one deployment: the earlier Python/Streamlit app was retired
+- [x] One front end and one deployment: `landing/` on Vercel — no second host
 - [ ] Broader, source-attributed curriculum content
 
 ## License

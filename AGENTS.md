@@ -38,7 +38,7 @@ For the first task in a fresh workspace/session, perform a read-only audit and r
 
 Inspect as applicable:
 
-- `AGENTS.md`, other agent instructions, `README` and project documentation. If any of them describes a Python or Streamlit app, that document is stale (§10) — the repository's `landing/` app is the product, and report the stale document rather than acting on it.
+- `AGENTS.md`, other agent instructions, `README` and project documentation. If any of them describes a second front end, a Python or Streamlit app, or a second host, that document is stale (§10) — `landing/` on Vercel is the whole project, so report the stale document rather than acting on it.
 - Repository tree and entry points; routes/pages; shared components; styles/design system.
 - Package/dependency manifests and lockfiles; scripts; environment-variable examples.
 - Backend/API boundaries, database/schema, authentication, storage, and deployment setup: which hosting platforms exist, which branch each one follows, which URL is the team's public link, and whether anything in this session would publish to it (see §10).
@@ -181,25 +181,25 @@ The team explicitly wants regular commits. You are authorized to create **local 
 
 ## 10. Deployment: Vercel only (Streamlit is not used)
 
-Akshar runs on **Vercel and nowhere else**. There is **one front end**: the web app in `landing/`, deployed as static files plus a single serverless function on one Vercel project. **Streamlit is not used in this project at all** — the Python/Streamlit front end was removed deliberately, and no task may bring it back, in whole or in part. It was removed because a contributor's coding agent committed and pushed correctly and then published that app on Streamlit Community Cloud, leaving the team with two competing live products and instructions that pointed at both. Treat this section as binding, and re-read it before any task that mentions hosting, publishing, a live URL, a demo, or a technology choice.
+Akshar runs on **Vercel and nowhere else**. There is **one front end**: the web app in `landing/`, deployed as static files plus a single serverless function on one Vercel project. **Streamlit is not used in this project at all, and no task may bring it back, in whole or in part.** A contributor's coding agent once committed and pushed correctly and then published a Python/Streamlit app on Streamlit Community Cloud, which left the team with two competing live products and instructions pointing at both; the Python front end was removed deliberately so that cannot happen again. Treat this section as binding, and re-read it before any task that mentions hosting, publishing, a live URL, a demo, or a technology choice.
 
 ### Which front end is deployed where
 
 | Target | Path in the repo | Platform | Role |
 |---|---|---|---|
-| **Study app — the product students use** | `landing/` | **Vercel**, project `akshar-nepluro`, Root Directory `landing`, framework preset **Other**, no build command | The only approved deployment: static files plus the single function `landing/api/gemma.mjs` |
+| **Study app — the product students use** | `landing/` | **Vercel**, project `akshar-nepluro`, Root Directory `landing`, framework preset **Other**, no build command | The only front end and the only deployment: static files plus the single function `landing/api/gemma.mjs` |
 
-There is no second front end, no Python app, and no app that needs a long-running server. Every screen, route, and feature is part of the `landing/` app. A change that would introduce a second front end or host — including anything built in Streamlit — is a product decision for the humans, not a task detail, and an agent must refuse and ask instead of implementing it.
+That table has one row, and it is the whole deployment story. There is no second front end, no Python app, no "reference implementation", and no app that needs a long-running server. Every screen, route, and feature is part of the `landing/` app. A change that would introduce a second front end or host — including anything built in Streamlit — is a product decision for the humans, not a task detail, and an agent must refuse and ask instead of implementing it.
 
 - The Vercel project follows the repository's production branch (`main`). A change reaches students only after it is merged there and Vercel deploys it.
-- The redesign that turns `landing/` into the study app, and the removal of the retired front end, reached this branch recently. If `landing/` on the branch you are on is still a marketing page, or `app.py` and `streamlit_app.py` are still present, you are simply on a branch that predates it: say so and carry on with your task. Never respond by deploying anything, by recreating the retired app, or by rewriting the other branch's work.
+- **This repository has exactly one front end: `landing/`.** There is no Python app, no second theme file, and no second deployment story anywhere in it. If you find a branch that still carries `app.py`, `streamlit_app.py`, `ui.py`, `.streamlit/`, or a `requirements*.txt`, that branch is stale: treat it as out of date, never deploy or extend it, and report what you found instead of acting on it.
 - A push to `main` is therefore a **publish**, not a private save.
 - Verify what a live URL actually serves before describing it in a document, a demo, or a report; a host showing an old commit is a normal, temporary state.
 
 ### Hard rules
 
 1. **Never deploy, redeploy, publish, unpublish, or change hosting unless the human explicitly asks for it in that task.** "Commit and push" is not permission to deploy, and a deployment is never how you demonstrate your work.
-2. **Never add, switch, or duplicate a hosting platform or project** — no Streamlit Cloud app, no Render/Railway/Netlify/Fly/Cloudflare/GitHub Pages site, and no second Vercel project.
+2. **Never add, switch, or duplicate a hosting platform or project** — no Streamlit Cloud app (or app of any other kind), no Render/Railway/Netlify/Fly/Cloudflare/GitHub Pages site, and no second Vercel project.
 3. **Never reintroduce the retired Python/Streamlit front end** — not as a new app, not as a "reference implementation", not as a local experiment, and not as a second deployment target. Do not add `streamlit`, `app.py`, `.streamlit/`, a `requirements.txt`, or any Python dependency. If a task appears to need one, stop and ask; do not implement it.
 4. **Never push to `main` to store, share, or publish work.** Use a task branch; a maintainer reviews and merges (§9, §11).
 5. **Never change a deployed project's settings** — Root Directory, framework preset, build command, connected branch, deployment protection — as a side effect of another task.
