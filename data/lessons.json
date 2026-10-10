@@ -30,15 +30,6 @@
       "content": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy stored in glucose. It takes place mainly in the chloroplasts, which contain the green pigment chlorophyll. The overall balanced equation is 6 CO2 + 6 H2O + light energy -> C6H12O6 + 6 O2. The process has two stages: the light-dependent reactions, which occur in the thylakoid membranes and produce ATP and NADPH while releasing oxygen, and the light-independent reactions (the Calvin cycle), which occur in the stroma and use ATP and NADPH to fix carbon dioxide into glucose."
     },
     {
-      "id": "bio-photosynthesis-ne",
-      "track": "NEB Grade 12",
-      "subject": "Biology",
-      "topic": "Photosynthesis",
-      "title": "प्रकाश संश्लेषण",
-      "language": "ne",
-      "content": "प्रकाश संश्लेषण त्यो प्रक्रिया हो जसमा हरिया वनस्पति, शैवाल र केही ब्याक्टेरियाले प्रकाश ऊर्जालाई ग्लुकोजमा सञ्चित रासायनिक ऊर्जामा परिणत गर्छन्। यो मुख्यतया क्लोरोप्लास्टमा हुन्छ, जसमा हरियो वर्णक क्लोरोफिल हुन्छ। कुल सन्तुलित समीकरण: 6 CO2 + 6 H2O + प्रकाश ऊर्जा -> C6H12O6 + 6 O2। यो प्रक्रियाका दुई चरण छन्: प्रकाश-निर्भर प्रतिक्रिया, जो थाइलाकोइड झिल्लीमा हुन्छ र ATP तथा NADPH उत्पादन गर्दै अक्सिजन निकाल्छ, र प्रकाश-स्वतन्त्र प्रतिक्रिया (क्याल्भिन चक्र), जो स्ट्रोमामा हुन्छ र ATP तथा NADPH प्रयोग गरी कार्बन डाइअक्साइडलाई ग्लुकोजमा स्थिर गर्छ।"
-    },
-    {
       "id": "chem-acids-bases-en",
       "track": "NEB Grade 11",
       "subject": "Chemistry",
@@ -46,15 +37,6 @@
       "title": "Acids and Bases",
       "language": "en",
       "content": "Acids are substances that donate protons (H+ ions) in aqueous solution, while bases accept protons. The pH scale, ranging from 0 to 14, measures the concentration of hydrogen ions: pH less than 7 is acidic, pH equal to 7 is neutral, and pH greater than 7 is basic. Strong acids such as hydrochloric acid (HCl) ionise completely in water, whereas weak acids such as acetic acid (CH3COOH) ionise only partially. Acids react with bases in a neutralisation reaction to form a salt and water, for example HCl + NaOH -> NaCl + H2O."
-    },
-    {
-      "id": "chem-acids-bases-ne",
-      "track": "NEB Grade 11",
-      "subject": "Chemistry",
-      "topic": "Acids, Bases and Salts",
-      "title": "अम्ल र क्षार",
-      "language": "ne",
-      "content": "अम्ल ती पदार्थ हुन् जुन जलीय घोलमा प्रोटोन (H+ आयन) दान गर्छन्, भने क्षार प्रोटोन ग्रहण गर्छन्। ० देखि १४ सम्मको pH स्केलले हाइड्रोजन आयनको सान्द्रता मापन गर्छ: pH < 7 अम्लीय, pH = 7 तटस्थ, र pH > 7 क्षारीय। हाइड्रोक्लोरिक अम्ल (HCl) जस्ता बलियो अम्ल पानीमा पूर्ण रूपमा आयनित हुन्छन्, तर एसिटिक अम्ल (CH3COOH) जस्ता कमजोर अम्ल आंशिक रूपमा मात्र आयनित हुन्छन्। अम्ल क्षारसँग उदासीनीकरण प्रतिक्रियामा मिलेर नुन र पानी बनाउँछन्, उदाहरण HCl + NaOH -> NaCl + H2O।"
     },
     {
       "id": "cee-kinematics-en",
@@ -66,15 +48,6 @@
       "content": "For motion in a straight line with uniform acceleration a, the three kinematic equations are: v = u + a t; s = u t + (1/2) a t^2; and v^2 = u^2 + 2 a s. Here u is the initial velocity, v is the final velocity, s is the displacement, and t is the time. These equations apply only when the acceleration is constant and the motion is along a straight line."
     },
     {
-      "id": "cee-kinematics-ne",
-      "track": "CEE",
-      "subject": "Physics",
-      "topic": "Kinematics",
-      "title": "गतिका समीकरणहरू",
-      "language": "ne",
-      "content": "एकनासको त्वरण a सहित सरल रेखामा हुने गतिका लागि तीन गतिक समीकरणहरू हुन्: v = u + a t; s = u t + (1/2) a t^2; र v^2 = u^2 + 2 a s। यहाँ u सुरुको वेग, v अन्तिम वेग, s विस्थापन, र t समय हो। यी समीकरण त्वरण स्थिर र गति सरल रेखामा हुँदा मात्र लागू हुन्छन्।"
-    },
-    {
       "id": "ioe-quadratics-en",
       "track": "IOE",
       "subject": "Mathematics",
@@ -82,15 +55,6 @@
       "title": "Quadratic Equations",
       "language": "en",
       "content": "A quadratic equation in one variable x has the standard form a x^2 + b x + c = 0, where a, b, and c are real numbers and a is not equal to 0. The roots are given by the quadratic formula x = (-b +/- sqrt(b^2 - 4ac)) / (2a). The expression b^2 - 4ac is called the discriminant (D). If D > 0 the equation has two distinct real roots; if D = 0 it has one repeated real root; and if D < 0 it has no real roots (two complex roots). The sum of the roots is -b/a and the product of the roots is c/a."
-    },
-    {
-      "id": "ioe-quadratics-ne",
-      "track": "IOE",
-      "subject": "Mathematics",
-      "topic": "Algebra",
-      "title": "द्विघात समीकरण",
-      "language": "ne",
-      "content": "एउटा चर x मा द्विघात समीकरणको मानक रूप a x^2 + b x + c = 0 हुन्छ, जहाँ a, b, c वास्तविक संख्या र a ≠ 0। मूलहरू द्विघात सूत्रबाट पाइन्छ: x = (-b ± sqrt(b^2 - 4ac)) / (2a)। b^2 - 4ac लाई विभेदक (D) भनिन्छ। D > 0 भए दुई भिन्न वास्तविक मूल; D = 0 भए एउटै दोहोरो वास्तविक मूल; र D < 0 भए वास्तविक मूल हुँदैन (दुई सम्मिश्र मूल)। मूलहरूको योग -b/a र गुणनफल c/a हुन्छ।"
     },
     {
       "id": "grade11-physics-motion",
@@ -127,6 +91,105 @@
       "title": "Derivatives",
       "language": "en",
       "content": "Derivatives\n\nThe derivative of a function measures the rate at which the function's value changes as its input changes. It is a central concept in differential calculus and has wide applications in physics, engineering, economics, and biology.\n\nDefinition of Derivative\nThe derivative of a function f(x) at a point x is defined as the limit of the average rate of change as the interval approaches zero:\n\n  f'(x) = lim(h -> 0) [f(x + h) - f(x)] / h\n\nIf this limit exists, the function is said to be differentiable at that point. The derivative f'(x) represents the instantaneous rate of change of f with respect to x, and geometrically it gives the slope of the tangent line to the curve at that point.\n\nNotation\nDerivatives can be written in several ways:\n- f'(x) (Lagrange notation)\n- dy/dx (Leibniz notation)\n- Df(x) (Euler notation)\n\nBasic Differentiation Rules\n\n1. Power Rule: d/dx [x^n] = n * x^(n-1)\n2. Constant Rule: d/dx [c] = 0, where c is a constant.\n3. Constant Multiple Rule: d/dx [c * f(x)] = c * f'(x)\n4. Sum/Difference Rule: d/dx [f(x) +/- g(x)] = f'(x) +/- g'(x)\n5. Product Rule: d/dx [f(x) * g(x)] = f'(x) * g(x) + f(x) * g'(x)\n6. Quotient Rule: d/dx [f(x) / g(x)] = [f'(x) * g(x) - f(x) * g'(x)] / [g(x)]^2\n7. Chain Rule: d/dx [f(g(x))] = f'(g(x)) * g'(x)\n\nDerivatives of Common Functions\n- d/dx [sin x] = cos x\n- d/dx [cos x] = -sin x\n- d/dx [tan x] = sec^2 x\n- d/dx [e^x] = e^x\n- d/dx [ln x] = 1/x\n\nApplications of Derivatives\n\n- Tangent and Normal Lines: the derivative at a point gives the slope of the tangent line. The normal line is perpendicular to the tangent.\n- Increasing and Decreasing Functions: if f'(x) > 0 on an interval, f is increasing; if f'(x) < 0, f is decreasing.\n- Maxima and Minima: critical points occur where f'(x) = 0 or f'(x) is undefined. The second derivative test helps classify them as local maxima or minima.\n- Rate of Change: in physics, velocity is the derivative of displacement with respect to time, and acceleration is the derivative of velocity.\n\nSummary\nDerivatives provide a precise tool for analysing how quantities change. Mastering the definition, basic rules, and applications of derivatives is essential for advanced mathematics and its real-world uses."
+    },
+    {
+      "id": "grade11-chemistry-chemical-bonding",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Chemical Bonding",
+      "title": "Chemical Bonding",
+      "language": "en",
+      "content": "Chemical Bonding\n\nChemical bonding is the force that holds atoms together in compounds. Atoms bond to achieve a more stable electron arrangement.\n\nIonic Bonding\n\nIonic bonding occurs when electrons are transferred from one atom to another, typically between a metal and a non-metal. The atom that loses electrons becomes a positively charged ion (cation), while the atom that gains electrons becomes a negatively charged ion (anion). The electrostatic attraction between oppositely charged ions holds the compound together.\n\nExample: In sodium chloride (NaCl), sodium (Na) loses one electron to become Na+, and chlorine (Cl) gains one electron to become Cl-, forming an ionic bond.\n\nCovalent Bonding\n\nCovalent bonding occurs when atoms share electrons instead of transferring them. This typically happens between non-metal atoms. The shared electrons hold the atoms together.\n\nExample: In a water molecule (H2O), each hydrogen atom shares one electron with the oxygen atom, forming two covalent bonds.\n\nElectron Arrangements\n\nThe electrons in the outermost energy level (valence electrons) determine how an atom bonds. Atoms tend to bond until they have eight valence electrons (the octet rule), except for hydrogen which wants two electrons.\n\nExample: Sodium (Na) has one valence electron and chlorine (Cl) has seven valence electrons. Sodium can lose its one valence electron to chlorine, achieving a stable octet for both atoms.\n\nCommon Misconception\n\nMisconception: Ionic bonds are always stronger than covalent bonds.\n\nCorrection: Bond strength depends on the atoms involved and their arrangement. Some covalent bonds are stronger than some ionic bonds.\n\nSelf-Check Exercise\n\n1. True or False: Ionic bonding involves electron transfer between atoms. Answer: True\n\n2. True or False: Covalent bonding involves electron sharing between atoms. Answer: True\n\nSummary\n\nChemical bonding is fundamental to understanding how atoms combine to form compounds. Ionic bonding involves electron transfer, while covalent bonding involves electron sharing. The type of bonding depends on the elements' electronegativity and electron arrangements. While ionic compounds typically form between metals and non-metals, and covalent compounds typically form between non-metals, there are many exceptions and intermediate cases.\n\n"
+    },
+    {
+      "id": "grade12-biology-genetics",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Basic Principles of Genetics",
+      "title": "Basic Principles of Genetics",
+      "language": "en",
+      "content": "Basic Principles of Genetics\n\nGenetics is the study of how traits are passed from parents to offspring. Understanding inheritance patterns helps explain why individuals within a family can have different characteristics.\n\nGenes and Alleles\n\nA gene is a segment of DNA that codes for a specific trait. Genes exist in different forms called alleles. An organism inherits one allele for each gene from each parent. For example, a gene for flower color might have a red allele and a white allele.\n\nGenotype and Phenotype\n\nThe genotype is the genetic makeup of an organism (the alleles it carries). The phenotype is the physical expression of those genes -- the visible trait. An organism's phenotype depends on both its genotype and environmental factors.\n\nDominant and Recessive Inheritance\n\nIn simple dominant-recessive patterns, a dominant allele masks the effect of a recessive allele when both are present. The dominant trait appears in the phenotype, while the recessive trait is 'hidden' but can be passed to future generations. Importantly, not all traits follow this simple pattern; some exhibit codominance, incomplete dominance, or polygenic inheritance.\n\nWorked Example: Mendel's Pea Plants\n\nConsider a single gene for pea plant height, where the tall allele (T) is dominant over the short allele (t).\n\nParental cross: A homozygous tall plant (TT) x A homozygous short plant (tt).\n\nSince TT parent can only contribute T alleles and tt parent can only contribute t alleles, all offspring in the F1 generation are heterozygous (Tt).\n\nBecause T is dominant, all F1 offspring display the tall phenotype, even though they carry the short allele.\n\nPunnett Square: F1 Self-Cross\n\nTall (Tt) x Tall (Tt)\n\n     T     t\n\n  T |  TT   |  Tt  |\n\n  t |  Tt   |  tt  |\n\nThis produces the F2 generation with the following genotypic ratio:\n\n- 1 TT (homozygous tall)\n\n- 2 Tt (heterozygous tall)\n\n- 1 tt (homozygous short)\n\nPhenotypic ratio: 3 tall : 1 short. Of the 3 tall plants, 2 are carriers of the short allele (Tt) even though they display the tall trait.\n\nCommon Misconception\n\nMisconception: If tall plants are crossed with tall plants, all offspring must be tall.\n\nCorrection: Two tall plants can be carriers of the short allele (Tt). Their offspring can be short (tt) even though neither parent displays the short phenotype.\n\nSelf-Check Exercise\n\n1. True or False: A gene is a segment of DNA that codes for a specific trait. Answer: True\n\n2. Define the difference between genotype and phenotype in your own words. Sample answer: Genotype refers to the alleles an organism carries, while phenotype refers to the physical trait expressed.\n\n3. In a monohybrid cross between two heterozygous (Tt) parents, what is the expected phenotypic ratio? Answer: 3 tall : 1 short\n\nSummary\n\nGenes come in different allele forms that determine inherited traits. The genotype (genetic makeup) influences the phenotype (physical expression), though environment also plays a role. Simple dominant-recessive patterns explain some traits, but many others exhibit more complex inheritance. In a monohybrid cross of heterozygotes, the expected ratio is 3:1 for phenotype and 1:2:1 for genotype.\n\n"
+    },
+    {
+      "id": "grade12-mathematics-limits-continuity",
+      "track": "NEB Grade 12",
+      "subject": "Mathematics",
+      "topic": "Limits and Continuity",
+      "title": "Limits and Continuity",
+      "language": "en",
+      "content": "Limits and Continuity\n\nLimits describe the behavior of a function as the input approaches a particular value. They are fundamental to calculus and help us understand how functions behave near points, even when the function is not defined at those points.\n\n\n\nUnderstanding Limits\n\nLet f(x) be a function. We say that the limit of f(x) as x approaches c is L, written:\n\n  lim (x -> c) f(x) = L\n\nThis means that as x gets arbitrarily close to c (but not equal to c), the function values f(x) get arbitrarily close to L. Importantly, the limit describes the behavior near c, not necessarily at c.\n\n\n\nWorked Example 1: Limit of a Polynomial\n\nEvaluate: lim (x -> 2) (x^2 - 4) / (x - 2)\n\nDirect substitution gives 0/0, which is indeterminate. Factor the numerator:\n\n  x^2 - 4 = (x - 2)(x + 2)\n\nSo:\n\n  lim (x -> 2) (x^2 - 4) / (x - 2) = lim (x -> 2) (x - 2)(x + 2) / (x - 2)\n\nFor x != 2, we can cancel (x - 2):\n\n  = lim (x -> 2) (x + 2)\n\nNow direct substitution works:\n\n  = 2 + 2 = 4\n\nTherefore: lim (x -> 2) (x^2 - 4) / (x - 2) = 4\n\nNote: The original function is undefined at x = 2 (0/0), but the limit exists and equals 4. Graphically, this corresponds to a hole in the graph at x = 2.\n\n\n\nWorked Example 2: Limit at Infinity\n\nEvaluate: lim (x -> infinity) 1 / x\n\nAs x grows without bound, 1 / x gets smaller and approaches 0:\n\n  lim (x -> infinity) 1 / x = 0\n\nThe function values become arbitrarily close to 0 as x → ∞, so the limit is 0. The x-axis (y = 0) is a horizontal asymptote.\n\n\n\nContinuity\n\nA function f(x) is continuous at a point c if three conditions are met:\n\n1. f(c) is defined\n2. lim (x -> c) f(x) exists\n3. lim (x -> c) f(x) = f(c)\n\nIf all three conditions hold, the graph of the function can be drawn at c without lifting the pen. If any condition fails, the function has a discontinuity at c.\n\n\n\nWorked Example 3: Checking Continuity\n\nDetermine if f(x) = { x^2, if x != 2; 4, if x = 2 } is continuous at x = 2.\n\nSolution:\n\n1. f(2) = 4 (defined)\n\n2. lim (x -> 2) f(x) = lim (x -> 2) x^2 = 4 (exists)\n\n3. lim (x -> 2) f(x) = 4 = f(2) (condition met)\n\nSince all three conditions are satisfied, f(x) is continuous at x = 2.\n\nContrast with Example 1: The function g(x) = (x^2 - 4) / (x - 2) has lim (x -> 2) g(x) = 4, but g(2) is undefined. Therefore g is not continuous at x = 2 (it has a removable discontinuity, or 'hole').\n\n\n\nSelf-Check Exercise\n\n1. True or False: lim (x -> 3) (x^2 - 9) / (x - 3) = 6. Answer: True (factor and cancel)\n\n2. True or False: If lim (x -> 2) f(x) = 5, then f(2) must equal 5. Answer: False (the limit describes behavior near 2, not necessarily at 2)\n\n3. True or False: A function that is continuous at x = c must have lim (x -> c) f(x) = f(c). Answer: True (this is the definition of continuity)\n\nSummary\n\nLimits describe how a function behaves near a point, not necessarily at the point. Algebraic simplification often resolves indeterminate forms (0/0). Continuity requires: (1) the function is defined, (2) the limit exists, and (3) the limit equals the function value. A removable discontinuity (\"hole\") occurs when the limit exists but the function is undefined or has a different value at the point.\n\n"
+    },
+    {
+      "id": "grade11-physics-motion-ne",
+      "track": "NEB Grade 11",
+      "subject": "Physics",
+      "topic": "Motion in a Straight Line",
+      "title": "एक समान रेखामध्ये गति",
+      "language": "ne",
+      "content": "एक समान रेखामध्ये गति\n\nएक वस्तु एकसाथ एक समान दिशामध्ये हरेक अवस्थाको साथ ठाउँबाट दिइए गए ठाउँबाट प्रवेश गर्दा हामी उनीको ठाउँको बदलावको बारे बोल्छौं। यसलाई एकाविधि गति पनि एकात्मक गति वा एकात्मक गतिकी पनि भन्ने हुन्छ।\n\nमहत्त्वपूर्ण अवधारणा\n\nदूरी र विस्थापन\n\nदूरी: वस्तु यात्रा गरेको पूरा पथको लामा। एक खणिक रकाम हो र सदा धनात्मक छ।\n\nविस्थापन: शुरुआती ठाउँबाट ठिठौँ ठाउँबाट लिएको सरल रेखामध्ये दूरी र उसके दिशा। एक सदिश रकाम हो र सकारात्मक, नेमातृक वा शून्य पनि हुन सक्छ।\n\nवेग र चम\n\nचम: दूरीको समयसाथ बदलाव। एक खणिक रकाम हो।\n\nचम = दूरी / समय\n\nवेग: विस्थापनको समयसाथ बदलाव। एक सदिश रकाम हो।\n\nवेग = विस्थापन / समय\n\nऔसत वेग: कुल विस्थापन / कुल समय\n\nत्वरण\n\nत्वरण: वेगको समयसाथ बदलाव। एक सदिश रकाम हो।\n\nत्वरण = वेगको बदला / समय\n\nत्वरणको SI मिति: मीटर प्रति वर्गमिलान (m/s^2)\n\nगति सम्बन्धी समीकरण\n\nसमून त्वरण वा एक समान गर्दा एकाधिक रेखामाथि गर्दा, शुन्य अवस्थाबाट एक गतिशील अवस्थाको सात जोड्ने तीन आधारभूत समीकरण छ:\n\n1. v = u + at\n\n2. s = ut + (1/2)at^2\n\n3. v^2 = u^2 + 2as\n\nइन समीकरणहरूमा, u = शुन्य अवस्थाको वेग, v = एकसमान त्वरणको साथ पहुँचिएको अंतिम वेग, a = त्वरण, t = समय, s = विस्थापन।\n\nयस समीकरणहरू मात्र एक समान त्वरण र एकाधिक रेखामाथि गर्दा हुन्छ।\n\nग्राफिकल प्रतिनिधित्व\n\n- स्थिति-विशेसणे समयको ग्राफ: अवस्था समयसाथ किन बदलाव हुन्छ यसग्राफको ढलान वेग दिइन्छ।\n\n- वेग-विशेसणे समयको ग्राफ: अवस्था समयसाथ किन बदलाव हुन्छ यसग्राफको ढलान त्वरण दिइन्छ र वक्राके उपरिको क्षेत्र विस्थापन दिइन्छ।\n\nस्वतन्त्र पतन\n\nपृथ्वीको सान्चारिक सतहdownarrowतर गर्दा एक वस्तु गुरुतीय बलबाट एकसमान त्वरण g, लगभग 9.8 m/s^2 को अनुभव गर्दा हामी उनी समीकरणहरूको साथ गर्दा हुन्छ।\n\nआशुलाई धनात्मक मानेर एकाधिक गर्दा g = 9.8 m/s^2\n\nसारांश\n\nएकाधिक रेखामध्ये गति गतिकी को आधार बन्छ। खणिक र सदिश रकाम बीचका अंतर र तीन आधारभूत समीकरणहरू मास्टर गर्दा मैकेनिकसँग सम्बन्धित समस्याहरूल्य हल गर्न आवश्यक हो।\n\n"
+    },
+    {
+      "id": "grade11-chemistry-atomic-structure-ne",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Atomic Structure",
+      "title": "अणु संगठन",
+      "language": "ne",
+      "content": "अणु संगठन\n\nअणुको संगठन बताउँछ, जसमा उप-अणु कणहरू र इलेक्ट्रॉनहरू नाभिको पैसेजमा व्यवस्थित हुन्छ। अणु संगठनको बोध रासायनिक व्यवहार, बंधन र आवर्त सारणीको बोध गर्दछ।\n\nउप-अणु कण\n\nएक अणु तीन आधारभूत उप-अणु कणहरूबाट बन्ने हो:\n\n- प्रोटॉन: नाभिकमा पाएको, +1 चार्ज र लगभग 1amu मिति।\n\n- नेमोट्रॉन: नाभिकमा पाएको, चार्ज नहोस, र लगभग 1amu मिति।\n\n- इलेक्ट्रॉन: नाभिको पार्श्वमा ऑर्बिटलमा पाएको, -1 चार्ज र लगभग 1/1836amu मिति।\n\nप्रोटॉन संख्याको परिभाषा अणु संख्या (Z) हो, जसले तत्व निर्धारित गर्दछ। प्रोटॉन र नेमोट्रॉनको total number अणु द्रव्यमान क्रमांक (A) बन्छ।\n\nबोहर मॉडल\n\nनiels bohr प्रस्ताव दिएको थियो कि इलेक्ट्रॉन नाभिकको पार्श्वमा निश्चित गोलाकार ऑर्बिटमा, विशेषतःऊर्जा स्तरहरूमा चक्कर मार्छन्, विकिरण बिना। प्रत्येक ऑर्बिट एक विशिष्ट ऊर्जाको corresponding hun। इलेक्ट्रॉन ऑर्बिट बीचमा अवशोषित वा विकिरण उत्सर्जित गरेर quanta दरवाजा पार्थिन्छ।\n\nहाइड्रोजन अणुको nth orbitमा एक इलेक्ट्रॉनको एनर्जी:\n\n  E_n = -13.6 / n^2 eV\n\nजहाँ n प्रधान क्वाण्टम नम्बर हो (n = 1, 2, 3, ...).\n\nक्वाण्टम नम्बर\n\nअणुमा एक इलेक्ट्रॉनको स्थिति चार क्वाण्टम नम्बरद्वारा विवरित हुन्छ:\n\n1. प्रधान क्वाण्टम नम्बर (n): एनर्जी लेबल वा शैलको संकेत (n = 1, 2, 3, ...).\n\n2. आयताकार क्वाण्टम नम्बर (l): subshell वा ऑर्बिटल आकारको संकेत (l = 0 to n-1). 0, 1, 2, 3 को मान s, p, d, f subshellहरू correspodn hun।\n\n3. चुंबकीय क्वाण्टम नम्बर (m_l): अंतरिक्षमा ऑर्बिटलको orientationको संकेत (m_l = -l to +l).\n\n4. स्पिन क्वाण्टम नम्बर (m_s): इलेक्ट्रॉनको spin दिशाको संकेत (+1/2 or -1/2).\n\nइलेक्ट्रॉन कॉन्फिगरेशन\n\nइलेक्ट्रॉन एनर्जी बढ़्दा भएर ऑर्बिटलमा भरिन्छ, तीन नियमका पालन गर्दा:\n\n- Aufbau principle: इलेक्ट्रॉन सबसे कम एनर्जी ऑर्बिटलमा भरिन्छ।\n\n- Pauli exclusion principle: अणुमा कोइ दो इलेक्ट्रॉन एक समान चारों क्वाण्टम नम्बर सेट पाउन सक्दैन; एक ऑर्बिटमाअधिकतम दो इलेक्ट्रॉन भर सक्छन् जसका विपरीत स्पिन हुनुपर्दछ।\n\n- Hund's rule: समानेको एनर्जीका ऑर्बिटलहरू भएर पनि भरिन्छ जुन pairing परिेछिन्छ।\n\nउदाहरण: सोडियम (Z = 11) को electron configuration हो 1s^2 2s^2 2p^6 3s^1.\n\nसारांश\n\nअणु संगठन, उप-अणु कणहरूको माइक्रोस्कोपिक व्यवस्थापrk macroscopic properties of elements। Quantum numbers वा electron configuration मास्टर गर्दा रासायनिक बंधन वा periodicity बोध गर्न आवश्यक हो।\n\n"
+    },
+    {
+      "id": "grade12-biology-cell-division-ne",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Cell Division",
+      "title": "कोशिका विभाजन",
+      "language": "ne",
+      "content": "कोशिका विभाजन\n\nएक औघटको कोशिका दिइएको कोशिकाहरूमा हेरिदा दोस्रो वा औघदाको कोशिकाहरू बनाउने प्रक्रिया हो। ग्रोथ, मरम्मत, प्रजनन र जीवनको सततताको लागि आवश्यक छ। दोस्रो मुख्य प्रकार: mitosis वा meiosis छ।\n\nकोशिका चक्र\n\nकोशिका विभाजन Between एक division वा अगदैनै एक कोशिका हो जसमा एक कोशिका यसपैहरू बीचमा हुन्छ। कोशिका चक्रको घटना एक कोशिका अगिदैनिक division coinciding अगाडि हुन्छ। दोस्रो मुख्य अवधारणा: Interphase वा M phase (Mitotic phase) छ।\n\nInterphase\n\nविभाजन बीच को अवधि। यस अवधि दौरान कोशिका ग्रोथ हुन्छ र DNA duplicated हुन्छ। Interphase में G1 (cell growth), S (DNA synthesis) và G2 (division preparation) सम्म כול्छ भएको छ।\n\nM phase (Mitotic phase)\n\nवास्तविक nuclear व cytoplasmic division को अवधि।\n\nMitosis\n\nGenetically identical two daughter cells बनाउँछ, eachले parent कोशिकाले same number of chromosomes लिइन्छ। Growth, asexual reproduction वà tissue repair को लागि प्रयोग गरिन्छ। Mitosis को चार स्टेज हुन्छ:\n\n- Prophase: chromosomes condense वà visible हुन्छ; nuclear envelope break down हुन्छ; spindle fibres form हुन्छ।\n\n- Metaphase: chromosomes cell के equator (metaphase plate) lining हुन्छ; spindle fibres centromeres लिइन्छ।\n\n- Anaphase: sister chromatids separate वà opposite poles of the cell लि खिच्चिन्छ।\n\n- Telophase: chromosomes decondense हुन्छ; nuclear envelopes प्रत्येक set के around re-form हुन्छ; cell division शरु हुन्छ।\n\nCytokinesis, cytoplasm को division, usually telophase following हुन्छ। Animal cells मा, cleavage furrow बनिन्छ; plant cells मा, cell plate बनिन्छ।\n\nMeiosis\n\nGenetically diverse four daughter cells बनाउँछ, eachले parent कोशिका chromosome number को half लिइन्छ। Reproductive cells (gametes) को लागि हुन्छ। Two successive divisions: meiosis I và meiosis II हुन्छ।\n\n- Meiosis I (reduction division): homologous chromosomes pair up, genetic material exchange crossing over हुन्छ, वà separate। यसले chromosome number diploid (2n) to haploid (n) reduce हुन्छ।\n\n- Meiosis II: sister chromatids separate, mitosis similar; four haploid cells उत्पादन हुन्छ।\n\nMeiosis को significantता\n\n- chromosome number generationsको constant बनाएर maintenance।\n\n- genetic variation crossing over वà independent assortment, evolution ड्राइव हुन्छ।\n\nComparison\n\n- Mitosis: one division, two diploid daughter cells, genetically identical, growth वà repair को लागि।\n\n- Meiosis: two divisions, four haploid daughter cells, genetically diverse, sexual reproduction को लागि।\n\nSummary\n\nCell division जीवनको मूलभूत हो। Mitosis ग्रोथ वà repair सुनिश्चित गर्दछ, जबकि meiosis sexual reproduction वà genetic diversity enable गर्दछ। दोनों प्रक्रियाहरू बोध गर्दा genetics, development वà medicine को लागि महत्वपूर्ण छ।\n\n"
+    },
+    {
+      "id": "grade12-mathematics-derivatives-ne",
+      "track": "NEB Grade 12",
+      "subject": "Mathematics",
+      "topic": "Derivatives",
+      "title": "एक अवकलज",
+      "language": "ne",
+      "content": "एक अवकलज एक अवधारणा हो र एक अवधारणा बताउँछ।\n\nअवलोकन\n\nएक फलन f(x) को अवकलज, फलनको च valu x ma parivartan huncha ra usko फलन ko अवकलज f'(x) vana dy/dx huncha।\n\nनोटेशन\n\nफलनको अवकलज लागि various नोटेशन प्रयोग गरिन्छ:\n\n- f'(x) (लाग्रन्ज नोटेशन)\n\n- dy/dx (लेबनाइज नोटेशन)\n\n- Df(x) (यूलर नोटेशन)\n\nआधारभूत अवकलन नियम\n\nएक अवकलन नियमहरू:\n\n1. घात नियम: d/dx [x^n] = n * x^(n-1)\n\n2. स्थिरांक नियम: d/dx [c] = 0, जहाँ c एक स्थिरांक हो।\n\n4. जोडा/घटा नियम: d/dx [f(x) +/- g(x)] = f'(x) +/- g'(x)\n\n5. गुणन नियम: d/dx [f(x) * g(x)] = f'(x) * g(x) + f(x) * g'(x)\n\n6. भाग नियम: d/dx [f(x) / g(x)] = [f'(x) * g(x) - f(x) * g'(x)] / [g(x)]^2\n\n7. श्रेणी नियम: d/dx [f(g(x))] = f'(g(x)) * g'(x)\n\nआम फलनहरूको अवकलज\n\nआम फलनहरूको अवकलज:\n\n- d/dx [sin x] = cos x\n\n- d/dx [cos x] = -sin x\n\n- d/dx [tan x] = sec^2 x\n\n- d/dx [e^x] = e^x\n\n- d/dx [ln x] = 1/x\n\nअवकलन प्रयोग\n\nअवकलन प्रयोग:\n\n- अवकलज एक बिन्दु को tangent रेखाको ढलान दिन्छ।\n\n- यदि f'(x) > 0 एक अन्तराल मा, तर फलन बढ्दैछ।\n\n- यदि f'(x) < 0 एक अन्तराल मा, तर फलन घट्दैछ।\n\n- critical बिन्दुहरूमा, f'(x) = 0 वा अविभाज्य भएमा स्थानीय maxima वा minima खोज्न सकिन्छ।\n\n- भौतिकी मा, चम वेगको अवकलन हो र त्वरण अवकलन।\n\nसारांश\n\nअवकलज गणितीय विश्लेषणको एक कुन्तो अवधारणा हो। सात आधारभूत नियमहरू र आम फलनहरूको अवकलज मा निपुणता आवश्यक हो। अवकलज फलनको व्यवहार, maxima r minima r rate of change analyze gardnuhos ra phisics r engineering ra economics ma wide aplikace huncha।\n\n"
+    },
+    {
+      "id": "bio-photosynthesis-ne",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Photosynthesis",
+      "title": "प्रकाश संश्लेषण",
+      "language": "ne",
+      "content": "प्रकाश संश्लेषण त्यो प्रक्रिया हो जसमा हरिया वनस्पति, शैवाल र केही ब्याक्टेरियाले प्रकाश ऊर्जालाई ग्लुकोजमा सञ्चित रासायनिक ऊर्जामा परिणत गर्छन्। यो मुख्यतया क्लोरोप्लास्टमा हुन्छ, जसमा हरियो वर्णक क्लोरोफिल हुन्छ। कुल सन्तुलित समीकरण: 6 CO2 + 6 H2O + प्रकाश ऊर्जा -> C6H12O6 + 6 O2। यो प्रक्रियाका दुई चरण छन्: प्रकाश-निर्भर प्रतिक्रिया, जो थाइलाकोइड झिल्लीमा हुन्छ र ATP तथा NADPH उत्पादन गर्दै अक्सिजन निकाल्छ, र प्रकाश-स्वतन्त्र प्रतिक्रिया (क्याल्भिन चक्र), जो स्ट्रोमामा हुन्छ र ATP तथा NADPH प्रयोग गरी कार्बन डाइअक्साइडलाई ग्लुकोजमा स्थिर गर्छ।"
+    },
+    {
+      "id": "chem-acids-bases-ne",
+      "track": "NEB Grade 11",
+      "subject": "Chemistry",
+      "topic": "Acids, Bases and Salts",
+      "title": "अम्ल र क्षार",
+      "language": "ne",
+      "content": "अम्ल ती पदार्थ हुन् जुन जलीय घोलमा प्रोटोन (H+ आयन) दान गर्छन्, भने क्षार प्रोटोन ग्रहण गर्छन्। ० देखि १४ सम्मको pH स्केलले हाइड्रोजन आयनको सान्द्रता मापन गर्छ: pH < 7 अम्लीय, pH = 7 तटस्थ, र pH > 7 क्षारीय। हाइड्रोक्लोरिक अम्ल (HCl) जस्ता बलियो अम्ल पानीमा पूर्ण रूपमा आयनित हुन्छन्, तर एसिटिक अम्ल (CH3COOH) जस्ता कमजोर अम्ल आंशिक रूपमा मात्र आयनित हुन्छन्। अम्ल क्षारसँग उदासीनीकरण प्रतिक्रियामा मिलेर नुन र पानी बनाउँछन्, उदाहरण HCl + NaOH -> NaCl + H2O।"
+    },
+    {
+      "id": "cee-kinematics-ne",
+      "track": "CEE",
+      "subject": "Physics",
+      "topic": "Kinematics",
+      "title": "गतिका समीकरणहरू",
+      "language": "ne",
+      "content": "एकनासको त्वरण a सहित सरल रेखामा हुने गतिका लागि तीन गतिक समीकरणहरू हुन्: v = u + a t; s = u t + (1/2) a t^2; र v^2 = u^2 + 2 a s। यहाँ u सुरुको वेग, v अन्तिम वेग, s विस्थापन, र t समय हो। यी समीकरण त्वरण स्थिर र गति सरल रेखामा हुँदा मात्र लागू हुन्छन्।"
+    },
+    {
+      "id": "ioe-quadratics-ne",
+      "track": "IOE",
+      "subject": "Mathematics",
+      "topic": "Algebra",
+      "title": "द्विघात समीकरण",
+      "language": "ne",
+      "content": "एउटा चर x मा द्विघात समीकरणको मानक रूप a x^2 + b x + c = 0 हुन्छ, जहाँ a, b, c वास्तविक संख्या र a ≠ 0। मूलहरू द्विघात सूत्रबाट पाइन्छ: x = (-b ± sqrt(b^2 - 4ac)) / (2a)। b^2 - 4ac लाई विभेदक (D) भनिन्छ। D > 0 भए दुई भिन्न वास्तविक मूल; D = 0 भए एउटै दोहोरो वास्तविक मूल; र D < 0 भए वास्तविक मूल हुँदैन (दुई सम्मिश्र मूल)। मूलहरूको योग -b/a र गुणनफल c/a हुन्छ।"
     }
   ]
 }

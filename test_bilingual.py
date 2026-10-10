@@ -57,14 +57,14 @@ def test_filter_lessons_language_en():
     """Filter lessons by English language code."""
     lessons = load_lessons()
     filtered = filter_lessons(lessons, language="en")
-    assert len(filtered) == 9  # 9 English lessons
+    assert len(filtered) == 12  # 12 English lessons
 
 
 def test_filter_lessons_language_ne():
     """Filter lessons by Nepali language code."""
     lessons = load_lessons()
     filtered = filter_lessons(lessons, language="ne")
-    assert len(filtered) == 5  # 5 Nepali lessons
+    assert len(filtered) == 9  # 9 Nepali lessons
 
 
 def test_filter_lessons_combined():
@@ -126,10 +126,10 @@ def test_language_distribution():
     lang_counts = {}
     for l in lessons:
         lang_counts[l["language"]] = lang_counts.get(l["language"], 0) + 1
-    # Current data: 9 English + 5 Nepali = 14 total
-    assert lang_counts.get("en", 0) == 9
-    assert lang_counts.get("ne", 0) == 5
-    assert sum(lang_counts.values()) == 14
+    # Current data: 12 English + 9 Nepali = 21 total
+    assert lang_counts.get("en", 0) == 12
+    assert lang_counts.get("ne", 0) == 9
+    assert sum(lang_counts.values()) == 21
 
 
 def test_load_lessons_has_required_fields():

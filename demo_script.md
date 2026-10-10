@@ -1,7 +1,13 @@
 # Akshar — Hackathon Demo Script
 
-**App:** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
-**Landing page:** <https://akshar-nepluro.vercel.app/>
+**Product deployment (Vercel):** <https://akshar-nepluro.vercel.app/> — the Vercel project
+serves `landing/` (on this branch still the earlier landing page; the study-app redesign
+merges from a task branch).
+**Streamlit app (reference implementation):** <https://akshar-nx6cm83qzbxznw8e6d7wpm.streamlit.app/>
+— the walkthrough below follows this front end, which we run locally with `streamlit run app.py`.
+
+> **Deployment rules:** nothing is deployed, redeployed, or republished for a demo, and the
+> Streamlit app is never presented as the product link — see [`AGENTS.md` §10](AGENTS.md).
 **Total time:** ~5 minutes
 **Speakers:** Sagar Katwal, Dipson Basnet, Dhiraj Shrestha
 
@@ -53,14 +59,17 @@
 
 ### [3:00 – 3:30] Demo Setup
 
-> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. The app is already deployed on Streamlit Community Cloud, and we also have a landing page on Vercel that links to it."
+> "Hi everyone, I'm Dhiraj. Let me show how Akshar works. The front end I'm walking through is our Streamlit reference implementation; the front end we publish to students is the Vercel web app in `landing/`."
 
 **Demo steps:**
 
-1. **Choose a lesson** — "In the sidebar I'll pick the NEB Grade 11 track, Physics, Newton's Laws of Motion. We can also switch the lesson language to Nepali."
-2. **Open the lesson** — "Here's Newton's Second Law — our own study notes, and we label them clearly as not official NEB material."
-3. **Explain tab** — "If a student needs a clearer explanation, they click **Generate a summary** and Gemma 4 writes one grounded in this lesson. We show an AI notice so nobody mistakes it for an official source."
-4. **Ask tab** — "Better still, the student can ask their own question. Gemma 4 answers using only this lesson, tells them when the lesson doesn't cover something instead of inventing facts, and can reply in **Nepali** if they switch the answer language."
+1. **Choose a lesson** — In the sidebar, pick the NEB Grade 11 track, Physics, Newton's Laws of Motion. Switch the lesson language to Nepali to see bilingual support.
+
+2. **Open the lesson** — Here's Newton's Second Law — our own study notes, clearly labelled as not official NEB material.
+
+3. **Explain tab** — If a student needs a clearer explanation, they click **Generate a summary** and Gemma 4 writes one grounded in this lesson. We show an AI notice so nobody mistakes it for an official source.
+
+4. **Ask tab** — Better still, the student can ask their own question. Gemma 4 answers using only this lesson, tells them when the lesson doesn't cover something instead of inventing facts, and can reply in **Nepali** if they switch the answer language.
 
 ### [3:30 – 4:00] Practice & Progress
 
@@ -70,8 +79,9 @@
 
 **Demo steps:**
 
-5. **Flashcards tab** — "The **Flashcards** tab turns the lesson into quick revision cards."
-6. **Deployment** — "We push to GitHub. Streamlit Community Cloud runs the app and keeps the API key in secrets; Vercel hosts the landing page. Both redeploy automatically on every push."
+5. **Flashcards tab** — The **Flashcards** tab turns the lesson into quick revision cards.
+
+6. **Deployment** — There is one published deployment: the Vercel project for `landing/`, which picks up changes on a merge to `main`. The Streamlit app you are watching is the reference implementation we run locally, so nothing is deployed or redeployed for this demo.
 
 ---
 
@@ -81,7 +91,7 @@
 
 > "As a hackathon prototype, Akshar has some limitations:
 >
-> - We have **14 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus — with the core lessons available in both English and Nepali.
+> - We have **21 sample lessons** across NEB 11/12, CEE, and IOE — not the full syllabus; core lessons are available in both English and Nepali.
 > - AI output, while helpful, should be verified against official textbooks.
 > - The app requires an internet connection and a Gemini API key.
 > - Progress tracking is per-session for now; there are no user accounts yet."
