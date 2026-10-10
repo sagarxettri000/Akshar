@@ -54,6 +54,7 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | Path | Purpose |
 |------|---------|
 | `app.py` | Streamlit app — the learn → understand → practise interface |
+| `ui.py` | Design system: tokens, injected stylesheet, shared UI blocks |
 | `ai_service.py` | Gemma 4 integration — summaries, grounded Q&A, MCQs, and flashcards |
 | `content.py` | Lesson loading and validation |
 | `progress.py` | Session-scoped learner progress tracking |
@@ -62,6 +63,7 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Development and testing dependencies |
 | `landing/` | Static landing page deployed to Vercel |
+| `docs/DESIGN.md` | Design system: colour, layout, type, components, accessibility |
 | `docs/DEPLOYMENT.md` | Step-by-step deployment guide |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |
 | `GEMINI.md` | Gemini CLI entry point that imports `AGENTS.md` |
@@ -132,6 +134,7 @@ See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the full walkthrough, includi
 - **Nepali-first accessibility.** Native Nepali/English support, correct Devanagari and mathematical notation, and readable text on small screens.
 - **Low-bandwidth by design.** Built for modest devices and connections.
 - **A real AI path.** Gemma 4 performs meaningful work in the learner flow — not a label attached to a canned answer.
+- **One design system.** `ui.py`, `.streamlit/config.toml`, and `landing/styles.css` share the same tokens, checked by `tests/test_design_tokens.py` (see [`docs/DESIGN.md`](docs/DESIGN.md)).
 
 ## Team — Nepluro
 
