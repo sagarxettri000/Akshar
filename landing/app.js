@@ -12,7 +12,7 @@ const PROGRESS_KEY = "akshar:progress";
 const LANGUAGE_LABELS = { en: "English", ne: "Nepali" };
 
 let lessons = [];
-let selection = { track: null, subject: null, topic: null, language: null };
+let selection = { goal: null, grade: null, track: null, subject: null, topic: null, language: null };
 let lesson = null;
 let aiReady = false;
 
@@ -114,6 +114,80 @@ export function resolveSelection(items, wanted = {}) {
 }
 
 /* ------------------------------------------------------------------ *
+ * Exam goals and grades
+ *
+ * Tracks encode the exam goal and, for NEB, the grade ("NEB Grade 11").
+ * Learners pick a goal first, then a grade where the goal has one — the same
+ * model as content.exam_goal_of / grade_of / resolve_goal_path in Python.
+ * ------------------------------------------------------------------ */
+
+export const EXAM_GOALS = ["NEB", "CEE", "IOE"];
+const GRADE_PATTERN = /grade\s+(\d+)/i;
+
+export function examGoalOf(track) {
+  const normalized = String(track ?? "").trim().toUpperCase();
+  return EXAM_GOALS.find((goal) => normalized.startsWith(goal)) ?? String(track ?? "").trim();
+}
+
+export function gradeOf(track) {
+  const match = GRADE_PATTERN.exec(String(track ?? ""));
+  return match ? match[1] : null;
+}
+
+export function availableGoals(items) {
+  const known = EXAM_GOALS.filter((goal) => items.some((l) => examGoalOf(l.track) === goal));
+  const extras = [];
+  for (const item of items) {
+    const goal = examGoalOf(item.track);
+    if (!EXAM_GOALS.includes(goal) && !extras.includes(goal)) extras.push(goal);
+  }
+  return [...known, ...extras];
+}
+
+export function gradeOptions(items, goal) {
+  const options = [];
+  for (const item of items) {
+    if (goal != null && examGoalOf(item.track) !== goal) continue;
+    const grade = gradeOf(item.track);
+    const label = grade ? `Grade ${grade}` : null;
+    if (label && !options.includes(label)) options.push(label);
+  }
+  return options;
+}
+
+export function trackFor(items, goal, grade) {
+  const wanted = grade ? gradeOf(grade) : null;
+  for (const item of items) {
+    if (goal != null && examGoalOf(item.track) !== goal) continue;
+    if (wanted !== null && gradeOf(item.track) !== wanted) continue;
+    return item.track;
+  }
+  return null;
+}
+
+/** Coerce an exam-goal/grade/subject/chapter/language choice into a lesson. */
+export function resolveGoalPath(items, wanted = {}) {
+  const goals = availableGoals(items);
+  const goal = goals.includes(wanted.goal) ? wanted.goal : (goals[0] ?? null);
+  const grades = gradeOptions(items, goal);
+  const grade = grades.length
+    ? (grades.includes(wanted.grade) ? wanted.grade : grades[0])
+    : null;
+  const track = trackFor(items, goal, grade);
+  if (track === null) {
+    const empty = resolveSelection(items, {});
+    return { ...empty, goal, grade };
+  }
+  const resolved = resolveSelection(items, {
+    track,
+    subject: wanted.subject,
+    topic: wanted.topic,
+    language: wanted.language,
+  });
+  return { ...resolved, goal, grade };
+}
+
+/* ------------------------------------------------------------------ *
  * Rendering the study selection and the lesson
  * ------------------------------------------------------------------ */
 
@@ -176,7 +250,13 @@ function renderLesson() {
   chips.append(el("span", "chip", lesson.subject));
   chips.append(el("span", "chip", lesson.track));
 
-  const parts = [selection.track, selection.subject, selection.topic, LANGUAGE_LABELS[selection.language] ?? ""];
+  const parts = [
+    selection.goal,
+    selection.grade,
+    selection.subject,
+    selection.topic,
+    LANGUAGE_LABELS[selection.language] ?? "",
+  ];
   parts.filter(Boolean).forEach((value, index) => {
     if (index) path.append(el("span", "path__sep", "/"));
     path.append(el("span", null, value));
@@ -188,8 +268,10 @@ function renderLesson() {
 }
 
 function applySelection(wanted, { persist = true } = {}) {
-  const resolved = resolveSelection(lessons, wanted);
+  const resolved = resolveGoalPath(lessons, wanted);
   selection = {
+    goal: resolved.goal,
+    grade: resolved.grade,
     track: resolved.track,
     subject: resolved.subject,
     topic: resolved.topic,
@@ -197,29 +279,31 @@ function applySelection(wanted, { persist = true } = {}) {
   };
   lesson = resolved.lesson;
 
-  fillSelect("f-track", uniqueValues(lessons, "track"), selection.track);
+  fillSelect("f-goal", availableGoals(lessons), selection.goal);
+
+  // The grade step only exists for graded goals (NEB); CEE and IOE are single tracks.
+  const grades = gradeOptions(lessons, selection.goal);
+  const gradeField = $("field-grade");
+  if (grades.length) {
+    gradeField.hidden = false;
+    fillSelect("f-grade", grades, selection.grade);
+  } else {
+    gradeField.hidden = true;
+    $("f-grade").disabled = true;
+    $("f-grade").textContent = "";
+  }
+
+  const inTrack = lessons.filter((l) => l.track === selection.track);
+  fillSelect("f-subject", uniqueValues(inTrack, "subject"), selection.subject);
   fillSelect(
-    "f-subject",
-    uniqueValues(lessons.filter((l) => l.track === selection.track), "subject"),
-    selection.subject,
-  );
-  fillSelect(
-    "f-topic",
-    uniqueValues(
-      lessons.filter((l) => l.track === selection.track && l.subject === selection.subject),
-      "topic",
-    ),
+    "f-chapter",
+    uniqueValues(inTrack.filter((l) => l.subject === selection.subject), "topic"),
     selection.topic,
   );
   fillSelect(
     "f-language",
     uniqueValues(
-      lessons.filter(
-        (l) =>
-          l.track === selection.track &&
-          l.subject === selection.subject &&
-          l.topic === selection.topic,
-      ),
+      inTrack.filter((l) => l.subject === selection.subject && l.topic === selection.topic),
       "language",
     ),
     selection.language,
@@ -700,9 +784,10 @@ function syncAiStates() {
 
 function wireFilters() {
   const map = {
-    "f-track": "track",
+    "f-goal": "goal",
+    "f-grade": "grade",
     "f-subject": "subject",
-    "f-topic": "topic",
+    "f-chapter": "topic",
     "f-language": "language",
   };
   for (const [id, key] of Object.entries(map)) {
@@ -735,7 +820,12 @@ async function init() {
     const parsed = await response.json();
     lessons = Array.isArray(parsed) ? parsed : (parsed.lessons ?? []);
     if (!lessons.length) throw new Error("No lessons are available yet.");
-    applySelection(readStore(STATE_KEY) ?? {}, { persist: false });
+    const saved = readStore(STATE_KEY) ?? {};
+    if (!saved.goal && saved.track) {
+      saved.goal = examGoalOf(saved.track);
+      saved.grade = gradeOf(saved.track) ? `Grade ${gradeOf(saved.track)}` : null;
+    }
+    applySelection(saved, { persist: false });
   } catch (error) {
     $("load-error").hidden = false;
     $("load-error-text").textContent = `${error.message} Reload the page to try again.`;

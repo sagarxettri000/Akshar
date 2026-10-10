@@ -314,3 +314,86 @@ def test_resolve_study_path_handles_no_lessons():
     resolved = content.resolve_study_path([])
     assert resolved["lesson"] is None
     assert resolved["variants"] == []
+
+
+# --------------------------------------------------------------------------- #
+# Exam goals and grades
+# --------------------------------------------------------------------------- #
+
+
+def test_normalize_text_collapses_whitespace():
+    """Regression: the pattern used to be ``r"\\\\s+"``, which never matched."""
+    assert content._normalize_text("  Photo   synthesis  ") == "photo synthesis"
+    assert content._normalize_text("A\tB\nC") == "a b c"
+
+
+def test_exam_goal_and_grade_are_read_from_the_track():
+    assert content.exam_goal_of("NEB Grade 11") == "NEB"
+    assert content.exam_goal_of("neb grade 12") == "NEB"
+    assert content.exam_goal_of("CEE") == "CEE"
+    assert content.exam_goal_of("IOE") == "IOE"
+    assert content.exam_goal_of("Something else") == "Something else"
+    assert content.grade_of("NEB Grade 11") == "11"
+    assert content.grade_of("CEE") is None
+
+
+def test_available_goals_lists_the_data_in_a_stable_order():
+    lessons = content.load_lessons()
+    assert content.available_goals(lessons) == ["NEB", "CEE", "IOE"]
+
+
+def test_grade_options_only_exist_for_graded_goals():
+    lessons = content.load_lessons()
+    assert content.grade_options(lessons, "NEB") == ["Grade 11", "Grade 12"]
+    assert content.grade_options(lessons, "CEE") == []
+    assert content.grade_options(lessons, "IOE") == []
+
+
+def test_track_for_matches_goal_and_optional_grade():
+    lessons = content.load_lessons()
+    assert content.track_for(lessons, "NEB", "Grade 12") == "NEB Grade 12"
+    assert content.track_for(lessons, "CEE", None) == "CEE"
+    assert content.track_for(lessons, "Unknown", None) is None
+
+
+def test_resolve_goal_path_picks_a_real_lesson_by_default():
+    lessons = content.load_lessons()
+    path = content.resolve_goal_path(lessons)
+    assert path["goal"] == "NEB"
+    assert path["grade"] == "Grade 11"
+    assert path["track"] == "NEB Grade 11"
+    assert path["lesson"] is not None
+
+
+def test_resolve_goal_path_repairs_stale_grade_subject_and_chapter():
+    lessons = content.load_lessons()
+    # Grade 11 Physics chapter is not a Grade 12 Biology chapter.
+    path = content.resolve_goal_path(
+        lessons,
+        goal="NEB",
+        grade="Grade 12",
+        subject="Physics",
+        topic="Newton's Laws of Motion",
+        language="ne",
+    )
+    assert path["track"] == "NEB Grade 12"
+    assert path["subject"] in content.unique_values(
+        content.filter_lessons(lessons, track="NEB Grade 12"), "subject"
+    )
+    assert path["lesson"] is not None
+
+
+def test_resolve_goal_path_handles_a_goal_without_grades():
+    lessons = content.load_lessons()
+    path = content.resolve_goal_path(lessons, goal="CEE", grade="Grade 11")
+    assert path["goal"] == "CEE"
+    assert path["grade"] is None, "CEE has no grades, so the grade step must not apply"
+    assert path["track"] == "CEE"
+    assert path["lesson"] is not None
+
+
+def test_resolve_goal_path_survives_an_unknown_goal():
+    lessons = content.load_lessons()
+    path = content.resolve_goal_path(lessons, goal="Unknown")
+    assert path["goal"] == "NEB", "an unknown goal falls back to the first available one"
+    assert path["lesson"] is not None

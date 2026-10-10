@@ -6,7 +6,16 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveSelection, uniqueValues } from "../app.js";
+import {
+  availableGoals,
+  examGoalOf,
+  gradeOf,
+  gradeOptions,
+  resolveGoalPath,
+  resolveSelection,
+  trackFor,
+  uniqueValues,
+} from "../app.js";
 
 const lesson = (track, subject, topic, language, id = `${track}-${subject}-${topic}-${language}`) => ({
   id,
@@ -95,4 +104,74 @@ test("an empty lesson list resolves to no lesson instead of throwing", () => {
   assert.equal(out.lesson, null);
   assert.deepEqual(out.variants, []);
   assert.equal(out.track, null);
+});
+
+
+/* ------------------- exam goals and grades (same as content.py) ------------------- */
+
+test("examGoalOf and gradeOf read the track", () => {
+  assert.equal(examGoalOf("NEB Grade 11"), "NEB");
+  assert.equal(examGoalOf("neb grade 12"), "NEB");
+  assert.equal(examGoalOf("CEE"), "CEE");
+  assert.equal(examGoalOf("Other board"), "Other board");
+  assert.equal(gradeOf("NEB Grade 11"), "11");
+  assert.equal(gradeOf("CEE"), null);
+});
+
+test("availableGoals lists the data in a stable order", () => {
+  assert.deepEqual(availableGoals(LESSONS), ["NEB", "CEE"]);
+});
+
+test("gradeOptions only exist for graded goals", () => {
+  assert.deepEqual(gradeOptions(LESSONS, "NEB"), ["Grade 11"]);
+  assert.deepEqual(gradeOptions(LESSONS, "CEE"), []);
+});
+
+test("trackFor matches the goal and optional grade", () => {
+  assert.equal(trackFor(LESSONS, "NEB", "Grade 11"), "NEB Grade 11");
+  assert.equal(trackFor(LESSONS, "CEE", null), "CEE");
+  assert.equal(trackFor(LESSONS, "Unknown", null), null);
+});
+
+test("resolveGoalPath picks a real lesson by default", () => {
+  const out = resolveGoalPath(LESSONS, {});
+  assert.equal(out.goal, "NEB");
+  assert.equal(out.grade, "Grade 11");
+  assert.equal(out.track, "NEB Grade 11");
+  assert.ok(out.lesson);
+});
+
+test("resolveGoalPath repairs a stale grade, subject and chapter", () => {
+  const out = resolveGoalPath(LESSONS, {
+    goal: "NEB",
+    grade: "Grade 11",
+    subject: "Chemistry",
+    topic: "Optics",
+    language: "ne",
+  });
+  assert.equal(out.track, "NEB Grade 11");
+  assert.equal(out.subject, "Chemistry");
+  assert.equal(out.topic, "Acids");
+  assert.equal(out.language, "en");
+});
+
+test("resolveGoalPath ignores a grade for a goal that has none", () => {
+  const out = resolveGoalPath(LESSONS, { goal: "CEE", grade: "Grade 11", language: "ne" });
+  assert.equal(out.goal, "CEE");
+  assert.equal(out.grade, null);
+  assert.equal(out.track, "CEE");
+  assert.equal(out.lesson.track, "CEE");
+});
+
+test("resolveGoalPath falls back when the goal is unknown", () => {
+  const out = resolveGoalPath(LESSONS, { goal: "Unknown" });
+  assert.equal(out.goal, "NEB");
+  assert.ok(out.lesson);
+});
+
+test("resolveGoalPath survives an empty lesson list", () => {
+  const out = resolveGoalPath([], {});
+  assert.equal(out.goal, null);
+  assert.equal(out.grade, null);
+  assert.equal(out.lesson, null);
 });

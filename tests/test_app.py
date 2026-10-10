@@ -60,14 +60,21 @@ def markdown_html(at):
 # ---------------------------------------------------------------------------
 
 
+def path_selectboxes(at):
+    """The study-path pickers, in order (the Ask tab adds its own picker)."""
+    return [box for box in at.selectbox if str(box.key).startswith("path-")]
+
+
 def test_first_run_renders_the_study_journey_without_an_api_key(monkeypatch):
     at = start(monkeypatch, api_key=None)
     assert not failures(at)
 
-    assert [box.label for box in at.selectbox[:4]] == [
-        "Track",
+    # The team's journey: exam goal, grade (NEB only), subject, chapter, language.
+    assert [box.label for box in path_selectboxes(at)] == [
+        "Exam goal",
+        "Grade",
         "Subject",
-        "Topic",
+        "Chapter",
         "Language",
     ]
     assert [tab.label for tab in at.tabs] == ["Explain", "Ask Gemma 4", "Practise", "Flashcards"]
@@ -108,28 +115,46 @@ def test_heading_outline_has_no_skips(monkeypatch):
         assert current <= previous + 1, f"heading levels jump: {previous} -> {current} in {levels}"
 
 
-def test_switching_track_refreshes_the_whole_path(monkeypatch):
+def test_switching_exam_goal_refreshes_the_whole_path(monkeypatch):
     """Regression: changing a parent selection used to leave the app empty.
 
     Streamlit hands back the *stale* raw value for a child selectbox when the
     options change, which previously produced an empty lesson list and a
-    StopIteration crash. content.resolve_study_path owns the fallback, so the
-    app must always show a real lesson.
+    StopIteration crash. content.resolve_goal_path owns the fallback, so the app
+    must always show a real lesson.
     """
     at = start(monkeypatch)
-    at.selectbox(key="path-track").set_value("IOE").run()
+    at.selectbox(key="path-goal").set_value("IOE").run()
     assert not failures(at)
     page = markdown_html(at)
     assert "Quadratic Equations" in page
     assert at.selectbox(key="path-subject").value == "Mathematics"
+    # IOE is a single track, so the grade step disappears.
+    assert [box.label for box in path_selectboxes(at)] == [
+        "Exam goal",
+        "Subject",
+        "Chapter",
+        "Language",
+    ]
 
-    # Move to a track whose subject/topic/language names are all different.
-    at.selectbox(key="path-track").set_value("CEE").run()
+    # Move to a goal whose subject/chapter/language names are all different.
+    at.selectbox(key="path-goal").set_value("CEE").run()
     assert not failures(at)
     page = markdown_html(at)
     assert "Equations of Motion" in page
-    assert at.selectbox(key="path-topic").value == "Kinematics"
+    assert at.selectbox(key="path-chapter").value == "Kinematics"
     assert at.selectbox(key="path-language").value == "en"
+
+
+def test_grade_step_repairs_stale_children(monkeypatch):
+    """Grade 12 has different subjects, so the stale subject/chapter must repair."""
+    at = start(monkeypatch)
+    assert at.selectbox(key="path-grade").value == "Grade 11"
+    at.selectbox(key="path-grade").set_value("Grade 12").run()
+    assert not failures(at)
+    page = markdown_html(at)
+    assert "NEB Grade 12" in page or "Grade 12" in page
+    assert at.selectbox(key="path-subject").value in at.selectbox(key="path-subject").options
 
 
 def test_explain_tab_shows_the_summary_it_just_generated(monkeypatch):

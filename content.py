@@ -5,6 +5,8 @@ Kept free of Streamlit imports so it can be unit tested and reused by the UI.
 
 from __future__ import annotations
 
+import re
+
 import json
 from pathlib import Path
 from typing import Any, Iterable
@@ -12,6 +14,9 @@ from typing import Any, Iterable
 DEFAULT_LESSONS_PATH = Path(__file__).resolve().parent / "data" / "lessons.json"
 
 REQUIRED_FIELDS = ("id", "track", "subject", "topic", "title", "language", "content")
+
+EXAM_GOALS = ("NEB", "CEE", "IOE")
+_GRADE_PATTERN = re.compile(r"Grade\s+(\d+)", re.IGNORECASE)
 
 LANGUAGE_LABELS = {"en": "English", "ne": "नेपाली (Nepali)"}
 
@@ -129,8 +134,7 @@ def _normalize_text(text: str) -> str:
     This lets a user type "photosynthesis" and match "Photosynthesis" or
     "  photosynthesis  " without needing exact string matches.
     """
-    import re
-    return re.sub(r"\\s+", " ", text.strip().lower())
+    return re.sub(r"\s+", " ", text.strip().lower())
 
 
 def search_lessons(
@@ -235,3 +239,101 @@ def resolve_study_path(
         "variants": variants,
         "lesson": lesson,
     }
+
+
+# --------------------------------------------------------------------------- #
+# Exam goals and grades
+#
+# Tracks encode both the exam goal and, for NEB, the grade ("NEB Grade 11").
+# Learners think in goals and grades, so the UI asks for those first.
+# --------------------------------------------------------------------------- #
+
+
+def exam_goal_of(track: str) -> str:
+    """Map a lesson track such as ``"NEB Grade 11"`` to NEB, CEE, or IOE."""
+    normalized = str(track).strip().upper()
+    for goal in EXAM_GOALS:
+        if normalized.startswith(goal):
+            return goal
+    return str(track).strip()
+
+
+def grade_of(track: str) -> str | None:
+    """Return the grade number encoded in a track such as ``"NEB Grade 11"``."""
+    match = _GRADE_PATTERN.search(str(track))
+    return match.group(1) if match else None
+
+
+def available_goals(lessons: Iterable[dict]) -> list[str]:
+    """Return the exam goals present in the data, known goals first."""
+    known = [goal for goal in EXAM_GOALS if any(exam_goal_of(l["track"]) == goal for l in lessons)]
+    extras: list[str] = []
+    for lesson in lessons:
+        goal = exam_goal_of(lesson["track"])
+        if goal not in EXAM_GOALS and goal not in extras:
+            extras.append(goal)
+    return known + extras
+
+
+def grade_options(lessons: Iterable[dict], goal: str | None) -> list[str]:
+    """Return the grade labels available for ``goal``, in data order."""
+    options: list[str] = []
+    for lesson in lessons:
+        if goal is not None and exam_goal_of(lesson["track"]) != goal:
+            continue
+        grade = grade_of(lesson["track"])
+        label = f"Grade {grade}" if grade else None
+        if label and label not in options:
+            options.append(label)
+    return options
+
+
+def track_for(lessons: Iterable[dict], goal: str | None, grade: str | None) -> str | None:
+    """Return the track matching ``goal`` (and ``grade``), or ``None``."""
+    wanted_grade = None
+    if grade:
+        match = _GRADE_PATTERN.search(str(grade))
+        wanted_grade = match.group(1) if match else None
+    for lesson in lessons:
+        track = lesson["track"]
+        if goal is not None and exam_goal_of(track) != goal:
+            continue
+        if wanted_grade is not None and grade_of(track) != wanted_grade:
+            continue
+        return track
+    return None
+
+
+def resolve_goal_path(
+    lessons: Iterable[dict],
+    goal: str | None = None,
+    grade: str | None = None,
+    subject: str | None = None,
+    topic: str | None = None,
+    language: str | None = None,
+) -> dict:
+    """Coerce an exam-goal/grade/subject/chapter/language choice into a real lesson.
+
+    Same contract as :func:`resolve_study_path`, with the goal and grade steps in
+    front. Returns the study-path keys plus ``goal`` and ``grade``.
+    """
+    lessons = list(lessons)
+    goals = available_goals(lessons)
+    chosen_goal = goal if goal in goals else (goals[0] if goals else None)
+
+    grades = grade_options(lessons, chosen_goal)
+    chosen_grade: str | None = None
+    if grades:
+        chosen_grade = grade if grade in grades else grades[0]
+
+    track = track_for(lessons, chosen_goal, chosen_grade)
+    if track is None:
+        empty = resolve_study_path(lessons)
+        empty.update({"goal": chosen_goal, "grade": chosen_grade})
+        return empty
+
+    resolved = resolve_study_path(
+        lessons, track=track, subject=subject, topic=topic, language=language
+    )
+    resolved.update({"goal": chosen_goal, "grade": chosen_grade})
+    return resolved

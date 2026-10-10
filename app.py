@@ -1,7 +1,9 @@
 """Akshar — a Streamlit learning app powered by Gemma 4.
 
-Flow: choose a track and topic -> read the study notes -> have Gemma 4 explain
-them or answer questions about them -> practise and review.
+Journey: pick an exam goal (NEB, CEE, or IOE), a grade where the track has one,
+a subject and a chapter -> read the study notes -> have Gemma 4 explain them or
+answer questions about them -> practise with a five-question quiz -> review with
+flashcards.
 
 Layering: presentation lives in :mod:`ui` (design tokens and shared blocks),
 lesson data and selection logic live in :mod:`content`, session progress lives in
@@ -21,16 +23,20 @@ import ui
 from ai_service import AIServiceError
 from content import (
     ContentError,
+    available_goals,
     filter_lessons,
+    grade_options,
     lesson_label,
     lessons_signature,
     load_lessons,
+    resolve_goal_path,
     resolve_study_path,
+    track_for,
     unique_values,
 )
 
-MCQ_COUNT = 3
-FLASHCARD_COUNT = 4
+MCQ_COUNT = 5
+FLASHCARD_COUNT = 5
 
 ASK_LANGUAGE_OPTIONS = {
     "Auto (match the lesson)": None,
@@ -83,15 +89,24 @@ def get_lessons(signature: str) -> list[dict]:
 
 
 def get_api_key() -> str | None:
-    """Return the Gemma 4 API key from Streamlit secrets or the environment."""
-    try:
-        key = st.secrets["GOOGLE_API_KEY"]
-        if key:
-            return str(key)
-    except Exception:
-        # No secrets file configured, or the key is absent.
-        pass
-    return os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
+    """Return the Gemma API key from Streamlit secrets or the environment.
+
+    ``GEMINI_API_KEY`` is the primary name; ``GOOGLE_API_KEY`` is accepted as a
+    fallback so existing setups keep working. The key is never logged.
+    """
+    for name in ("GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        try:
+            value = st.secrets[name]
+            if value:
+                return str(value)
+        except Exception:
+            # No secrets file configured, or the key is absent.
+            pass
+    for name in ("GEMINI_API_KEY", "GOOGLE_API_KEY"):
+        value = os.environ.get(name)
+        if value:
+            return value
+    return None
 
 
 def get_progress() -> dict:
@@ -133,43 +148,99 @@ def render_ai_status(api_key: str | None) -> None:
         )
 
 
+def _option_select(
+    label: str,
+    options: list,
+    key: str,
+    format_func=None,
+):
+    """Render one picker, or ``None`` when this branch has no options left."""
+    if not options:
+        return None
+    if format_func is None:
+        return st.selectbox(label, options, key=key)
+    return st.selectbox(label, options, key=key, format_func=format_func)
+
+
 def render_study_path(lessons: list[dict]) -> dict:
-    """Render the cascading track pickers and return the reconciled selection."""
+    """Render the exam goal / grade / subject / chapter pickers.
+
+    Learners pick an exam goal first (NEB, CEE, IOE), then a grade when the goal
+    has grades, then subject, chapter, and language. Streamlit can hand back a
+    value that no longer exists under a new parent, so the selection is
+    reconciled through :func:`content.resolve_goal_path` before use.
+    """
     ui.section_title("Choose what to study", level=2)
-    track_col, subject_col, topic_col, language_col = st.columns([1, 0.95, 1.4, 1])
 
-    with track_col:
-        track = st.selectbox("Track", unique_values(lessons, "track"), key="path-track")
+    goals = available_goals(lessons)
+    grades = grade_options(lessons, goals[0] if goals else None)
 
-    subjects = unique_values(filter_lessons(lessons, track=track), "subject")
+    if grades:
+        goal_col, grade_col, subject_col, chapter_col, language_col = st.columns(
+            [0.85, 0.75, 1.0, 1.3, 0.9]
+        )
+    else:
+        goal_col, subject_col, chapter_col, language_col = st.columns(
+            [0.9, 1.1, 1.35, 0.9]
+        )
+        grade_col = None
+
+    with goal_col:
+        goal = _option_select("Exam goal", goals, "path-goal")
+
+    grade = None
+    if grade_col is not None:
+        grades = grade_options(lessons, goal)
+        with grade_col:
+            grade = _option_select("Grade", grades, "path-grade")
+
+    track = track_for(lessons, goal, grade)
+    subjects = unique_values(filter_lessons(lessons, track=track), "subject") if track else []
     with subject_col:
-        subject = st.selectbox("Subject", subjects, key="path-subject")
+        subject = _option_select("Subject", subjects, "path-subject")
 
-    topics = unique_values(
-        filter_lessons(lessons, track=track, subject=subject), "topic"
+    chapters = (
+        unique_values(
+            filter_lessons(lessons, track=track, subject=subject), "topic"
+        )
+        if track and subject
+        else []
     )
-    with topic_col:
-        topic = st.selectbox("Topic", topics, key="path-topic")
+    with chapter_col:
+        chapter = _option_select("Chapter", chapters, "path-chapter")
 
-    variants = filter_lessons(lessons, track=track, subject=subject, topic=topic)
+    variants = (
+        filter_lessons(lessons, track=track, subject=subject, topic=chapter)
+        if track and subject and chapter
+        else []
+    )
     languages = unique_values(variants, "language")
     with language_col:
-        language = st.selectbox(
-            "Language",
-            languages,
-            format_func=lesson_label,
-            key="path-language",
+        language = _option_select(
+            "Language", languages, "path-language", format_func=lesson_label
         )
 
-    # Widgets can hand back a value that no longer exists under a new parent
-    # (for example a topic from the previous track), so reconcile the path.
-    return resolve_study_path(lessons, track, subject, topic, language)
+    return resolve_goal_path(
+        lessons,
+        goal=goal,
+        grade=grade,
+        subject=subject,
+        topic=chapter,
+        language=language,
+    )
 
 
-def render_lesson(lesson: dict) -> None:
+def render_lesson(lesson: dict, selection: dict | None = None) -> None:
     """Breadcrumb, title, and the notes themselves with their provenance."""
+    trail = []
+    if selection:
+        if selection.get("goal"):
+            trail.append(selection["goal"])
+        if selection.get("grade"):
+            trail.append(selection["grade"])
+    trail += [lesson["subject"], lesson["topic"]]
     ui.lesson_header(
-        [lesson["track"], lesson["subject"], lesson["topic"]],
+        trail,
         lesson["title"],
         [(lesson_label(lesson["language"]), False), ("Study notes", True)],
     )
@@ -575,7 +646,7 @@ def main() -> None:
         )
         st.stop()
 
-    render_lesson(lesson)
+    render_lesson(lesson, selection)
     render_ai_status(api_key)
 
     tab_explain, tab_ask, tab_practice, tab_flashcards = st.tabs(
