@@ -35,6 +35,18 @@ test("bullet blocks become one list with the markers removed", () => {
   assert.deepEqual(block.items, ["first point", "second point", "third point"]);
 });
 
+test("indented Markdown bullets are not mistaken for diagrams", () => {
+  const [block] = classifyLessonBlocks(
+    "*    **Definition:** The rate of change of momentum.\n" +
+      "*    **Formula:** $F = ma$",
+  );
+  assert.equal(block.type, "bullets");
+  assert.deepEqual(block.items, [
+    "**Definition:** The rate of change of momentum.",
+    "**Formula:** $F = ma$",
+  ]);
+});
+
 test("numbered formula blocks become formula steps", () => {
   const [block] = classifyLessonBlocks("1. v = u + at\n2. s = ut + (1/2)at^2\n3. v^2 = u^2 + 2as");
   assert.equal(block.type, "steps");

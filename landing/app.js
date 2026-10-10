@@ -417,18 +417,10 @@ export function classifyLessonBlocks(text) {
       flushList();
       continue;
     }
-    // Table rows are written one line per blank-line-separated block, so they
-    // are collected across blanks and emitted as a single diagram.
-    if (isNotationLine(line)) {
-      flushRun();
-      flushList();
-      diagram.push(line);
-      continue;
-    }
-    flushDiagram();
     if (isBulletLine(line) || isNumberedLine(line)) {
-      const type = isBulletLine(line) ? "bullets" : "steps";
       flushRun();
+      flushDiagram();
+      const type = isBulletLine(line) ? "bullets" : "steps";
       if (list && list.type === type) list.items.push(cleanMarker(line));
       else {
         flushList();
@@ -436,6 +428,16 @@ export function classifyLessonBlocks(text) {
       }
       continue;
     }
+    // Table rows are written one line per blank-line-separated block, so they
+    // are collected across blanks and emitted as a single diagram. List
+    // markers are handled first because their indentation can resemble columns.
+    if (isNotationLine(line)) {
+      flushRun();
+      flushList();
+      diagram.push(line);
+      continue;
+    }
+    flushDiagram();
     flushList();
     run.push(line);
   }
