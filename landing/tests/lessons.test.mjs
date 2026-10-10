@@ -78,3 +78,21 @@ test("the served lessons cover every track and both languages", () => {
     assert.ok(languages.has(language), `no lesson is written in ${language}`);
   }
 });
+
+test("Nepal-focused chapter topics are available in English and Nepali", () => {
+  const topics = [
+    "Climate and Monsoon in Nepal",
+    "Rivers and Water Resources of Nepal",
+    "Biodiversity and Conservation in Nepal",
+    "Constitution and Fundamental Rights of Nepal",
+  ];
+
+  for (const topic of topics) {
+    const variants = lessons.filter((lesson) => lesson.topic === topic);
+    assert.deepEqual(
+      new Set(variants.map((lesson) => lesson.language)),
+      new Set(VALID_LANGUAGES),
+      `${topic} must have English and Nepali lesson content`,
+    );
+  }
+});
