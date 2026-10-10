@@ -177,7 +177,7 @@ When contributing a Nepali-language version of a lesson:
 - **Keep equations and units in English:** Mathematical notation, scientific symbols, unit abbreviations (e.g., `m/s²`, `amu`), and standard formula symbols remain in English so they render correctly and match curriculum references.
 - **Introduce technical terms in Nepali with English parentheses:** On first mention, write the Nepali term followed by the English term in parentheses (e.g., "नेट बल (net force)"). This helps learners connect the two languages while reading textbook‑style content.
 - **Do not change the JSON schema:** The 7-field structure (`id`, `track`, `subject`, `topic`, `title`, `language`, `content`) is unchanged for multilingual lessons. Only the `language` field and the `content` text differ.
-- **Name the ID by replacing the language suffix:** If the English lesson ID ends in `-en`, the Nepali version should end in `-ne` (e.g., `phy-newton-2-en` → `phy-newton-2-ne`). This convention applies to lesson pairs that have both English and Nepali versions. The base portion of the ID (everything before the language suffix) stays the same, which keeps the pair linked and prevents duplicate IDs. Existing lessons without a Nepali version (such as `grade11-physics-motion` and `grade12-mathematics-derivatives`) omit the language suffix entirely. For future lesson pairs, use a matching `-en`/`-ne` suffix pattern to keep IDs consistent and searchable.
+- **Name the ID by replacing the language suffix:** If the English lesson ID ends in `-en`, the Nepali version should end in `-ne` (e.g., `phy-newton-2-en` → `phy-newton-2-ne`). This convention applies to lesson pairs that have both English and Nepali versions. The base portion of the ID (everything before the language suffix) stays the same, which keeps the pair linked and prevents duplicate IDs. A few older English IDs omit the suffix even though a Nepali version now exists (e.g. `grade11-physics-motion` → `grade11-physics-motion-ne`); keep their base ID stable when adding content. For future lesson pairs, use a matching `-en`/`-ne` suffix pattern to keep IDs consistent and searchable.
 - **Validate the same way:** run `node --test landing/tests/lessons.test.mjs` and confirm the new lesson passes every check.
 
 ### Validating lesson data
@@ -197,11 +197,12 @@ The checks cover JSON structure, the required fields, unique and non-empty ids, 
 | `chem-acids-bases-en` | `chem-acids-bases-ne` | NEB Grade 11 | Chemistry | Acids, Bases and Salts |
 | `cee-kinematics-en` | `cee-kinematics-ne` | CEE | Physics | Kinematics |
 | `ioe-quadratics-en` | `ioe-quadratics-ne` | IOE | Mathematics | Algebra |
-| `grade11-physics-motion` | (Nepali not yet) | NEB Grade 11 | Physics | Motion in a Straight Line |
+| `grade11-physics-motion` | `grade11-physics-motion-ne` | NEB Grade 11 | Physics | Motion in a Straight Line |
 | `grade11-chemistry-atomic-structure` | `grade11-chemistry-atomic-structure-ne` | NEB Grade 11 | Chemistry | Atomic Structure |
 | `grade12-biology-cell-division` | `grade12-biology-cell-division-ne` | NEB Grade 12 | Biology | Cell Division |
-| `grade12-mathematics-derivatives` | (Nepali not yet) | NEB Grade 12 | Mathematics | Derivatives |
+| `grade12-mathematics-derivatives` | `grade12-mathematics-derivatives-ne` | NEB Grade 12 | Mathematics | Derivatives |
 | `grade12-mathematics-limits-continuity` | (Nepali not yet) | NEB Grade 12 | Mathematics | Limits and Continuity |
 | `grade11-chemistry-chemical-bonding` | (Nepali not yet) | NEB Grade 11 | Chemistry | Chemical Bonding |
+| `grade12-biology-genetics` | (Nepali not yet) | NEB Grade 12 | Biology | Basic Principles of Genetics |
 
-**21 lessons total: 12 English + 9 Nepali across 5 complete English–Nepali pairs.**
+**21 lessons total: 12 English + 9 Nepali across 9 complete English–Nepali pairs; 3 lessons (Chemical Bonding, Genetics, Limits and Continuity) are English-only so far.**
