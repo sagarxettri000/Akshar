@@ -56,7 +56,7 @@ function writeStore(key, value) {
 }
 
 function emptyProgress() {
-  return { lessons: {}, attempts: 0, best: null, last: null, bookmarks: [] };
+  return { lessons: {}, recent: [], attempts: 0, best: null, last: null, bookmarks: [] };
 }
 
 export function progressState() {
@@ -66,6 +66,7 @@ export function progressState() {
     ...emptyProgress(),
     ...stored,
     lessons: stored.lessons && typeof stored.lessons === "object" ? stored.lessons : {},
+    recent: Array.isArray(stored.recent) ? stored.recent.filter((id) => typeof id === "string") : [],
     bookmarks: Array.isArray(stored.bookmarks) ? stored.bookmarks : [],
   };
 }
@@ -80,6 +81,9 @@ function markLessonOpened(id) {
   const state = progressState();
   state.lessons[id] = true;
   state.last = id;
+  // Newest first, deduplicated: this is what the dashboard's "recently studied"
+  // row shows, so it has to be the real order the reader opened chapters in.
+  state.recent = [id, ...state.recent.filter((value) => value !== id)].slice(0, 5);
   saveProgress(state);
 }
 
@@ -237,6 +241,221 @@ export function readingBar({ viewportHeight, docHeight } = {}) {
   return doc - viewport > 8;
 }
 
+/* ------------------------------------------------------------------ *
+ * Lesson text → blocks
+ *
+ * Lesson bodies are plain text written to one light convention: a blank
+ * line separates blocks; "- " starts a bullet; "1. " starts a step; a
+ * short standalone line is a section title; "Example:", "Summary:" and
+ * friends open a labelled block; and a block of short "=" / "->" / "|"
+ * lines is a formula or a diagram. Parsing that once here keeps the
+ * renderer and the tests working from the same rules.
+ * ------------------------------------------------------------------ */
+
+const LABEL_KINDS = {
+  example: ["example", "worked example", "sample"],
+  note: ["note", "key point", "key idea", "remember", "definition"],
+  misconception: ["misconception", "common misconception", "correction"],
+  summary: ["summary", "in short", "key takeaway", "takeaway"],
+  exercise: ["self-check exercise", "self-check", "exercise", "try it yourself"],
+  answer: ["answer"],
+};
+
+const isBulletLine = (line) => /^[-•*]\s+/.test(line);
+const isNumberedLine = (line) => /^\d+[.)]\s+/.test(line);
+/** A line that is laid out in columns: part of a table or a diagram. */
+const isNotationLine = (line) => line.includes("|") || /\s{3,}/.test(line);
+/** Words that are maths rather than prose when they sit inside a line. */
+const MATH_WORDS = new Set(["lim", "sin", "cos", "tan", "log", "ln", "exp"]);
+
+/**
+ * A line that is notation rather than prose: an equation, or one step of one.
+ * A sentence that merely contains "=" is prose, so a line that ends as a
+ * sentence, runs long, or is mostly words never counts.
+ */
+function isFormulaLine(line) {
+  const text = String(line).trim();
+  if (!text || text.length > 90) return false;
+  if (/[.?!।:]$/.test(text)) return false;
+  if (text.split(/\s+/).length > 14) return false;
+
+  const hasEquals = text.includes("=");
+  if (!hasEquals && !/->|→∞|≥|≤|\blim\b/.test(text)) return false;
+
+  if (hasEquals) {
+    const left = text.slice(0, text.indexOf("=")).trim();
+    const leftWords = left ? left.split(/\s+/).length : 0;
+    if (leftWords > 4) {
+      const prose = (text.match(/[A-Za-z]{3,}|[\u0900-\u097F]{2,}/g) || []).filter(
+        (word) => !MATH_WORDS.has(word),
+      );
+      if (prose.length > 2) return false;
+    }
+  }
+  return true;
+}
+
+function labelKind(label) {
+  // "Worked Example 1:" and "Example 2:" are the same kind of block.
+  const key = label
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .replace(/\s*\b\d+$/, "")
+    .trim();
+  for (const [kind, names] of Object.entries(LABEL_KINDS)) {
+    if (names.includes(key)) return kind;
+  }
+  return null;
+}
+
+const cleanMarker = (line) => line.replace(/^[-•*]\s+/, "").replace(/^\d+[.)]\s+/, "");
+
+/**
+ * A section title: short, unpunctuated, and starting a thought rather than
+ * continuing one (so a wrapped sentence is never mistaken for a title).
+ */
+function isHeadingLine(line) {
+  return (
+    line.length <= 60 &&
+    line.split(/\s+/).length <= 8 &&
+    !/[,.:;?!।]$/.test(line) &&
+    !/[=|]/.test(line) &&
+    !/\s{2,}/.test(line) &&
+    /^[A-Z0-9\u0900-\u097F(]/.test(line) &&
+    !isBulletLine(line) &&
+    !isNumberedLine(line)
+  );
+}
+
+function classifyLine(line) {
+  const pair = line.match(/^([^:]{2,40}):\s+(\S.*)$/);
+  if (pair) {
+    const kind = labelKind(pair[1]);
+    // "Example:", "Summary:", "Misconception:" and friends are labelled blocks.
+    if (kind) return { type: "labelled", kind, label: pair[1], text: pair[2] };
+    // "Evaluate: lim …" stays notation; "वेग: विस्थापनको …" is a term and its
+    // meaning, which is how the bilingual notes introduce vocabulary. A longer
+    // lead-in is prose that happens to contain a colon.
+    if (isFormulaLine(pair[2])) return { type: "formula", text: line };
+    if (pair[1].length <= 30 && pair[1].split(/\s+/).length <= 3) {
+      return { type: "definition", term: pair[1], text: pair[2] };
+    }
+  }
+  if (isHeadingLine(line)) return { type: "heading", text: line };
+  if (isFormulaLine(line)) return { type: "formula", text: line };
+  return { type: "paragraph", text: line };
+}
+
+/** One run of non-list lines, with no blank line inside it. */
+function classifyRun(lines) {
+  if (!lines.length) return [];
+  if (lines.length === 1) return [classifyLine(lines[0])];
+
+  if (lines.length >= 2 && lines.every((line) => isFormulaLine(line) || line.includes("|"))) {
+    return [{ type: "diagram", lines }];
+  }
+
+  // A section title written on the line above its prose still gets to be a
+  // title — that is how the notes are laid out.
+  const out = [];
+  let rest = lines;
+  while (rest.length > 1 && isHeadingLine(rest[0])) {
+    out.push({ type: "heading", text: rest[0] });
+    rest = rest.slice(1);
+  }
+
+  // One equation inside a sentence of prose stays an equation, and the prose
+  // around it stays prose.
+  const equations = rest.filter(isFormulaLine).length;
+  if (rest.length > 1 && equations === 1) {
+    const at = rest.findIndex(isFormulaLine);
+    const before = rest.slice(0, at).join(" ");
+    const after = rest.slice(at + 1).join(" ");
+    if (before) out.push({ type: "paragraph", text: before });
+    out.push({ type: "formula", text: rest[at] });
+    if (after) out.push({ type: "paragraph", text: after });
+    return out;
+  }
+
+  out.push({ type: "paragraph", text: rest.join(" ") });
+  return out;
+}
+
+/** Structure for one lesson body: headings, prose, lists, formulas, examples. */
+export function classifyLessonBlocks(text) {
+  const out = [];
+  let run = [];
+  let list = null;
+  let diagram = [];
+
+  const flushRun = () => {
+    if (run.length) {
+      out.push(...classifyRun(run));
+      run = [];
+    }
+  };
+  const flushDiagram = () => {
+    if (diagram.length) {
+      out.push({ type: "diagram", lines: diagram });
+      diagram = [];
+    }
+  };
+  const flushList = () => {
+    if (list) {
+      out.push(
+        list.type === "steps" ? { ...list, formulas: list.items.every(isFormulaLine) } : list,
+      );
+      list = null;
+    }
+  };
+
+  for (const raw of String(text ?? "").split("\n")) {
+    const line = raw.trim();
+    if (!line) {
+      flushRun();
+      flushList();
+      continue;
+    }
+    // Table rows are written one line per blank-line-separated block, so they
+    // are collected across blanks and emitted as a single diagram.
+    if (isNotationLine(line)) {
+      flushRun();
+      flushList();
+      diagram.push(line);
+      continue;
+    }
+    flushDiagram();
+    if (isBulletLine(line) || isNumberedLine(line)) {
+      const type = isBulletLine(line) ? "bullets" : "steps";
+      flushRun();
+      if (list && list.type === type) list.items.push(cleanMarker(line));
+      else {
+        flushList();
+        list = { type, items: [cleanMarker(line)] };
+      }
+      continue;
+    }
+    flushList();
+    run.push(line);
+  }
+  flushRun();
+  flushList();
+  flushDiagram();
+  return out;
+}
+
+/**
+ * "2 min 14 s" / "48 s" — for the time a student actually spent on a set, which
+ * the results screen states as what it is: time in this tab, not exam time.
+ */
+export function formatDuration(ms) {
+  const seconds = Math.round(Math.max(0, Number(ms) || 0) / 1000);
+  if (seconds < 60) return `${seconds} s`;
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return rest ? `${minutes} min ${rest} s` : `${minutes} min`;
+}
+
 /** The chapters either side of the current one, in lesson-file order. */
 export function chapterNeighbours(items, current) {
   if (!current) return { prev: null, next: null };
@@ -309,6 +528,7 @@ export function dashboardModel(items = [], progress = {}) {
   return {
     continueLesson,
     opened: openedIds.length,
+    recent: (state.recent ?? []).map(byId).filter(Boolean),
     attempts,
     best,
     pathways: availableGoals(items).map((goal) => {
@@ -471,15 +691,46 @@ function renderLessonContent(text, language) {
   const box = $("lesson-content");
   box.textContent = "";
   box.setAttribute("lang", language === "ne" ? "ne" : "en");
-  const blocks = text.split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
-  for (const block of blocks) {
-    const lines = block.split("\n").map((line) => line.trim()).filter(Boolean);
-    if (lines.every((line) => /^[-•*]\s+/.test(line))) {
-      const list = document.createElement("ul");
-      for (const line of lines) list.append(el("li", null, line.replace(/^[-•*]\s+/, "")));
+
+  const blocks = classifyLessonBlocks(text);
+  for (let index = 0; index < blocks.length; index += 1) {
+    const block = blocks[index];
+    // The chapter title is already the heading above the notes, so a first
+    // section title that repeats it is dropped rather than shown twice.
+    if (
+      index === 0 &&
+      block.type === "heading" &&
+      lesson &&
+      block.text.toLowerCase() === lesson.title.toLowerCase()
+    ) {
+      continue;
+    }
+    if (block.type === "heading") {
+      box.append(el("h3", "prose__heading", block.text));
+    } else if (block.type === "bullets" || block.type === "steps") {
+      const list = document.createElement(block.type === "steps" ? "ol" : "ul");
+      if (block.type === "steps" && block.formulas) list.className = "prose__list--formula";
+      for (const item of block.items) list.append(el("li", null, item));
       box.append(list);
+    } else if (block.type === "formula") {
+      box.append(el("p", "prose__formula", block.text));
+    } else if (block.type === "diagram") {
+      const pre = document.createElement("pre");
+      pre.className = "prose__diagram";
+      pre.textContent = block.lines.join("\n");
+      box.append(pre);
+    } else if (block.type === "definition") {
+      const row = el("p", "prose__definition");
+      row.append(el("span", "prose__term", `${block.term}: `), el("span", null, block.text));
+      box.append(row);
+    } else if (block.type === "labelled") {
+      const wrap = el("div", `prose__block prose__block--${block.kind}`);
+      // The label is part of the notes, so it stays readable text, not decoration.
+      wrap.append(el("p", "prose__block-label", `${block.label}:`));
+      wrap.append(el("p", "prose__block-body", block.text));
+      box.append(wrap);
     } else {
-      box.append(el("p", null, lines.join(" ")));
+      box.append(el("p", null, block.text));
     }
   }
 }
@@ -506,7 +757,9 @@ function renderDashboard() {
       ? `${model.opened} chapter${model.opened === 1 ? "" : "s"} opened in this browser · ${model.attempts} practice attempt${model.attempts === 1 ? "" : "s"} recorded.`
       : "Starting from the first chapter in the lesson file — you can change it on Study.";
     $("continue-meta").textContent = opened
-      ? `${current.track} · ${current.subject}`
+      ? `${current.track} · ${current.subject} · ${
+          LANGUAGE_LABELS[current.language] ?? current.language
+        }`
       : "Nothing studied yet in this browser.";
     $("continue-body").textContent = opened
       ? current.title
@@ -516,6 +769,21 @@ function renderDashboard() {
     // repeating it.
     $("continue-action").textContent = opened ? `Continue ${current.topic}` : "Choose a chapter";
     $("continue-action").dataset.mode = opened ? "open" : "choose";
+
+    // Recently studied: the chapters actually opened, newest first, minus the
+    // one the button above already offers.
+    const others = model.recent.filter((item) => item.id !== current.id);
+    const recent = $("recent");
+    recent.hidden = others.length === 0;
+    const recentList = $("recent-list");
+    recentList.textContent = "";
+    for (const item of others.slice(0, 4)) {
+      const button = el("button", "recent__item", item.topic);
+      button.type = "button";
+      button.title = `${item.subject} · ${item.track}`;
+      button.addEventListener("click", () => openLesson(item));
+      recentList.append(button);
+    }
   } else {
     $("resume-hint").textContent = "";
     $("continue-meta").textContent = "Nothing studied yet in this browser.";
@@ -963,6 +1231,7 @@ function wireAsk() {
 
     runWithButton($("ask-submit"), async (signal) => {
       setState("ask-state", "loading", "Gemma 4 is reading the notes to answer…");
+      const pending = renderPendingAnswer();
       try {
         const answer = await callApi(
           "ask",
@@ -977,6 +1246,8 @@ function wireAsk() {
       } catch (error) {
         if (error?.name === "AbortError") return;
         setState("ask-state", "error", `${error.message} Ask again to retry.`);
+      } finally {
+        pending?.remove();
       }
     });
   });
@@ -988,12 +1259,40 @@ function wireAsk() {
   });
 }
 
+/** A placeholder answer while the model is working, marked busy for screen readers. */
+function renderPendingAnswer() {
+  const thread = $("ask-thread");
+  if (!thread) return null;
+  thread.setAttribute("aria-busy", "true");
+  const bubble = el("div", "turn turn--assistant turn--pending");
+  bubble.setAttribute("aria-hidden", "true");
+  for (const width of ["82%", "64%"]) {
+    const line = el("span", "skeleton-line");
+    line.style.width = width;
+    bubble.append(line);
+  }
+  thread.append(bubble);
+  bubble.scrollIntoView({ block: "nearest" });
+  // renderThread() clears the thread when the answer lands, but making the
+  // busy state explicit keeps it correct if that ever changes.
+  const stop = () => thread.removeAttribute("aria-busy");
+  const observer = new MutationObserver(() => {
+    if (!thread.contains(bubble)) {
+      stop();
+      observer.disconnect();
+    }
+  });
+  observer.observe(thread, { childList: true });
+  return bubble;
+}
+
 /* ---------------------------- Practise ---------------------------- */
 
 let practiceQuestions = null;
 let practiceAnswers = new Map();
 let quizSubmitted = false;
 let dialogConfirm = null;
+let quizStartedAt = 0;
 
 function practiceMode() {
   const checked = document.querySelector('input[name="practice-mode"]:checked');
@@ -1054,6 +1353,7 @@ function renderQuizForm() {
   form.hidden = false;
   practiceAnswers = new Map();
   quizSubmitted = false;
+  quizStartedAt = Date.now();
   setState("practice-state", null, "");
   $("quiz-progress").hidden = false;
 
@@ -1171,6 +1471,16 @@ function renderQuizGraded(answers) {
       `Answered ${summary.answered} of ${summary.total} · accuracy ${summary.accuracy}% on the questions you answered.`,
     ),
   );
+
+  if (quizStartedAt) {
+    card.append(
+      el(
+        "p",
+        "result-facts result-facts--quiet",
+        `Time on this set: ${formatDuration(Date.now() - quizStartedAt)} — counted in this tab, from when the questions appeared.`,
+      ),
+    );
+  }
 
   const state = progressState();
   if (state.best) {
