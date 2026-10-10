@@ -2,8 +2,9 @@
 
 The learner journey: pick an exam goal (NEB, CEE, or IOE), pick a grade,
 subject, and chapter, read the preloaded lesson, then generate an AI summary,
-practise with a five-question MCQ quiz, and review flashcards. All AI features
-call :mod:`ai_service`, which wraps the official ``google-genai`` SDK.
+ask the assistant a question, practise with a five-question MCQ quiz, and
+review flashcards. All AI features call :mod:`ai_service`, which wraps the
+official ``google-genai`` SDK.
 """
 
 from __future__ import annotations
@@ -36,9 +37,163 @@ ASK_LANGUAGE_OPTIONS = {
     "English": "en",
     "नेपाली (Nepali)": "ne",
 }
+SUGGESTED_QUESTIONS = (
+    "Explain this chapter in simpler terms.",
+    "Give a worked example from this lesson.",
+    "What should I remember for the exam?",
+)
 EXAM_GOALS = ("NEB", "CEE", "IOE")
 OPTION_LETTERS = ("A", "B", "C", "D")
 GRADE_PATTERN = re.compile(r"Grade\s+(\d+)", re.IGNORECASE)
+
+# ---------------------------------------------------------------------------
+# Design tokens
+# ---------------------------------------------------------------------------
+
+APP_CSS = """
+:root {
+  --ak-primary: #1f6feb;
+  --ak-primary-dark: #1a5fd7;
+  --ak-text: #111827;
+  --ak-muted: #5b6472;
+  --ak-subtle: #f4f7fb;
+  --ak-border: #e2e8f0;
+  --ak-radius: 10px;
+}
+
+html, body { overflow-x: hidden; }
+
+/* Typography: system stack with Devanagari support */
+html, body, [class*="css"] {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans",
+    "Noto Sans Devanagari", "Mangal", "Kokila", sans-serif;
+  color: var(--ak-text);
+}
+
+/* Main column: a deliberate, readable width */
+.block-container {
+  max-width: 44rem !important;
+  padding: 2.5rem 1.75rem 4rem !important;
+}
+
+h1, h2, h3 { line-height: 1.25; letter-spacing: -0.01em; }
+
+/* Reading typography for lessons, explanations, and chat */
+[data-testid="stMarkdownContainer"] p {
+  line-height: 1.7;
+  margin: 0 0 0.9rem;
+}
+[data-testid="stMarkdownContainer"] ul,
+[data-testid="stMarkdownContainer"] ol {
+  margin: 0 0 1rem;
+  padding-left: 1.4rem;
+}
+[data-testid="stMarkdownContainer"] li {
+  line-height: 1.65;
+  margin-bottom: 0.3rem;
+}
+[data-testid="stMarkdownContainer"] code {
+  background: var(--ak-subtle);
+  border: 1px solid var(--ak-border);
+  border-radius: 6px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.92em;
+}
+[data-testid="stMarkdownContainer"] pre {
+  background: var(--ak-subtle);
+  border: 1px solid var(--ak-border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+}
+
+/* Buttons: comfortable, consistent touch targets */
+[data-testid="stButton"] button {
+  min-height: 2.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--ak-radius);
+  border: 1px solid var(--ak-border);
+  background: #ffffff;
+  color: var(--ak-text);
+  font-weight: 600;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+[data-testid="stButton"] button:hover {
+  background: var(--ak-subtle);
+  border-color: #cbd5e1;
+}
+[data-testid="stButton"] button[kind="primary"] {
+  background: var(--ak-primary);
+  border-color: var(--ak-primary);
+  color: #ffffff;
+}
+[data-testid="stButton"] button[kind="primary"]:hover {
+  background: var(--ak-primary-dark);
+  border-color: var(--ak-primary-dark);
+}
+
+/* Visible keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--ak-primary);
+  outline-offset: 2px;
+}
+
+/* Selects and radios */
+[data-testid="stSelectbox"] div[data-baseweb="select"] {
+  border-radius: var(--ak-radius);
+}
+[data-testid="stRadio"] input[type="radio"] {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+[data-testid="stRadio"] label {
+  min-height: 2.25rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Tabs */
+[data-testid="stTabs"] [data-testid="stTab"] {
+  font-weight: 600;
+  color: var(--ak-muted);
+  padding: 0.5rem 0.75rem;
+}
+[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] {
+  color: var(--ak-primary);
+  border-bottom: 2px solid var(--ak-primary);
+}
+
+/* Alerts, expanders, and chat bubbles */
+[data-testid="stAlert"] { border-radius: var(--ak-radius); }
+[data-testid="stExpander"] { border-radius: var(--ak-radius); }
+[data-testid="stChatMessage"] { border-radius: var(--ak-radius); }
+
+/* Sidebar title */
+[data-testid="stSidebar"] h1 { font-size: 1.3rem; margin-bottom: 0.1rem; }
+
+/* Mobile: full-width content with tighter padding */
+@media (max-width: 768px) {
+  .block-container { padding: 1.25rem 1rem 3rem !important; }
+}
+@media (max-width: 390px) {
+  .block-container { padding: 1rem 0.75rem 2.5rem !important; }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+"""
+
+
+def inject_app_css() -> None:
+    """Apply the Akshar design tokens once per run."""
+    st.markdown(f"<style>{APP_CSS}</style>", unsafe_allow_html=True)
+
+
+# ---------------------------------------------------------------------------
+# Data loading, API key, and shared helpers
+# ---------------------------------------------------------------------------
 
 
 @st.cache_data(show_spinner=False)
@@ -150,9 +305,7 @@ def render_select(
 
 
 def select_lesson(lessons: list[dict]) -> dict | None:
-    """Render the sidebar selectors and return the selected lesson, if any."""
-    st.header("Study setup")
-
+    """Render the study-setup selectors and return the selected lesson."""
     goal = render_select("Exam goal", available_goals(lessons), "exam-goal")
     if goal is None:
         return None
@@ -190,6 +343,108 @@ def select_lesson(lessons: list[dict]) -> dict | None:
     return next((lesson for lesson in pool if lesson["language"] == language), pool[0])
 
 
+def render_sidebar_setup(lessons: list[dict]) -> dict | None:
+    """Render the top of the sidebar: app identity and study setup."""
+    with st.sidebar:
+        st.title("Akshar")
+        st.caption("Learning platform for Nepal")
+        st.divider()
+        st.subheader("Study setup")
+        st.caption("Start with an exam goal, then narrow down.")
+        return select_lesson(lessons)
+
+
+def render_progress_section() -> None:
+    """Render the bottom of the sidebar: honest, session-scoped progress."""
+    with st.sidebar:
+        st.divider()
+        st.subheader("Your progress")
+        summary = progress.summarize(get_progress())
+        st.caption(f"Lessons practised: **{summary['lessons_practised']}**")
+        st.caption(f"Practice attempts: **{summary['total_attempts']}**")
+        st.caption(f"Average best score: **{summary['average_best_percent']}%**")
+        if st.button("Reset progress", key="reset-progress"):
+            st.session_state["progress"] = progress.new_state()
+            st.rerun()
+        st.divider()
+        if get_api_key():
+            st.caption("✓ Gemma 4 connected.")
+        else:
+            st.caption(
+                "Gemma 4 not connected — add `GEMINI_API_KEY` to "
+                "`.streamlit/secrets.toml` or your environment for AI features."
+            )
+
+
+# ---------------------------------------------------------------------------
+# Lesson reading experience
+# ---------------------------------------------------------------------------
+
+
+def _short_chapter(topic: str, limit: int = 26) -> str:
+    """Return a chapter title short enough for a navigation button."""
+    return topic if len(topic) <= limit else topic[: limit - 1].rstrip() + "…"
+
+
+def _select_chapter(topic: str) -> None:
+    """Select ``topic`` in the sidebar; the click triggers a rerun."""
+    st.session_state["chapter"] = topic
+
+
+def render_chapter_navigation(lessons: list[dict], lesson: dict) -> None:
+    """Offer previous/next buttons for sibling chapters of this lesson."""
+    goal = exam_goal_of(lesson["track"])
+    grade = grade_of(lesson["track"])
+    pool = [item for item in lessons if exam_goal_of(item["track"]) == goal]
+    if grade:
+        pool = [item for item in pool if grade_of(item["track"]) == grade]
+    pool = [item for item in pool if item["subject"] == lesson["subject"]]
+
+    topics = unique_values(pool, "topic")
+    if len(topics) < 2 or lesson["topic"] not in topics:
+        return
+    index = topics.index(lesson["topic"])
+
+    columns = st.columns(2)
+    if index > 0:
+        previous = topics[index - 1]
+        columns[0].button(
+            f"← {_short_chapter(previous)}",
+            key=f"prev-chapter::{lesson['id']}",
+            on_click=_select_chapter,
+            args=(previous,),
+            help=previous,
+        )
+    if index < len(topics) - 1:
+        following = topics[index + 1]
+        columns[1].button(
+            f"{_short_chapter(following)} →",
+            key=f"next-chapter::{lesson['id']}",
+            on_click=_select_chapter,
+            args=(following,),
+            help=following,
+        )
+
+
+def render_lesson(lesson: dict, lessons: list[dict]) -> None:
+    """Render the lesson as the page's main reading content."""
+    st.title(lesson["title"])
+    st.caption(
+        f"{lesson['track']} · {lesson['subject']} · Chapter: {lesson['topic']} "
+        f"· {lesson_label(lesson['language'])}"
+    )
+    st.divider()
+    st.markdown(lesson["content"])
+    st.caption("Team-authored study notes — not official NEB/CEE/IOE material.")
+    st.divider()
+    render_chapter_navigation(lessons, lesson)
+
+
+# ---------------------------------------------------------------------------
+# AI summary
+# ---------------------------------------------------------------------------
+
+
 def render_summary_tab(lesson: dict, api_key: str | None) -> None:
     state_key = f"summary::{lesson['id']}"
 
@@ -214,117 +469,19 @@ def render_summary_tab(lesson: dict, api_key: str | None) -> None:
         st.caption("Generate a summary to see AI-powered highlights.")
 
 
-def render_practice_tab(lesson: dict, api_key: str | None) -> None:
-    gen_key = f"mcq-gen::{lesson['id']}"
-    data_key = f"mcqs::{lesson['id']}"
-    if gen_key not in st.session_state:
-        st.session_state[gen_key] = 0
-    generation = st.session_state[gen_key]
-
-    if st.button("Generate practice questions", key=f"gen-mcq::{lesson['id']}"):
-        if require_api_key(api_key):
-            with st.spinner("Gemma 4 is writing questions…"):
-                try:
-                    st.session_state[data_key] = ai_service.generate_mcqs(
-                        lesson["content"], api_key, count=MCQ_COUNT
-                    )
-                    st.session_state[gen_key] = generation + 1
-                    st.rerun()
-                except AIServiceError as exc:
-                    st.error(f"Could not generate questions: {exc}")
-
-    questions = st.session_state.get(data_key)
-    if not questions:
-        st.caption("Generate questions, choose your answers, then check them.")
-        return
-
-    with st.form(key=f"mcq-form::{lesson['id']}::{generation}"):
-        selections: dict[int, str] = {}
-        for index, question in enumerate(questions, start=1):
-            st.markdown(f"**Q{index}. {question['question']}**")
-            options = [
-                f"{letter}. {question['options'][letter]}" for letter in OPTION_LETTERS
-            ]
-            choice = st.radio(
-                f"Answer for question {index}",
-                options,
-                key=f"mcq-ans::{lesson['id']}::{generation}::{index}",
-                label_visibility="collapsed",
-            )
-            selections[index] = choice[0]
-
-        submitted = st.form_submit_button("Check answers")
-
-    if submitted:
-        score = 0
-        correct_map: dict[int, str] = {}
-        missed_indices: list[int] = []
-        for index, question in enumerate(questions, start=1):
-            correct = question["answer"]
-            correct_map[index] = correct
-            if selections.get(index) == correct:
-                score += 1
-                st.success(f"Q{index}: Correct. {question['explanation']}")
-            else:
-                missed_indices.append(index)
-                st.error(
-                    f"Q{index}: The correct answer is **{correct}**. "
-                    f"{question['explanation']}"
-                )
-
-        progress.record_attempt(get_progress(), lesson["id"], score, len(questions))
-        best = progress.get_lesson_progress(get_progress(), lesson["id"])
-        st.info(
-            f"Score: {score} / {len(questions)} "
-            f"({score/len(questions)*100:.0f}%) · "
-            f"Best: {best['best_score']} / {best['best_total']}"
-        )
-
-        # Review summary
-        if missed_indices:
-            with st.expander(f"Review {len(missed_indices)} missed question(s)"):
-                for idx in missed_indices:
-                    q = questions[idx - 1]
-                    answer_letter = q["answer"]
-                    st.markdown(f"**Q{idx}: {q['question']}**")
-                    st.markdown(
-                        f"Correct answer: **{answer_letter}. {q['options'][answer_letter]}**"
-                    )
-                    st.markdown(f"Explanation: {q['explanation']}")
-        else:
-            st.balloons()
-            st.success("Perfect! You got all questions correct!")
-
-        render_ai_notice()
-
-    render_ai_notice()
+# ---------------------------------------------------------------------------
+# AI ask tab
+# ---------------------------------------------------------------------------
 
 
-def render_flashcards_tab(lesson: dict, api_key: str | None) -> None:
-    state_key = f"cards::{lesson['id']}"
-
-    if st.button("Generate flashcards", key=f"gen-fc::{lesson['id']}"):
-        if require_api_key(api_key):
-            with st.spinner("Gemma 4 is writing flashcards…"):
-                try:
-                    st.session_state[state_key] = ai_service.generate_flashcards(
-                        lesson["content"], api_key, count=FLASHCARD_COUNT
-                    )
-                except AIServiceError as exc:
-                    st.error(f"Could not generate flashcards: {exc}")
-
-    cards = st.session_state.get(state_key)
-    if cards:
-        for index, card in enumerate(cards, start=1):
-            with st.expander(f"Card {index}: {card['question']}"):
-                st.write(card["answer"])
-        render_ai_notice()
-    else:
-        st.caption("Generate flashcards to create quick revision cards.")
+def _prefill_question(input_key: str, suggestion: str) -> None:
+    """Put a suggested question into the ask input; the click reruns the app."""
+    st.session_state[input_key] = suggestion
 
 
 def render_ask_tab(lesson: dict, api_key: str | None) -> None:
     state_key = f"chat::{lesson['id']}"
+    input_key = f"ask-input::{lesson['id']}"
     if state_key not in st.session_state:
         st.session_state[state_key] = []
     history: list[dict] = st.session_state[state_key]
@@ -339,6 +496,16 @@ def render_ask_tab(lesson: dict, api_key: str | None) -> None:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
 
+    st.caption("Suggested questions:")
+    columns = st.columns(len(SUGGESTED_QUESTIONS))
+    for index, suggestion in enumerate(SUGGESTED_QUESTIONS):
+        columns[index].button(
+            suggestion,
+            key=f"suggest::{lesson['id']}::{index}",
+            on_click=_prefill_question,
+            args=(input_key, suggestion),
+        )
+
     language_label = st.selectbox(
         "Answer language",
         list(ASK_LANGUAGE_OPTIONS),
@@ -350,8 +517,10 @@ def render_ask_tab(lesson: dict, api_key: str | None) -> None:
         question = st.text_input(
             "Your question",
             placeholder="e.g. Why is acceleration inversely proportional to mass?",
+            key=input_key,
+            help="Press Enter to ask.",
         )
-        submitted = st.form_submit_button("Ask Gemma 4")
+        submitted = st.form_submit_button("Ask Gemma 4", type="primary")
 
     if submitted:
         if require_api_key(api_key):
@@ -380,17 +549,220 @@ def render_ask_tab(lesson: dict, api_key: str | None) -> None:
         render_ai_notice()
 
 
+# ---------------------------------------------------------------------------
+# Practice quiz
+# ---------------------------------------------------------------------------
+
+
+def _generate_quiz(lesson: dict, api_key: str | None) -> bool:
+    """Fetch ``MCQ_COUNT`` questions from Gemma 4; return True on success."""
+    data_key = f"mcqs::{lesson['id']}"
+    try:
+        questions = ai_service.generate_mcqs(
+            lesson["content"], api_key, count=MCQ_COUNT
+        )
+    except AIServiceError as exc:
+        st.error(f"Could not generate questions: {exc}")
+        return False
+    st.session_state[data_key] = questions
+    st.session_state[f"mcq-gen::{lesson['id']}"] += 1
+    st.session_state[f"mcq-attempt::{lesson['id']}"] += 1
+    st.session_state[f"mcq-checked::{lesson['id']}"] = False
+    st.session_state.pop(f"mcq-selections::{lesson['id']}", None)
+    return True
+
+
+def _retry_quiz(lesson_id: str) -> None:
+    """Reset the current quiz so the same questions can be answered again."""
+    st.session_state[f"mcq-attempt::{lesson_id}"] += 1
+    st.session_state[f"mcq-checked::{lesson_id}"] = False
+    st.session_state.pop(f"mcq-selections::{lesson_id}", None)
+
+
+def render_practice_tab(lesson: dict, api_key: str | None) -> None:
+    """Five-question MCQ quiz with a focused form and a full results review."""
+    gen_key = f"mcq-gen::{lesson['id']}"
+    attempt_key = f"mcq-attempt::{lesson['id']}"
+    data_key = f"mcqs::{lesson['id']}"
+    checked_key = f"mcq-checked::{lesson['id']}"
+    st.session_state.setdefault(gen_key, 0)
+    st.session_state.setdefault(attempt_key, 0)
+
+    if st.button(
+        "Generate practice questions",
+        key=f"gen-mcq::{lesson['id']}",
+        type="primary",
+    ):
+        if require_api_key(api_key):
+            with st.spinner("Gemma 4 is writing questions…"):
+                _generate_quiz(lesson, api_key)
+                st.rerun()
+
+    questions = st.session_state.get(data_key)
+    if not questions:
+        st.caption("Generate five practice questions, answer them, then check.")
+        return
+
+    if not st.session_state.get(checked_key, False):
+        _render_quiz_form(lesson, questions, attempt_key, checked_key)
+    else:
+        selections = st.session_state.get(f"mcq-selections::{lesson['id']}", {})
+        _render_quiz_results(lesson, questions, selections)
+
+
+def _render_quiz_form(
+    lesson: dict, questions: list[dict], attempt_key: str, checked_key: str
+) -> None:
+    """Render the answer form; on submission, hand over to the results view."""
+    attempt = st.session_state[attempt_key]
+    selections_key = f"mcq-selections::{lesson['id']}"
+    st.caption(
+        f"{len(questions)} questions · choose one answer per question, "
+        "then check your answers."
+    )
+    with st.form(key=f"mcq-form::{lesson['id']}::{attempt}"):
+        selections: dict[int, str] = {}
+        for index, question in enumerate(questions, start=1):
+            st.markdown(f"**Question {index} of {len(questions)}**")
+            st.markdown(question["question"])
+            options = [
+                f"{letter}. {question['options'][letter]}" for letter in OPTION_LETTERS
+            ]
+            choice = st.radio(
+                f"Answer for question {index}",
+                options,
+                key=f"mcq-ans::{lesson['id']}::{attempt}::{index}",
+                label_visibility="collapsed",
+            )
+            selections[index] = choice[0]
+
+        submitted = st.form_submit_button("Check answers", type="primary")
+
+    if submitted:
+        score = sum(
+            1
+            for index, question in enumerate(questions, start=1)
+            if selections.get(index) == question["answer"]
+        )
+        st.session_state[selections_key] = selections
+        st.session_state[checked_key] = True
+        progress.record_attempt(get_progress(), lesson["id"], score, len(questions))
+        _render_quiz_results(lesson, questions, selections)
+
+
+def _render_quiz_results(
+    lesson: dict, questions: list[dict], selections: dict[int, str]
+) -> None:
+    """Show the score, a per-question review, and clear next actions."""
+    total = len(questions)
+    score = sum(
+        1
+        for index, question in enumerate(questions, start=1)
+        if selections.get(index) == question["answer"]
+    )
+    incorrect = total - score
+    percent = round(score / total * 100)
+
+    st.subheader("Results")
+    st.markdown(f"**Score: {score} / {total}** ({percent}%)")
+    st.caption(f"{score} correct · {incorrect} incorrect")
+    best = progress.get_lesson_progress(get_progress(), lesson["id"])
+    if best:
+        st.caption(f"Best so far for this lesson: {best['best_score']} / {best['best_total']}")
+
+    if score == total:
+        st.success("Perfect score — excellent work!")
+    elif score >= total / 2:
+        st.success("Good effort — review the explanations below and try again.")
+    else:
+        st.info("Keep going — reread the lesson, then review the questions below.")
+
+    st.divider()
+    st.subheader("Answer review")
+    for index, question in enumerate(questions, start=1):
+        picked = selections.get(index)
+        correct = question["answer"]
+        status = "✓ Correct" if picked == correct else "✗ Incorrect"
+        st.markdown(f"**Question {index} of {total} — {status}**")
+        st.markdown(question["question"])
+        option_lines = []
+        for letter in OPTION_LETTERS:
+            text = question["options"][letter]
+            if letter == correct:
+                option_lines.append(f"- ✓ **{letter}. {text}** — correct answer")
+            elif letter == picked:
+                option_lines.append(f"- ✗ {letter}. {text} — your answer")
+            else:
+                option_lines.append(f"- {letter}. {text}")
+        st.markdown("\n".join(option_lines))
+        st.markdown(f"*Why:* {question['explanation']}")
+        st.divider()
+
+    st.markdown("**Next steps**")
+    columns = st.columns(2)
+    columns[0].button(
+        "Try again",
+        key=f"retry-mcq::{lesson['id']}",
+        on_click=_retry_quiz,
+        args=(lesson["id"],),
+        help="Answer the same five questions again.",
+    )
+    if columns[1].button(
+        "New questions",
+        key=f"new-mcq::{lesson['id']}",
+        help="Generate a fresh set of five questions from this lesson.",
+    ):
+        api_key = get_api_key()
+        if require_api_key(api_key):
+            with st.spinner("Gemma 4 is writing questions…"):
+                if _generate_quiz(lesson, api_key):
+                    st.rerun()
+
+    render_ai_notice()
+
+
+# ---------------------------------------------------------------------------
+# Flashcards
+# ---------------------------------------------------------------------------
+
+
+def render_flashcards_tab(lesson: dict, api_key: str | None) -> None:
+    state_key = f"cards::{lesson['id']}"
+
+    if st.button("Generate flashcards", key=f"gen-fc::{lesson['id']}"):
+        if require_api_key(api_key):
+            with st.spinner("Gemma 4 is writing flashcards…"):
+                try:
+                    st.session_state[state_key] = ai_service.generate_flashcards(
+                        lesson["content"], api_key, count=FLASHCARD_COUNT
+                    )
+                except AIServiceError as exc:
+                    st.error(f"Could not generate flashcards: {exc}")
+
+    cards = st.session_state.get(state_key)
+    if cards:
+        for index, card in enumerate(cards, start=1):
+            with st.expander(f"Card {index}: {card['question']}"):
+                st.markdown(card["answer"])
+        render_ai_notice()
+    else:
+        st.caption("Generate flashcards to create quick revision cards.")
+
+
+# ---------------------------------------------------------------------------
+# App entry point
+# ---------------------------------------------------------------------------
+
+
 def main() -> None:
     st.set_page_config(
         page_title="Akshar — Learning Platform for Nepal",
         page_icon="📘",
         layout="centered",
     )
+    inject_app_css()
 
-    st.title("Akshar")
-    st.caption(
-        "Learn → understand → practise, with Nepali/English support and Gemma 4."
-    )
+    st.caption("**AKSHAR** — Learning platform for Nepal")
 
     try:
         lessons = get_lessons(lessons_signature())
@@ -398,30 +770,13 @@ def main() -> None:
         st.error(f"Could not load lesson content: {exc}")
         st.stop()
 
-    with st.sidebar:
-        lesson = select_lesson(lessons)
-
-        st.divider()
-        if get_api_key():
-            st.success("Gemma 4 API key detected.")
-        else:
-            st.info(
-                "Connect with Gemma 4 to get explanations, practice questions, and flashcards. "
-                "Add `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) to `.streamlit/secrets.toml` or your environment."
-            )
+    lesson = render_sidebar_setup(lessons)
 
     if lesson is None:
         st.info("Pick an exam goal, subject, and chapter in the sidebar to open a lesson.")
         return
 
-    st.subheader(lesson["title"])
-    st.caption(
-        f"{lesson['track']} · {lesson['subject']} · {lesson['topic']} "
-        f"· {lesson_label(lesson['language'])}"
-    )
-    with st.expander("Lesson notes", expanded=True):
-        st.write(lesson["content"])
-    st.caption("Team-authored study notes for this demo, not official NEB/IOE material.")
+    render_lesson(lesson, lessons)
 
     api_key = get_api_key()
     tab_summary, tab_ask, tab_practice, tab_flashcards = st.tabs(
@@ -436,18 +791,10 @@ def main() -> None:
     with tab_flashcards:
         render_flashcards_tab(lesson, api_key)
 
-    # Render progress after the tabs so the counters reflect any attempt recorded
-    # during this run — for example, immediately after the learner checks answers.
-    with st.sidebar:
-        st.divider()
-        st.subheader("Your progress")
-        summary = progress.summarize(get_progress())
-        st.caption(f"Lessons practised: **{summary['lessons_practised']}**")
-        st.caption(f"Practice attempts: **{summary['total_attempts']}**")
-        st.caption(f"Average best score: **{summary['average_best_percent']}%**")
-        if st.button("Reset progress"):
-            st.session_state["progress"] = progress.new_state()
-            st.rerun()
+    # Rendered after the tabs so counters reflect any attempt recorded
+    # during this run — for example, immediately after the learner submits
+    # answers.
+    render_progress_section()
 
     st.divider()
     st.caption("Akshar · Team Nepluro · MIT License")
