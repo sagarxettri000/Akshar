@@ -10,8 +10,9 @@ import assert from "node:assert/strict";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
-const LANDING = new URL("..", import.meta.url).pathname.replace(/\/$/, "");
+const LANDING = fileURLToPath(new URL("..", import.meta.url));
 const SECRET_PATTERNS = [
   /AIza[0-9A-Za-z_-]{30,}/,
   /sk-[0-9A-Za-z]{20,}/,
