@@ -71,7 +71,7 @@ The AI layer lives in [`ai_service.py`](ai_service.py) and calls Google's hosted
 | `tests/` | Unit tests for the AI service, content, progress, design tokens, and the web app — including cross-language prompt/validator parity (no live API calls) |
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Development and testing dependencies |
-| `landing/` | **Web app deployed to Vercel** — `index.html`, `app.js`, `styles.css`, `data/lessons.json`, `api/gemma.mjs` (the only place the API key is used), and `scripts/dev.mjs` (local server, optional mock upstream) |
+| `landing/` | **Web app deployed to Vercel** — `index.html`, `app.js`, `styles.css`, `data/lessons.json`, `api/gemma.mjs` (the only place the API key is used; prompts and validation in `lib/ai.mjs`), and `scripts/dev.mjs` (local server, optional mock upstream) |
 | `docs/DESIGN.md` | Design system: colour, layout, type, components, accessibility |
 | `docs/DEPLOYMENT.md` | Step-by-step deployment guide |
 | `AGENTS.md` | Canonical, tool-agnostic instructions for AI coding agents |

@@ -28,7 +28,7 @@ import {
   validateFlashcards,
   validateMcq,
   validateMcqs,
-} from "./ai.mjs";
+} from "../lib/ai.mjs";
 
 const LESSON = "Newton's second law: the net force equals mass times acceleration (F = m a).";
 

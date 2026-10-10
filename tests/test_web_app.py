@@ -23,7 +23,7 @@ import ai_service
 
 ROOT = Path(__file__).resolve().parents[1]
 LANDING = ROOT / "landing"
-AI_MJS = LANDING / "api" / "ai.mjs"
+AI_MJS = LANDING / "lib" / "ai.mjs"
 NODE = shutil.which("node")
 
 SECRET_PATTERNS = (

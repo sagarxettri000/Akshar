@@ -21,7 +21,7 @@ import {
   generateFlashcards,
   generateMcqs,
   generateSummary,
-} from "./ai.mjs";
+} from "../lib/ai.mjs";
 
 const ACTIONS = new Set(["summary", "mcqs", "flashcards", "ask"]);
 const MAX_BODY_BYTES = 64 * 1024;

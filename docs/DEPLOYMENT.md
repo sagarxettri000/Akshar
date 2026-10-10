@@ -69,7 +69,7 @@ streamlit run app.py
 | `/` | `landing/index.html` (the study app) |
 | `/app.js`, `/styles.css` | `landing/app.js`, `landing/styles.css` |
 | `/data/lessons.json` | `landing/data/lessons.json` |
-| `POST /api/gemma` | `landing/api/gemma.mjs` — `{action, lessonId, …}` in, validated JSON out |
+| `POST /api/gemma` | `landing/api/gemma.mjs` — `{action, lessonId, …}` in, validated JSON out (prompts live in `landing/lib/ai.mjs` so Vercel builds exactly one endpoint) |
 | `GET /api/gemma` | Availability probe: `{ok: true, aiAvailable: true|false}` |
 
 Every push to the production branch redeploys automatically.
@@ -85,8 +85,8 @@ shares with students.
 
 ```bash
 python -m pytest -q                     # Python: AI service, content, design tokens, web assets
-node --test landing/api/ai.test.mjs     # JS: prompts, parsing, validation, transport
-node --test landing/app.test.mjs        # JS: study-selection resolution
+node --test landing/tests/ai.test.mjs   # JS: prompts, parsing, validation, transport
+node --test landing/tests/app.test.mjs  # JS: study-selection resolution
 ```
 
 `tests/test_web_app.py` fails if the lesson copy served to the browser drifts from

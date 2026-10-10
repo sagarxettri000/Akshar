@@ -6,7 +6,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveSelection, uniqueValues } from "./app.js";
+import { resolveSelection, uniqueValues } from "../app.js";
 
 const lesson = (track, subject, topic, language, id = `${track}-${subject}-${topic}-${language}`) => ({
   id,
