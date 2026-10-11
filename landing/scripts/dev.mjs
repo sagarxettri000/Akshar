@@ -54,11 +54,12 @@ const TYPES = {
 
 /* ----------------------------- mock upstream ---------------------------- */
 
-const mcq = (n) => ({
+const mcq = (n, evidence) => ({
   question: `Mock question ${n} about the lesson?`,
   options: { A: `Option A${n}`, B: `Option B${n}`, C: `Option C${n}`, D: `Option D${n}` },
   answer: "B",
   explanation: `Mock explanation ${n}: the notes say so.`,
+  evidence,
 });
 
 function mockReply(prompt) {
@@ -74,7 +75,9 @@ function mockReply(prompt) {
   let text;
   if (prompt.includes("multiple-choice questions")) {
     // Deliberately include one malformed item: the validator must drop it.
-    text = "```json\n" + JSON.stringify([mcq(1), { question: "broken" }, mcq(2)]) + "\n```";
+    const lesson = prompt.split("LESSON:\n").at(-1)?.trim() ?? "";
+    const evidence = lesson.split(/\n\s*\n/)[0]?.trim() ?? "";
+    text = "```json\n" + JSON.stringify([mcq(1, evidence), { question: "broken" }, mcq(2, evidence)]) + "\n```";
   } else if (prompt.includes("flashcards")) {
     text = JSON.stringify([
       { question: "Mock prompt 1?", answer: "Mock answer 1." },

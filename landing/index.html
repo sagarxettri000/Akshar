@@ -8,400 +8,467 @@
       name="description"
       content="Akshar is a study companion for students in Nepal preparing for NEB Grade 11–12, CEE, and IOE. Read the notes, ask Gemma 4 about the part you are stuck on, then check yourself."
     />
-    <meta name="theme-color" content="#171a2b" />
+    <meta name="theme-color" content="#0f172a" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' x='4' font-size='22'%3E%E0%A4%85%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <header class="site-header">
-      <div class="site-header__inner shell">
-        <a class="brand" href="#home" data-view="home"><span lang="ne">अक्षर</span> Akshar</a>
-        <nav class="site-nav" aria-label="Main">
-          <a href="#home" data-view="home">Home</a>
-          <a href="#study" data-view="study">Study</a>
-          <a href="#sources" data-view="sources">Sources &amp; limits</a>
+    <div class="app-shell">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar__brand">
+          <a class="brand" href="#home" data-view="home">
+            <span class="brand__mark" aria-hidden="true">अ</span>
+            <span class="brand__text"><span lang="ne">अक्षर</span> Akshar</span>
+          </a>
+        </div>
+
+        <nav class="sidebar__nav" aria-label="Main">
+          <a href="#home" data-view="home" class="nav-item nav-item--active">
+            <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Dashboard</span>
+          </a>
+          <a href="#study" data-view="study" class="nav-item">
+            <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>Study</span>
+          </a>
+          <a href="#sources" data-view="sources" class="nav-item">
+            <svg class="nav-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Sources</span>
+          </a>
         </nav>
-        <p class="status" id="ai-status" data-state="checking">
-          <span class="status__dot" aria-hidden="true"></span>
-          <span class="status__text" id="ai-status-text">Checking Gemma 4…</span>
-        </p>
-      </div>
-    </header>
 
-    <main id="main" class="shell" tabindex="-1">
-      <p class="note note--warning" id="ai-off" hidden>
-        <span class="note__label">AI features are off</span>
-        No Gemma 4 API key is configured on the server, so explanations, practice and
-        flashcards are unavailable. Reading the study notes still works. Set
-        <code>GOOGLE_API_KEY</code> in the deployment environment to switch them on.
-      </p>
-
-      <p class="note note--danger" id="load-error" hidden>
-        <span class="note__label">Could not load the lessons</span>
-        <span id="load-error-text">The lesson file could not be read.</span>
-      </p>
-
-      <!-- ---------------------------------------------------------------- *
-           Home: what to continue, what to practise, how progress looks.
-           Every number here comes from saved study activity or the lesson
-           file — nothing is invented.
-           * ---------------------------------------------------------------- -->
-      <section class="view view--home" id="home-view" data-view-panel="home" aria-labelledby="home-heading">
-        <div class="hero">
-          <p class="hero__eyebrow"><span lang="ne">अक्षर</span> · NEB · CEE · IOE</p>
-          <h1 class="hero__title" id="home-heading">
-            Study notes, grounded explanations, and practice you can check yourself
-          </h1>
-          <p class="hero__lead">
-            Read the official-style notes our team wrote, ask Gemma 4 about the part you are
-            stuck on, then test yourself — in English or Nepali, on any device.
+        <div class="sidebar__footer">
+          <p class="status status--sidebar" id="ai-status" data-state="checking">
+            <span class="status__dot" aria-hidden="true"></span>
+            <span class="status__text" id="ai-status-text">Checking…</span>
           </p>
-          <div class="hero__actions">
-            <button class="button button--primary button--lg" id="resume" type="button">
-              Start studying
-            </button>
-            <a class="button button--ghost" href="#study" data-view="study">Browse all chapters</a>
-          </div>
-          <p class="hero__hint" id="resume-hint"></p>
         </div>
+      </aside>
 
-        <div class="dash">
-          <section class="card card--lead" aria-labelledby="continue-heading">
-            <h2 class="card__title" id="continue-heading">Continue learning</h2>
-            <p class="card__meta" id="continue-meta">Nothing studied yet in this browser.</p>
-            <p class="card__body" id="continue-body">
-              Pick an exam goal and a chapter and your place is kept here.
-            </p>
-            <div class="recent" id="recent" hidden>
-              <p class="recent__label">Recently studied</p>
-              <div class="recent__list" id="recent-list"></div>
-            </div>
-            <div class="card__actions">
-              <button class="button button--primary" id="continue-action" type="button">
-                Choose a chapter
-              </button>
-            </div>
-          </section>
+      <!-- Main content -->
+      <div class="main-area">
+        <header class="topbar">
+          <div class="topbar__inner">
+            <p class="topbar__greeting" id="topbar-greeting">Welcome back</p>
+            <p class="topbar__sub" id="topbar-sub">Let's keep the momentum going.</p>
+          </div>
+        </header>
 
-          <section class="card" aria-labelledby="pathways-heading">
-            <h2 class="card__title" id="pathways-heading">Learning pathways</h2>
-            <p class="card__meta">Chapters available in each pathway, from the lesson file.</p>
-            <ul class="pathways" id="pathways"></ul>
-          </section>
-
-          <section class="card" aria-labelledby="practise-next-heading">
-            <h2 class="card__title" id="practise-next-heading">Practise next</h2>
-            <p class="card__meta" id="practise-next-meta">No practice attempts recorded yet.</p>
-            <p class="card__body" id="practise-next-body">
-              Gemma 4 can write practice questions from the notes you are reading, then mark
-              them and explain every answer.
-            </p>
-            <div class="card__actions">
-              <button class="button" id="practise-next" type="button">Open practice</button>
-            </div>
-          </section>
-
-          <section class="card" aria-labelledby="bookmarks-heading">
-            <h2 class="card__title" id="bookmarks-heading">Bookmarked chapters</h2>
-            <ul class="bookmark-list" id="bookmark-list"></ul>
-            <p class="card__meta" id="bookmarks-empty">
-              Use the bookmark button on a lesson to keep it here.
-            </p>
-          </section>
-
-          <section class="card" aria-labelledby="progress-heading">
-            <h2 class="card__title" id="progress-heading">Your progress</h2>
-            <p class="card__meta">Saved in this browser only. Clearing site data removes it.</p>
-            <dl class="stats" id="stats">
-              <div><dt>Chapters opened</dt><dd id="stat-lessons">0</dd></div>
-              <div><dt>Practice attempts</dt><dd id="stat-attempts">0</dd></div>
-              <div><dt>Best score</dt><dd id="stat-best">—</dd></div>
-            </dl>
-            <div class="card__actions">
-              <button class="button button--quiet" id="progress-reset" type="button">
-                Reset progress
-              </button>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <!-- ---------------------------------------------------------------- *
-           Study: choose a chapter, read it, then work with Gemma 4.
-           * ---------------------------------------------------------------- -->
-      <section class="view view--study" id="study" data-view-panel="study" aria-labelledby="study-heading">
-        <h1 class="section-title" id="study-heading">Choose what to study</h1>
-        <div class="filters">
-          <div class="field">
-            <label for="f-goal">Exam goal</label>
-            <select id="f-goal"></select>
-          </div>
-          <div class="field" id="field-grade">
-            <label for="f-grade">Grade</label>
-            <select id="f-grade"></select>
-          </div>
-          <div class="field">
-            <label for="f-subject">Subject</label>
-            <select id="f-subject"></select>
-          </div>
-          <div class="field">
-            <label for="f-chapter">Chapter</label>
-            <select id="f-chapter"></select>
-          </div>
-          <div class="field">
-            <label for="f-language">Language</label>
-            <select id="f-language"></select>
-          </div>
-        </div>
-        <p class="path" id="path"></p>
-
-        <article class="lesson" aria-labelledby="lesson-title">
-          <div class="reading" id="reading-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <span class="reading__fill" id="reading-fill"></span>
-          </div>
-          <div class="lesson__head">
-            <h2 class="lesson__title" id="lesson-title"></h2>
-            <p class="chips" id="lesson-chips"></p>
-          </div>
-          <div class="lesson-toolbar" role="group" aria-label="Lesson tools">
-            <div class="toolbar__group">
-              <span class="toolbar__label" id="text-size-label">Text size</span>
-              <button class="icon-button" id="text-smaller" type="button" aria-describedby="text-size-label">A−</button>
-              <button class="icon-button" id="text-larger" type="button" aria-describedby="text-size-label">A+</button>
-              <span class="toolbar__value" id="text-size-value">Normal</span>
-            </div>
-            <div class="toolbar__group">
-              <button class="button button--quiet" id="lesson-bookmark" type="button" aria-pressed="false">
-                Bookmark
-              </button>
-              <button class="button button--quiet" id="ask-about" type="button">Ask about this</button>
-            </div>
-          </div>
-          <details class="source" id="lesson-source" open>
-            <summary>Study notes — the source for everything below</summary>
-            <div class="prose" id="lesson-content" lang="en"></div>
-            <p class="note note--source">
-              <span class="note__label" id="source-label">Source</span>
-              <span id="source-body"
-                >Team-authored study notes written for Akshar. Not official NEB, CEE, or IOE
-                material.</span
-              >
-            </p>
-          </details>
-          <div class="lesson-nav">
-            <button class="button button--quiet" id="prev-lesson" type="button">← Previous chapter</button>
-            <button class="button button--quiet" id="next-lesson" type="button">Next chapter →</button>
-          </div>
-        </article>
-
-        <section class="ai" aria-labelledby="ai-heading">
-          <h2 class="section-title" id="ai-heading">Study help from Gemma 4</h2>
-          <p class="ai__intro">
-            Every answer below is generated from the notes you have open and is labelled as
-            AI-generated. Generated questions are checked for structure, not for truth — treat
-            them as a prompt to check yourself against the notes.
+        <main id="main" class="main-content" tabindex="-1">
+          <p class="note note--warning" id="ai-off" hidden>
+            <span class="note__label">AI features are off</span>
+            No Gemma 4 API key is configured on the server, so explanations, practice and
+            flashcards are unavailable. Reading the study notes still works. Set
+            <code>GOOGLE_API_KEY</code> in the deployment environment to switch them on.
           </p>
 
-          <div class="tabs" role="tablist" aria-label="Study help">
-            <button class="tab" id="tab-explain" role="tab" aria-selected="true" aria-controls="panel-explain">
-              Explain
-            </button>
-            <button class="tab" id="tab-ask" role="tab" aria-selected="false" aria-controls="panel-ask" tabindex="-1">
-              Ask Gemma 4
-            </button>
-            <button class="tab" id="tab-practise" role="tab" aria-selected="false" aria-controls="panel-practise" tabindex="-1">
-              Practise
-            </button>
-            <button class="tab" id="tab-flashcards" role="tab" aria-selected="false" aria-controls="panel-flashcards" tabindex="-1">
-              Flashcards
-            </button>
-          </div>
+          <p class="note note--danger" id="load-error" hidden>
+            <span class="note__label">Could not load the lessons</span>
+            <span id="load-error-text">The lesson file could not be read.</span>
+          </p>
 
-          <div class="panel" id="panel-explain" role="tabpanel" aria-labelledby="tab-explain" tabindex="0">
-            <div class="panel__actions">
-              <button class="button button--primary" id="summary-run" type="button">
-                Explain this lesson
-              </button>
-              <button class="button" id="summary-reset" type="button" hidden>Generate again</button>
-            </div>
-            <p class="empty" id="summary-empty">
-              Gemma 4 writes a short summary of the notes above, in the language of the notes.
-            </p>
-            <div class="result" id="summary-result" hidden></div>
-            <p class="state" id="summary-state" hidden role="status"></p>
-          </div>
-
-          <div class="panel" id="panel-ask" role="tabpanel" aria-labelledby="tab-ask" tabindex="0" hidden>
-            <div class="assistant" id="assistant">
-              <p class="assistant__context">
-                <span class="assistant__label">Grounded on</span>
-                <span id="assistant-lesson">the current chapter</span>
-              </p>
-              <p class="assistant__note">
-                Answers come only from the notes above. Suggestions are prompts to help you
-                ask — not AI answers.
-              </p>
-              <p class="assistant__suggest-label" id="suggest-label">Try asking</p>
-              <div class="suggestions" id="suggestions" role="group" aria-labelledby="suggest-label"></div>
-            </div>
-            <form class="ask" id="ask-form">
-              <label for="ask-input">Your question about this lesson</label>
-              <div class="ask__row">
-                <input
-                  id="ask-input"
-                  name="question"
-                  type="text"
-                  maxlength="1000"
-                  autocomplete="off"
-                  placeholder="e.g. Why is acceleration inversely proportional to mass?"
-                  aria-describedby="ask-hint"
-                />
-                <button class="button button--primary" id="ask-submit" type="submit">Ask</button>
+          <!-- Home / Dashboard -->
+          <section class="view view--home" id="home-view" data-view-panel="home" aria-labelledby="home-heading">
+            <div class="hero">
+              <div class="hero__content">
+                <p class="hero__eyebrow"><span lang="ne">अक्षर</span> · NEB · CEE · IOE</p>
+                <h1 class="hero__title" id="home-heading">
+                  Turn one chapter into <span class="hero__title-accent">real progress.</span>
+                </h1>
+                <p class="hero__lead">
+                  Read lesson notes in English or Nepali, ask Gemma 4 what you are stuck on, and
+                  check yourself with focused practice that keeps your effort honest.
+                </p>
+                <div class="hero__actions">
+                  <button class="button button--primary button--lg" id="resume" type="button">
+                    Start studying
+                  </button>
+                  <a class="button button--ghost" href="#study" data-view="study">Browse all chapters</a>
+                </div>
+                <p class="hero__hint" id="resume-hint"></p>
               </div>
-              <label class="ask__language">
-                Answer language
-                <select id="ask-language" aria-describedby="ask-hint">
-                  <option value="">Match the lesson</option>
-                  <option value="en">English</option>
-                  <option value="ne">Nepali</option>
-                </select>
-              </label>
-              <p class="hint" id="ask-hint">
-                If the notes do not cover something, Gemma 4 says so instead of guessing.
-              </p>
-            </form>
-            <p class="empty" id="ask-empty">
-              Ask about the part you are stuck on — one question at a time.
-            </p>
-            <div class="thread" id="ask-thread"></div>
-            <p class="state" id="ask-state" hidden role="status"></p>
-            <div class="panel__actions">
-              <button class="button" id="ask-clear" type="button" hidden>Clear this conversation</button>
-              <a class="button button--quiet" href="#lesson-title" id="back-to-lesson">Back to the notes</a>
-            </div>
-          </div>
 
-          <div class="panel" id="panel-practise" role="tabpanel" aria-labelledby="tab-practise" tabindex="0" hidden>
-            <div class="panel__actions">
-              <button class="button button--primary" id="practice-run" type="button">
-                Write practice questions
-              </button>
-              <label class="count">
-                Questions
-                <select id="practice-count">
-                  <option value="3">3</option>
-                  <option value="5" selected>5</option>
-                  <option value="10">10</option>
-                </select>
-              </label>
+              <aside class="hero__panel" aria-label="Learning flow summary">
+                <div class="hero__panel-card">
+                  <span class="eyebrow">Today's flow</span>
+                  <ol class="hero__steps">
+                    <li><span>1</span> Pick a track and chapter</li>
+                    <li><span>2</span> Read the notes in context</li>
+                    <li><span>3</span> Ask, practise, and review</li>
+                  </ol>
+                </div>
+                <div class="hero__mini-stat">
+                  <strong>Lesson-first</strong>
+                  <span>Source-grounded AI help for the chapter open on screen.</span>
+                </div>
+              </aside>
             </div>
-            <fieldset class="modes" id="practice-modes">
-              <legend>Mode</legend>
-              <label class="mode">
-                <input type="radio" name="practice-mode" value="practice" checked />
-                <span>
-                  <strong>Practice</strong>
-                  <small>See whether each answer is right as you choose it.</small>
-                </span>
-              </label>
-              <label class="mode">
-                <input type="radio" name="practice-mode" value="exam" />
-                <span>
-                  <strong>Exam</strong>
-                  <small>Answers stay hidden until you submit the whole set.</small>
-                </span>
-              </label>
-            </fieldset>
-            <p class="empty" id="practice-empty">
-              Akshar writes multiple-choice questions from the notes above, then marks them and
-              explains every answer. These are generated questions, not official exam papers.
-            </p>
-            <p class="state" id="practice-state" hidden role="status"></p>
-            <div class="quiz-progress" id="quiz-progress" hidden>
-              <div class="quiz-progress__track" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="quiz-progress-bar">
-                <span class="quiz-progress__fill" id="quiz-progress-fill"></span>
+
+            <div class="story-grid" aria-label="Product overview">
+              <article class="story-card story-card--accent">
+                <p class="story-card__label">Bilingual study</p>
+                <h2>Read in the language that helps you learn.</h2>
+                <p>English and Nepali notes sit side by side in the same learning flow, so students can switch without losing context.</p>
+              </article>
+              <article class="story-card">
+                <p class="story-card__label">Grounded AI</p>
+                <h2>Ask the exact concept you are stuck on.</h2>
+                <p>Gemma 4 is used as a study aid, with answers clearly labelled and grounded in the active lesson.</p>
+              </article>
+              <article class="story-card">
+                <p class="story-card__label">Real practice</p>
+                <h2>Turn reading into recall and review.</h2>
+                <p>Practice questions and flashcards help students check retention before moving on.</p>
+              </article>
+            </div>
+
+            <div class="dash">
+              <section class="card card--lead" aria-labelledby="continue-heading">
+                <h2 class="card__title" id="continue-heading">Continue learning</h2>
+                <p class="card__meta" id="continue-meta">Nothing studied yet in this browser.</p>
+                <p class="card__body" id="continue-body">
+                  Pick an exam goal and a chapter and your place is kept here.
+                </p>
+                <div class="recent" id="recent" hidden>
+                  <p class="recent__label">Recently studied</p>
+                  <div class="recent__list" id="recent-list"></div>
+                </div>
+                <div class="card__actions">
+                  <button class="button button--primary" id="continue-action" type="button">
+                    Choose a chapter
+                  </button>
+                </div>
+              </section>
+
+              <section class="card" aria-labelledby="pathways-heading">
+                <h2 class="card__title" id="pathways-heading">Learning pathways</h2>
+                <p class="card__meta">Chapters available in each pathway, from the lesson file.</p>
+                <ul class="pathways" id="pathways"></ul>
+              </section>
+
+              <section class="card card--dashboard" aria-labelledby="progress-heading">
+                <h2 class="card__title" id="progress-heading">Your progress</h2>
+                <p class="card__meta">Saved in this browser only. Clearing site data removes it.</p>
+
+                <div class="dashboard">
+                  <div class="dashboard__ring-wrap">
+                    <svg class="dashboard__ring" viewBox="0 0 120 120" role="img" aria-label="Overall progress ring">
+                      <circle class="dashboard__ring-track" cx="60" cy="60" r="52" />
+                      <circle class="dashboard__ring-fill" id="progress-ring-fill" cx="60" cy="60" r="52" />
+                    </svg>
+                    <div class="dashboard__ring-label">
+                      <strong id="progress-percent">0%</strong>
+                      <span>complete</span>
+                    </div>
+                  </div>
+
+                  <div class="dashboard__body">
+                    <dl class="stats" id="stats">
+                      <div><dt>Chapters opened</dt><dd id="stat-lessons">0</dd></div>
+                      <div><dt>Practice attempts</dt><dd id="stat-attempts">0</dd></div>
+                      <div><dt>Best score</dt><dd id="stat-best">—</dd></div>
+                    </dl>
+                    <p class="dashboard__motivation" id="dashboard-motivation">
+                      Start your first chapter to begin tracking your progress.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="dashboard__pathways" id="dashboard-pathways"></div>
+
+                <div class="card__actions">
+                  <button class="button button--quiet" id="progress-reset" type="button">
+                    Reset progress
+                  </button>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <!-- Study -->
+          <section class="view view--study" id="study" data-view-panel="study" aria-labelledby="study-heading">
+            <h1 class="section-title" id="study-heading">Choose what to study</h1>
+            <div class="filters">
+              <div class="field">
+                <label for="f-goal">Exam goal</label>
+                <select id="f-goal"></select>
               </div>
-              <p class="quiz-progress__text" id="quiz-progress-text"></p>
+              <div class="field" id="field-grade">
+                <label for="f-grade">Grade</label>
+                <select id="f-grade"></select>
+              </div>
+              <div class="field">
+                <label for="f-subject">Subject</label>
+                <select id="f-subject"></select>
+              </div>
+              <div class="field">
+                <label for="f-chapter">Chapter</label>
+                <select id="f-chapter"></select>
+              </div>
+              <div class="field">
+                <label for="f-language">Language</label>
+                <select id="f-language"></select>
+              </div>
             </div>
-            <form class="quiz" id="quiz" hidden></form>
-          </div>
+            <p class="path" id="path"></p>
 
-          <div class="panel" id="panel-flashcards" role="tabpanel" aria-labelledby="tab-flashcards" tabindex="0" hidden>
-            <div class="panel__actions">
-              <button class="button button--primary" id="flashcards-run" type="button">
-                Build flashcards
-              </button>
-              <label class="count">
-                Cards
-                <select id="flashcards-count">
-                  <option value="5" selected>5</option>
-                  <option value="8">8</option>
-                  <option value="10">10</option>
-                </select>
-              </label>
+            <article class="lesson" aria-labelledby="lesson-title">
+              <div class="reading" id="reading-progress" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <span class="reading__fill" id="reading-fill"></span>
+              </div>
+              <div class="lesson__head">
+                <h2 class="lesson__title" id="lesson-title"></h2>
+                <p class="chips" id="lesson-chips"></p>
+              </div>
+              <div class="lesson-toolbar" role="group" aria-label="Lesson tools">
+                <div class="toolbar__group">
+                  <span class="toolbar__label" id="text-size-label">Text size</span>
+                  <button class="icon-button" id="text-smaller" type="button" aria-describedby="text-size-label">A−</button>
+                  <button class="icon-button" id="text-larger" type="button" aria-describedby="text-size-label">A+</button>
+                  <span class="toolbar__value" id="text-size-value">Normal</span>
+                </div>
+                <div class="toolbar__group">
+                  <button class="button button--quiet" id="lesson-bookmark" type="button" aria-pressed="false">
+                    Bookmark
+                  </button>
+                  <button class="button button--quiet" id="ask-about" type="button">Ask about this</button>
+                </div>
+              </div>
+              <details class="source" id="lesson-source" open>
+                <summary>Study notes — the source for everything below</summary>
+                <div class="prose" id="lesson-content" lang="en"></div>
+                <p class="note note--source">
+                  <span class="note__label" id="source-label">Source</span>
+                  <span id="source-body"
+                    >Team-authored study notes written for Akshar. Not official NEB, CEE, or IOE
+                    material.</span
+                  >
+                </p>
+                <p class="source__references-label" id="source-references-label" hidden>Related official references</p>
+                <ul class="source__links" id="source-links" hidden></ul>
+              </details>
+              <div class="lesson-nav">
+                <button class="button button--quiet" id="prev-lesson" type="button">← Previous chapter</button>
+                <button class="button button--quiet" id="next-lesson" type="button">Next chapter →</button>
+              </div>
+            </article>
+
+            <section class="ai" aria-labelledby="ai-heading">
+              <h2 class="section-title" id="ai-heading">Study help from Gemma 4</h2>
+              <p class="ai__intro" id="ai-intro">
+                Every answer below is generated from the notes you have open and is labelled as
+                AI-generated. Practice questions include a quoted lesson excerpt, but their answers
+                are not independently verified — check them against the notes.
+              </p>
+
+              <div class="tabs" role="tablist" aria-label="Study help">
+                <button class="tab" id="tab-explain" role="tab" aria-selected="true" aria-controls="panel-explain">
+                  Explain
+                </button>
+                <button class="tab" id="tab-ask" role="tab" aria-selected="false" aria-controls="panel-ask" tabindex="-1">
+                  Ask Gemma 4
+                </button>
+                <button class="tab" id="tab-practise" role="tab" aria-selected="false" aria-controls="panel-practise" tabindex="-1">
+                  Practise
+                </button>
+                <button class="tab" id="tab-flashcards" role="tab" aria-selected="false" aria-controls="panel-flashcards" tabindex="-1">
+                  Flashcards
+                </button>
+              </div>
+
+              <div class="panel" id="panel-explain" role="tabpanel" aria-labelledby="tab-explain" tabindex="0">
+                <div class="panel__actions">
+                  <button class="button button--primary" id="summary-run" type="button">
+                    Explain this lesson
+                  </button>
+                  <button class="button" id="summary-reset" type="button" hidden>Generate again</button>
+                </div>
+                <p class="empty" id="summary-empty">
+                  Gemma 4 writes a short summary of the notes above, in the language of the notes.
+                </p>
+                <div class="result" id="summary-result" hidden></div>
+                <p class="state" id="summary-state" hidden role="status"></p>
+              </div>
+
+              <div class="panel" id="panel-ask" role="tabpanel" aria-labelledby="tab-ask" tabindex="0" hidden>
+                <div class="assistant" id="assistant">
+                  <p class="assistant__context">
+                    <span class="assistant__label">Grounded on</span>
+                    <span id="assistant-lesson">the current chapter</span>
+                  </p>
+                  <p class="assistant__note">
+                    Answers come only from the notes above. Suggestions are prompts to help you
+                    ask — not AI answers.
+                  </p>
+                  <p class="assistant__suggest-label" id="suggest-label">Try asking</p>
+                  <div class="suggestions" id="suggestions" role="group" aria-labelledby="suggest-label"></div>
+                </div>
+                <form class="ask" id="ask-form">
+                  <label for="ask-input">Your question about this lesson</label>
+                  <div class="ask__row">
+                    <input
+                      id="ask-input"
+                      name="question"
+                      type="text"
+                      maxlength="1000"
+                      autocomplete="off"
+                      placeholder="e.g. Why is acceleration inversely proportional to mass?"
+                      aria-describedby="ask-hint"
+                    />
+                    <button class="button button--primary" id="ask-submit" type="submit">Ask</button>
+                  </div>
+                  <label class="ask__language">
+                    Answer language
+                    <select id="ask-language" aria-describedby="ask-hint">
+                      <option value="">Match the lesson</option>
+                      <option value="en">English</option>
+                      <option value="ne">Nepali</option>
+                    </select>
+                  </label>
+                  <p class="hint" id="ask-hint">
+                    If the notes do not cover something, Gemma 4 says so instead of guessing.
+                  </p>
+                </form>
+                <p class="empty" id="ask-empty">
+                  Ask about the part you are stuck on — one question at a time.
+                </p>
+                <div class="thread" id="ask-thread"></div>
+                <p class="state" id="ask-state" hidden role="status"></p>
+                <div class="panel__actions">
+                  <button class="button" id="ask-clear" type="button" hidden>Clear this conversation</button>
+                  <a class="button button--quiet" href="#lesson-title" id="back-to-lesson">Back to the notes</a>
+                </div>
+              </div>
+
+              <div class="panel" id="panel-practise" role="tabpanel" aria-labelledby="tab-practise" tabindex="0" hidden>
+                <div class="panel__actions">
+                  <button class="button button--primary" id="practice-run" type="button">
+                    Write practice questions
+                  </button>
+                  <label class="count">
+                    Questions
+                    <select id="practice-count">
+                      <option value="3">3</option>
+                      <option value="5" selected>5</option>
+                      <option value="10">10</option>
+                    </select>
+                  </label>
+                </div>
+                <fieldset class="modes" id="practice-modes">
+                  <legend>Mode</legend>
+                  <label class="mode">
+                    <input type="radio" name="practice-mode" value="practice" checked />
+                    <span>
+                      <strong>Practice</strong>
+                      <small>See whether each answer is right as you choose it.</small>
+                    </span>
+                  </label>
+                  <label class="mode">
+                    <input type="radio" name="practice-mode" value="exam" />
+                    <span>
+                      <strong>Exam</strong>
+                      <small>Answers stay hidden until you submit the whole set.</small>
+                    </span>
+                  </label>
+                </fieldset>
+                <p class="empty" id="practice-empty">
+                  Akshar writes multiple-choice questions from the notes above. Each includes a
+                  matching excerpt for checking; answer accuracy still needs your review. These are
+                  generated questions, not official exam papers.
+                </p>
+                <p class="state" id="practice-state" hidden role="status"></p>
+                <div class="quiz-progress" id="quiz-progress" hidden>
+                  <div class="quiz-progress__track" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="quiz-progress-bar">
+                    <span class="quiz-progress__fill" id="quiz-progress-fill"></span>
+                  </div>
+                  <p class="quiz-progress__text" id="quiz-progress-text"></p>
+                </div>
+                <form class="quiz" id="quiz" hidden></form>
+              </div>
+
+              <div class="panel" id="panel-flashcards" role="tabpanel" aria-labelledby="tab-flashcards" tabindex="0" hidden>
+                <div class="panel__actions">
+                  <button class="button button--primary" id="flashcards-run" type="button">
+                    Build flashcards
+                  </button>
+                  <label class="count">
+                    Cards
+                    <select id="flashcards-count">
+                      <option value="5" selected>5</option>
+                      <option value="8">8</option>
+                      <option value="10">10</option>
+                    </select>
+                  </label>
+                </div>
+                <p class="empty" id="flashcards-empty">
+                  Prompt-and-answer cards for a quick recall pass before an exam.
+                </p>
+                <p class="state" id="flashcards-state" hidden role="status"></p>
+                <div class="cards" id="flashcards-list" hidden></div>
+              </div>
+            </section>
+          </section>
+
+          <!-- Sources -->
+          <section class="view view--about" id="sources" data-view-panel="sources" aria-labelledby="sources-heading">
+            <h1 class="section-title" id="sources-heading">Sources and limits</h1>
+            <div class="about__grid">
+              <div>
+                <h2>The notes are the source</h2>
+                <p>
+                  Lesson notes are written by our team for standard NEB Grade 11–12, CEE, and IOE
+                  topics, in English and Nepali. They are original text for this build: not official
+                  NEB, CEE, or IOE material, and no past papers or copyrighted textbooks are copied.
+                  Source-attributed curriculum material is the next thing we are building.
+                </p>
+              </div>
+              <div>
+                <h2>Gemma 4 is the study aid</h2>
+                <p>
+                  Akshar calls Google's hosted <code>gemma-4-26b-a4b-it</code> through the Gemini
+                  API, grounded on the lesson on screen. Explanations, questions, and flashcards are
+                  labelled as AI-generated wherever you read them, and are never presented as
+                  official exam material.
+                </p>
+              </div>
+              <div>
+                <h2>How output is checked</h2>
+                <p>
+                  Responses are parsed defensively — plain JSON, fenced blocks, or JSON inside a
+                  sentence. A question needs four options A–D, exactly one marked answer, and a
+                  non-empty explanation before it is shown; malformed items are dropped. A failed
+                  call is shown as an error, never as an answer. The API key stays on the server and
+                  is redacted from messages.
+                </p>
+              </div>
+              <div>
+                <h2>Team Nepluro</h2>
+                <ul class="team">
+                  <li><strong>Sagar Katwal</strong> — backend and frontend</li>
+                  <li><strong>Dipson Basnet</strong> — Gemma 4 and the AI pipeline</li>
+                  <li><strong>Dhiraj Shrestha</strong> — learning content, practice, validation</li>
+                </ul>
+              </div>
             </div>
-            <p class="empty" id="flashcards-empty">
-              Prompt-and-answer cards for a quick recall pass before an exam.
-            </p>
-            <p class="state" id="flashcards-state" hidden role="status"></p>
-            <div class="cards" id="flashcards-list" hidden></div>
-          </div>
-        </section>
-      </section>
+          </section>
+        </main>
 
-      <section class="view view--about" id="sources" data-view-panel="sources" aria-labelledby="sources-heading">
-        <h1 class="section-title" id="sources-heading">Sources and limits</h1>
-        <div class="about__grid">
-          <div>
-            <h2>The notes are the source</h2>
-            <p>
-              Lesson notes are written by our team for standard NEB Grade 11–12, CEE, and IOE
-              topics, in English and Nepali. They are original text for this build: not official
-              NEB, CEE, or IOE material, and no past papers or copyrighted textbooks are copied.
-              Source-attributed curriculum material is the next thing we are building.
+        <footer class="site-footer">
+          <div class="site-footer__inner">
+            <p>Akshar · MIT License · Built for students in Nepal</p>
+            <p class="site-footer__note">
+              Study notes in this build are our own and are not official NEB, CEE, or IOE material.
             </p>
           </div>
-          <div>
-            <h2>Gemma 4 is the study aid</h2>
-            <p>
-              Akshar calls Google's hosted <code>gemma-4-26b-a4b-it</code> through the Gemini
-              API, grounded on the lesson on screen. Explanations, questions, and flashcards are
-              labelled as AI-generated wherever you read them, and are never presented as
-              official exam material.
-            </p>
-          </div>
-          <div>
-            <h2>How output is checked</h2>
-            <p>
-              Responses are parsed defensively — plain JSON, fenced blocks, or JSON inside a
-              sentence. A question needs four options A–D, exactly one marked answer, and a
-              non-empty explanation before it is shown; malformed items are dropped. A failed
-              call is shown as an error, never as an answer. The API key stays on the server and
-              is redacted from messages.
-            </p>
-          </div>
-          <div>
-            <h2>Team Nepluro</h2>
-            <ul class="team">
-              <li><strong>Sagar Katwal</strong> — learner experience and frontend</li>
-              <li><strong>Dipson Basnet</strong> — Gemma 4 and the AI pipeline</li>
-              <li><strong>Dhiraj Shrestha</strong> — learning content, practice, validation</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="site-footer__inner shell">
-        <p>Akshar · MIT License · Built for students in Nepal</p>
-        <p class="site-footer__note">
-          Study notes in this build are our own and are not official NEB, CEE, or IOE material.
-        </p>
+        </footer>
       </div>
-    </footer>
+    </div>
 
     <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
 

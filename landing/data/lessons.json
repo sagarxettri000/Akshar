@@ -190,6 +190,126 @@
       "title": "द्विघात समीकरण",
       "language": "ne",
       "content": "एउटा चर x मा द्विघात समीकरणको मानक रूप a x^2 + b x + c = 0 हुन्छ, जहाँ a, b, c वास्तविक संख्या र a ≠ 0। मूलहरू द्विघात सूत्रबाट पाइन्छ: x = (-b ± sqrt(b^2 - 4ac)) / (2a)। b^2 - 4ac लाई विभेदक (D) भनिन्छ। D > 0 भए दुई भिन्न वास्तविक मूल; D = 0 भए एउटै दोहोरो वास्तविक मूल; र D < 0 भए वास्तविक मूल हुँदैन (दुई सम्मिश्र मूल)। मूलहरूको योग -b/a र गुणनफल c/a हुन्छ।"
+    },
+    {
+      "id": "neb-geography-nepal-physical-en",
+      "track": "NEB Grade 11",
+      "subject": "Geography",
+      "topic": "Physical Geography of Nepal",
+      "title": "Physical Geography of Nepal",
+      "language": "en",
+      "references": [{ "title": "Nepal National Geoportal — Survey Department", "url": "https://nationalgeoportal.gov.np/#/" }],
+      "content": "Physical Geography of Nepal\n\nNepal is a Himalayan country located between China in the north and India in the south. Its geography is shaped by great elevation changes, from the lowland Terai plains to the towering peaks of the Himalayas. This variation creates a wide range of climate, vegetation, and land use patterns.\n\nMajor geographical divisions of Nepal include the Terai, the Hill region, and the Himalayan region. The Terai is the southern flat belt, rich in agriculture and transport routes. The Hill region has valleys, ridges, and middle mountains, while the Himalayan region contains the highest mountains, glacial rivers, and alpine landscapes.\n\nThe Himalayas influence Nepal's climate, rainfall, and river systems. Most rivers originate in the mountains, flow southward, and support farming, hydropower, and settlement. Mountain slopes, seasonal monsoon rainfall, and soil conditions together shape agriculture and livelihoods.\n\nKey idea: Nepal's physical geography is diverse and strongly linked to altitude. As elevation increases, temperature usually decreases, and the natural environment becomes cooler and less suitable for agriculture."
+    },
+    {
+      "id": "neb-geography-nepal-physical-ne",
+      "track": "NEB Grade 11",
+      "subject": "Geography",
+      "topic": "Physical Geography of Nepal",
+      "title": "नेपालको भौतिक भूगोल",
+      "language": "ne",
+      "references": [{ "title": "Nepal National Geoportal — Survey Department", "url": "https://nationalgeoportal.gov.np/#/" }],
+      "content": "नेपालको भौतिक भूगोल\n\nनेपाल उत्तरमा चीन र दक्षिणमा भारत बीचको हिमालयी देश हो। यसको भूगोलले ठूलो उचाइ परिवर्तनलाई समेट्छ: तराईका मैदानी क्षेत्रदेखि हिमालयको उँचाइमा पुगेका शिखरहरूसम्म। यसले जलवायु, वनस्पति र जग्गा प्रयोगमा ठूलो भिन्नता ल्याउँछ।\n\nनेपालका मुख्य भौतिक अञ्चलहरूमा तराई, पहाड र हिमालय समावेश छन्। तराई दक्षिणी भागको समतल क्षेत्र हो, जहाँ कृषि र यातायातलाई धेरै महत्व पर्छ। पहाड क्षेत्रमा उपत्यका, ढाड र मध्यम पहाडहरू छन्, जबकि हिमालय क्षेत्रमा सबैभन्दा उँचाइका पर्वत, हिमनदी नदिहरू र आल्पाइन परिदृश्यहरू पाइन्छन्।\n\nहिमालयले नेपालको जलवायु, वर्षा र नदी प्रणालीलाई प्रभाव पार्छ। धेरै नदीहरू पहाडदेखि उत्पन्न भएर दक्षिणतिर flowing हुन्छन्, जसले खेती, जलविद्युत र बसोबासलाई सहयोग गर्छ। पहाडको ढलान, मानसून वर्षा र माटोको अवस्था मिलेर कृषि र जीवनयापनलाई प्रभावित गर्छ।\n\nमुख्य कुरा: नेपालको भौतिक भूगोल विविध छ र उचाइसँग गहन रूपमा जोडिएको छ। उचाइ बढ़ाउँदा तापक्रम सामान्यतया घट्छ र प्राकृतिक वातावरण चिसो र खेतीका लागि कम उपयुक्त हुन्छ।"
+    },
+    {
+      "id": "neb-geography-nepal-monsoon-en",
+      "track": "NEB Grade 11",
+      "subject": "Geography",
+      "topic": "Climate and Monsoon in Nepal",
+      "title": "Climate and Monsoon in Nepal",
+      "language": "en",
+      "references": [{ "title": "Nepal Meteorological Department — mandate", "url": "https://dhm.gov.np/pages/about-us" }, { "title": "Nepal Meteorological Department — publications", "url": "https://dhm.gov.np/publication" }],
+      "content": "Climate and Monsoon in Nepal\n\nNepal's climate varies across short distances because elevation changes rapidly from the Terai to the high Himalaya. Lower areas are generally warmer and higher areas cooler. Landforms, slope direction, and distance from mountains also affect local conditions.\n\nThe summer monsoon brings much of Nepal's annual rainfall. Rain supports crops and water supplies, while intense or prolonged rain can contribute to floods and landslides. Seasonal rainfall affects farming, settlement, and water planning.\n\nKey idea: Nepal does not have one uniform climate. Elevation and seasonal rainfall create distinct local conditions, so climate impacts and adaptation needs vary by place."
+    },
+    {
+      "id": "neb-geography-nepal-monsoon-ne",
+      "track": "NEB Grade 11",
+      "subject": "Geography",
+      "topic": "Climate and Monsoon in Nepal",
+      "title": "नेपालको जलवायु र मनसुन",
+      "language": "ne",
+      "references": [{ "title": "Nepal Meteorological Department — mandate", "url": "https://dhm.gov.np/pages/about-us" }, { "title": "Nepal Meteorological Department — publications", "url": "https://dhm.gov.np/publication" }],
+      "content": "नेपालको जलवायु र मनसुन\n\nतराईदेखि उच्च हिमालयसम्म छोटो दूरीमै उचाइ धेरै बदलिने भएकाले नेपालको जलवायु ठाउँअनुसार फरक हुन्छ। तल्ला भूभाग सामान्यतया न्यानो र अग्ला भूभाग चिसा हुन्छन्। भूआकृति, ढलानको दिशा र पहाडसँगको दूरीले पनि स्थानीय अवस्थालाई प्रभाव पार्छ।\n\nगर्मी यामको मनसुनले नेपालको वार्षिक वर्षाको ठूलो हिस्सा ल्याउँछ। वर्षाले बाली र पानीका स्रोतलाई सहयोग गर्छ, तर धेरै वा लामो समयको वर्षाले बाढी र पहिरोको जोखिम बढाउन सक्छ। मौसमी वर्षाले खेती, बसोबास र पानीको योजनालाई असर गर्छ।\n\nमुख्य कुरा: नेपालको जलवायु सबै ठाउँमा एउटै छैन। उचाइ र मौसमी वर्षाले फरक स्थानीय अवस्था बनाउँछन्, त्यसैले असर र अनुकूलनका आवश्यकता ठाउँअनुसार फरक हुन्छन्।"
+    },
+    {
+      "id": "neb-geography-nepal-water-en",
+      "track": "NEB Grade 11",
+      "subject": "Geography",
+      "topic": "Rivers and Water Resources of Nepal",
+      "title": "Rivers and Water Resources of Nepal",
+      "language": "en",
+      "references": [{ "title": "Department of Water Resources and Irrigation — Irrigation Master Plan, updated 2024", "url": "https://dwri.gov.np/content/16/irrigation-master-plan-2019---updated-2024/" }, { "title": "Nepal Meteorological Department — bulletins", "url": "https://dhm.gov.np/bulletins" }],
+      "content": "Rivers and Water Resources of Nepal\n\nNepal's rivers are connected to its mountains, rainfall, and seasonal snow and ice. Many flow from higher areas toward the southern plains. River water supports households, farming, ecosystems, and economic activity.\n\nWater resources can be used for irrigation, drinking water, and hydropower. These benefits depend on careful planning, suitable infrastructure, and fair access. River flow changes with the seasons: monsoon rain can raise water levels, while drier periods can reduce flow in some places.\n\nFlooding and erosion can damage land and settlements, especially near riverbanks or unstable slopes. Watershed management, suitable land use, and early warning can help reduce risk.\n\nKey idea: Nepal's rivers are valuable resources and natural systems that need responsible management. Development should consider downstream communities and river ecosystems."
+    },
+    {
+      "id": "neb-geography-nepal-water-ne",
+      "track": "NEB Grade 11",
+      "subject": "Geography",
+      "topic": "Rivers and Water Resources of Nepal",
+      "title": "नेपालका नदी र जलस्रोत",
+      "language": "ne",
+      "references": [{ "title": "Department of Water Resources and Irrigation — Irrigation Master Plan, updated 2024", "url": "https://dwri.gov.np/content/16/irrigation-master-plan-2019---updated-2024/" }, { "title": "Nepal Meteorological Department — bulletins", "url": "https://dhm.gov.np/bulletins" }],
+      "content": "नेपालका नदी र जलस्रोत\n\nनेपालका नदीहरू पहाड, वर्षा र मौसमी हिउँ तथा बरफसँग सम्बन्धित छन्। धेरै नदीहरू उच्च भूभागबाट दक्षिणका मैदानतर्फ बग्छन्। नदीको पानीले घरायसी आवश्यकता, खेती, पारिस्थितिक प्रणाली र आर्थिक गतिविधिलाई सहयोग गर्छ।\n\nजलस्रोतलाई सिँचाइ, खानेपानी र जलविद्युतका लागि उपयोग गर्न सकिन्छ। यी लाभका लागि सावधानीपूर्वक योजना, उपयुक्त पूर्वाधार र न्यायोचित पहुँच आवश्यक हुन्छ। नदीको बहाव मौसमअनुसार बदलिन्छ: मनसुनमा पानीको सतह बढ्न सक्छ भने सुक्खा समयमा केही ठाउँमा बहाव घट्न सक्छ।\n\nबाढी र कटानले जमिन तथा बस्तीमा क्षति पुर्‍याउन सक्छन्, विशेष गरी नदी किनार वा अस्थिर भिरालो जमिनमा। जलाधार क्षेत्रको व्यवस्थापन, उपयुक्त भूमि उपयोग र पूर्वसूचनाले जोखिम घटाउन सहयोग गर्छ।\n\nमुख्य कुरा: नेपालका नदी बहुमूल्य स्रोत र जिम्मेवार व्यवस्थापन चाहिने प्राकृतिक प्रणाली दुवै हुन्। विकास गर्दा तल्लो तटीय समुदाय र नदीको पारिस्थितिक प्रणालीलाई ध्यान दिनुपर्छ।"
+    },
+    {
+      "id": "neb-biology-nepal-biodiversity-en",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Biodiversity and Conservation in Nepal",
+      "title": "Biodiversity and Conservation in Nepal",
+      "language": "en",
+      "references": [{ "title": "Ministry of Forests and Environment — OECM identification guidance (2082)", "url": "https://mofe.gov.np/content/369/guidance-on-identification-of-other-areas-for/" }],
+      "content": "Biodiversity and Conservation in Nepal\n\nBiodiversity is the variety of life at the level of genes, species, and ecosystems. Nepal's differences in elevation and climate support varied habitats, from lowland forests and wetlands to mountain environments. These habitats support plants, animals, and communities that depend on natural resources.\n\nForests and wetlands help protect soil, regulate water, store carbon, and provide habitat. They can also support food, materials, and livelihoods. These benefits depend on healthy ecosystems and sustainable use.\n\nHabitat loss, pollution, overuse of resources, invasive species, and climate change can place pressure on biodiversity. Conservation can include protecting habitats, restoring degraded areas, using resources sustainably, and involving local communities.\n\nKey idea: conservation means maintaining species, habitats, and ecological relationships so that nature and people can thrive."
+    },
+    {
+      "id": "neb-biology-nepal-biodiversity-ne",
+      "track": "NEB Grade 12",
+      "subject": "Biology",
+      "topic": "Biodiversity and Conservation in Nepal",
+      "title": "नेपालको जैविक विविधता र संरक्षण",
+      "language": "ne",
+      "references": [{ "title": "Ministry of Forests and Environment — OECM identification guidance (2082)", "url": "https://mofe.gov.np/content/369/guidance-on-identification-of-other-areas-for/" }],
+      "content": "नेपालको जैविक विविधता र संरक्षण\n\nजैविक विविधता भन्नाले जीन, प्रजाति र पारिस्थितिक प्रणालीको तहमा पाइने जीवनको विविधता बुझिन्छ। उचाइ र जलवायुमा भिन्नता भएकाले नेपालमा तराईका वन तथा सिमसारदेखि पहाडी र हिमाली बासस्थानसम्म विभिन्न वातावरण पाइन्छन्। यी बासस्थानले वनस्पति, जनावर र प्राकृतिक स्रोतमा निर्भर समुदायलाई आधार दिन्छन्।\n\nवन र सिमसारले माटो जोगाउन, पानीको चक्रलाई सन्तुलित राख्न, कार्बन सञ्चय गर्न र जीवलाई बासस्थान दिन सहयोग गर्छन्। तिनले खाना, सामग्री र जीविकोपार्जनमा पनि योगदान दिन सक्छन्। यी लाभ स्वस्थ पारिस्थितिक प्रणाली र दिगो उपयोगमा निर्भर हुन्छन्।\n\nबासस्थानको विनाश, प्रदूषण, स्रोतको अत्यधिक उपयोग, बाह्य प्रजातिको फैलावट र जलवायु परिवर्तनले जैविक विविधतामा दबाब पार्न सक्छन्। संरक्षणका उपायमा बासस्थान जोगाउने, बिग्रिएका क्षेत्र पुनर्स्थापना गर्ने, स्रोत दिगो रूपमा उपयोग गर्ने र स्थानीय समुदायलाई सहभागी गराउने काम पर्छन्।\n\nमुख्य कुरा: संरक्षणमा प्रजाति, बासस्थान र पारिस्थितिक सम्बन्ध कायम राख्नु पर्छ, ताकि प्रकृति र मानिस दुवै फस्टाउन सकून्।"
+    },
+    {
+      "id": "neb-civics-nepal-rights-en",
+      "track": "NEB Grade 12",
+      "subject": "Civics",
+      "topic": "Constitution and Fundamental Rights of Nepal",
+      "title": "Constitution and Fundamental Rights of Nepal",
+      "language": "en",
+      "references": [{ "title": "Nepal Law Commission — legal repository", "url": "https://repository.lawcommission.gov.np/np/" }],
+      "content": "Constitution and Fundamental Rights of Nepal\n\nA constitution is the basic legal framework that describes how a state is governed, how public authority is organized, and what rights and responsibilities are recognized. Nepal's Constitution establishes the country's system of government and provides a foundation for laws and public institutions.\n\nFundamental rights are protections recognized by the Constitution. They set standards for how people should be treated and help individuals seek remedies when protected rights are violated. The Constitution also describes responsibilities and procedures that guide the state and its citizens.\n\nRights become meaningful when people understand them, public institutions respect them, and fair processes are available to address violations. Citizens can support constitutional governance by learning about their rights and responsibilities, participating peacefully in public life, and respecting others' rights.\n\nStudy note: this is an introductory overview, not legal advice. For exact constitutional provisions, consult the current official Constitution of Nepal."
+    },
+    {
+      "id": "neb-civics-nepal-rights-ne",
+      "track": "NEB Grade 12",
+      "subject": "Civics",
+      "topic": "Constitution and Fundamental Rights of Nepal",
+      "title": "नेपालको संविधान र मौलिक हक",
+      "language": "ne",
+      "references": [{ "title": "Nepal Law Commission — legal repository", "url": "https://repository.lawcommission.gov.np/np/" }],
+      "content": "नेपालको संविधान र मौलिक हक\n\nसंविधान राज्य सञ्चालन कसरी हुन्छ, सार्वजनिक अधिकार कसरी व्यवस्थित हुन्छ र कुन हक तथा जिम्मेवारी मान्यता प्राप्त छन् भन्ने बताउने आधारभूत कानुनी संरचना हो। नेपालको संविधानले शासन प्रणाली स्थापित गर्छ र कानुन तथा सार्वजनिक संस्थाहरूका लागि आधार प्रदान गर्छ।\n\nमौलिक हक संविधानले मान्यता दिएका संरक्षण हुन्। तिनले मानिससँग कस्तो व्यवहार गरिनुपर्छ भन्ने मापदण्ड तय गर्छन् र संरक्षित हक उल्लङ्घन हुँदा उपचार खोज्ने आधार दिन्छन्। संविधानले राज्य र नागरिकलाई मार्गदर्शन गर्ने जिम्मेवारी तथा प्रक्रियाहरू पनि उल्लेख गर्छ।\n\nमानिसले हक बुझ्न सक्दा, सार्वजनिक संस्थाले तिनको सम्मान गर्दा र उल्लङ्घन सम्बोधन गर्ने निष्पक्ष प्रक्रिया उपलब्ध हुँदा हक व्यवहारमा अर्थपूर्ण हुन्छन्। नागरिकले आफ्ना हक र जिम्मेवारीबारे सिकेर, शान्तिपूर्ण रूपमा सार्वजनिक जीवनमा सहभागी भएर र अरूका हकको सम्मान गरेर संवैधानिक शासनलाई सहयोग गर्न सक्छन्।\n\nअध्ययन टिप्पणी: यो प्रारम्भिक परिचय हो, कानुनी सल्लाह होइन। संवैधानिक व्यवस्थाको ठ्याक्कै विवरणका लागि नेपालको हालको आधिकारिक संविधान हेर्नुहोस्।"
+    },
+    {
+      "id": "neb-civics-federal-system-en",
+      "track": "NEB Grade 12",
+      "subject": "Civics",
+      "topic": "Federal System of Nepal",
+      "title": "Federal System of Nepal",
+      "language": "en",
+      "references": [{ "title": "Nepal Law Commission — legal repository", "url": "https://repository.lawcommission.gov.np/np/" }],
+      "content": "Federal System of Nepal\n\nThe federal system divides power among the federal, provincial, and local levels of government. Nepal adopted this model to make governance more inclusive, democratic, and close to the people. The Constitution of Nepal provides the legal foundation for this structure.\n\nThe federal government handles national-level responsibilities such as defense, foreign affairs, citizenship, national planning, and major infrastructure. Provincial governments manage subjects such as provincial education, health, transport, and local development. Local governments look after services such as water supply, sanitation, small roads, local markets, and community development.\n\nThis division of power is meant to reduce concentration of authority and improve public service delivery. It also allows local communities to participate in decision-making and development planning. However, coordination among different levels is essential for smooth governance.\n\nKey point: federalism strengthens representation and accountability by bringing the state closer to citizens."
+    },
+    {
+      "id": "neb-civics-federal-system-ne",
+      "track": "NEB Grade 12",
+      "subject": "Civics",
+      "topic": "Federal System of Nepal",
+      "title": "नेपालको संघीय प्रणाली",
+      "language": "ne",
+      "references": [{ "title": "Nepal Law Commission — legal repository", "url": "https://repository.lawcommission.gov.np/np/" }],
+      "content": "नेपालको संघीय प्रणाली\n\nसंघीय प्रणालीले सरकारको केन्द्रीय, प्रान्तीय र स्थानीय तहबीच शक्ति विभाजन गर्छ। नेपालले यस प्रणालीलाई अधिक समावेशी, जनवादी र जनतासम्म नजिकको शासन बनाउने उद्देश्यले अपनाएको हो। नेपालको संविधानले यस संरचनाको कानूनी आधार प्रदान गर्छ।\n\nकेन्द्रीय सरकारले रक्षा, विदेशी नीति, नागरिकता, राष्ट्रिय योजना र प्रमुख पूर्वाधार जस्ता राष्ट्रिय विषयहरूको जिम्मेवारी वहन गर्छ। प्रान्तीय सरकारहरूले प्रान्तीय शिक्षा, स्वास्थ्य, यातायात र स्थानीय विकास जस्ता विषयहरू व्यवस्थापन गर्छन्। स्थानीय सरकारहरूले पानी, सरसफाई, साना सडक, स्थानीय बजार र सामुदायिक विकास जस्ता सेवाहरू हेर्छन्।\n\nयो शक्ति विभाजनले अधिकारको केन्द्रीकरण कम गर्न र सार्वजनिक सेवाको वितरण सुधार गर्न मद्दत गर्छ। यसले समुदायलाई निर्णयमा सहभागी बनाउन र विकास योजना बनाउन सहयोग गर्छ। तर, सुचारू शासनका लागि विभिन्न तहबीच समन्वय आवश्यक हुन्छ।\n\nमुख्य बुँदाहरू: संघवादले राज्यलाई नागरिकहरूसम्म नजिक ल्याएर प्रतिनिधित्व र उत्तरदायित्वलाई बलियो बनाउँछ।"
     }
   ]
 }

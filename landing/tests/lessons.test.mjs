@@ -30,9 +30,19 @@ test("every lesson carries exactly the seven required fields", () => {
     assert.equal(typeof lesson, "object", `lesson ${index} must be an object`);
     assert.deepEqual(
       Object.keys(lesson).sort(),
-      [...REQUIRED_FIELDS].sort(),
+      [...REQUIRED_FIELDS, ...(lesson.references ? ["references"] : [])].sort(),
       `lesson ${index} (${lesson.id ?? "?"}) has the wrong fields`,
     );
+    if (lesson.references) {
+      assert.ok(Array.isArray(lesson.references), `${lesson.id}.references must be a list`);
+      assert.ok(lesson.references.length > 0, `${lesson.id}.references must not be empty`);
+      for (const reference of lesson.references) {
+        assert.equal(typeof reference.title, "string", `${lesson.id} reference needs a title`);
+        assert.ok(reference.title.trim());
+        const url = new URL(reference.url);
+        assert.equal(url.protocol, "https:", `${lesson.id} reference must use HTTPS`);
+      }
+    }
   });
 });
 
@@ -76,5 +86,26 @@ test("the served lessons cover every track and both languages", () => {
   }
   for (const language of VALID_LANGUAGES) {
     assert.ok(languages.has(language), `no lesson is written in ${language}`);
+  }
+});
+
+test("Nepal-focused chapter topics are available in English and Nepali", () => {
+  const topics = [
+    "Physical Geography of Nepal",
+    "Climate and Monsoon in Nepal",
+    "Rivers and Water Resources of Nepal",
+    "Biodiversity and Conservation in Nepal",
+    "Federal System of Nepal",
+    "Constitution and Fundamental Rights of Nepal",
+  ];
+
+  for (const topic of topics) {
+    const variants = lessons.filter((lesson) => lesson.topic === topic);
+    assert.deepEqual(
+      new Set(variants.map((lesson) => lesson.language)),
+      new Set(VALID_LANGUAGES),
+      `${topic} must have English and Nepali lesson content`,
+    );
+    assert.ok(variants.every((lesson) => lesson.references?.length), `${topic} needs related official references`);
   }
 });

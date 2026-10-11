@@ -1,7 +1,7 @@
 # Akshar — Repository Instructions for AI Coding Agents
 
 > **Project:** Akshar — Learning Platform for Nepal
-> **Team:** Nepluro (Sagar Katwal · Dipson Basnet · Dhiraj Shrestha)
+> **Team:** Nepluro (Sagar Katwal — backend and frontend · Dipson Basnet · Dhiraj Shrestha)
 > **Primary users:** Nepali students studying NEB Grade 11–12 and preparing for CEE/IOE entrance exams.
 
 This document is the canonical, tool-agnostic instruction source for everyone who contributes to Akshar — human developers and any AI coding agent, in any editor, environment, or location. Follow it for every task. Where this document and the actual repository disagree, the repository wins: inspect the code before deciding how to implement anything.

@@ -3,8 +3,8 @@
  *
  * Reads lesson content from ./data/lessons.json and sends only a lesson id to
  * /api/gemma — the model key never reaches the browser, and neither does the
- * prompt. Everything the model returns is untrusted text: it is inserted with
- * textContent, never as HTML.
+ * prompt. Everything the model returns is untrusted text: it is rendered as
+ * text nodes, never interpreted as HTML.
  *
  * Layout of this file:
  *   1. storage and progress
@@ -24,6 +24,7 @@ let lessons = [];
 let selection = { goal: null, grade: null, track: null, subject: null, topic: null, language: null };
 let lesson = null;
 let aiReady = false;
+let aiMock = false;
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, className, text) => {
@@ -416,18 +417,10 @@ export function classifyLessonBlocks(text) {
       flushList();
       continue;
     }
-    // Table rows are written one line per blank-line-separated block, so they
-    // are collected across blanks and emitted as a single diagram.
-    if (isNotationLine(line)) {
-      flushRun();
-      flushList();
-      diagram.push(line);
-      continue;
-    }
-    flushDiagram();
     if (isBulletLine(line) || isNumberedLine(line)) {
-      const type = isBulletLine(line) ? "bullets" : "steps";
       flushRun();
+      flushDiagram();
+      const type = isBulletLine(line) ? "bullets" : "steps";
       if (list && list.type === type) list.items.push(cleanMarker(line));
       else {
         flushList();
@@ -435,6 +428,16 @@ export function classifyLessonBlocks(text) {
       }
       continue;
     }
+    // Table rows are written one line per blank-line-separated block, so they
+    // are collected across blanks and emitted as a single diagram. List
+    // markers are handled first because their indentation can resemble columns.
+    if (isNotationLine(line)) {
+      flushRun();
+      flushList();
+      diagram.push(line);
+      continue;
+    }
+    flushDiagram();
     flushList();
     run.push(line);
   }
@@ -454,6 +457,10 @@ export function formatDuration(ms) {
   const minutes = Math.floor(seconds / 60);
   const rest = seconds % 60;
   return rest ? `${minutes} min ${rest} s` : `${minutes} min`;
+}
+
+export function formatGenerationDuration(ms) {
+  return Number(ms) >= 1000 ? formatDuration(ms) : "under 1 s";
 }
 
 /** The chapters either side of the current one, in lesson-file order. */
@@ -525,19 +532,30 @@ export function dashboardModel(items = [], progress = {}) {
     byId(state.last) ?? openedIds.map(byId).find(Boolean) ?? items[0] ?? null;
   const best = state.best ?? null;
   const attempts = state.attempts ?? 0;
+  const totalChapters = items.length;
+  const opened = openedIds.length;
+  const percent = totalChapters > 0 ? Math.round((opened / totalChapters) * 100) : 0;
   return {
     continueLesson,
-    opened: openedIds.length,
+    opened,
+    totalChapters,
+    percent,
     recent: (state.recent ?? []).map(byId).filter(Boolean),
     attempts,
     best,
     pathways: availableGoals(items).map((goal) => {
       const goalItems = items.filter((l) => examGoalOf(l.track) === goal);
+      const goalOpened = goalItems.filter((l) => openedIds.includes(l.id)).length;
+      const goalTotal = goalItems.length;
+      const goalPercent = goalTotal > 0 ? Math.round((goalOpened / goalTotal) * 100) : 0;
       return {
         goal,
         chapters: uniqueValues(goalItems, "topic").length,
         subjects: uniqueValues(goalItems, "subject").length,
         languages: uniqueValues(goalItems, "language").length,
+        opened: goalOpened,
+        total: goalTotal,
+        percent: goalPercent,
       };
     }),
     bookmarks: (state.bookmarks ?? []).map(byId).filter(Boolean),
@@ -601,17 +619,48 @@ function showView(name, { focus = false } = {}) {
     panel.hidden = panel.dataset.viewPanel !== target;
   }
   for (const link of document.querySelectorAll("a[data-view]")) {
-    if (link.dataset.view === target) link.setAttribute("aria-current", "page");
-    else link.removeAttribute("aria-current");
+    if (link.dataset.view === target) {
+      link.setAttribute("aria-current", "page");
+      link.classList.add("nav-item--active");
+    } else {
+      link.removeAttribute("aria-current");
+      link.classList.remove("nav-item--active");
+    }
   }
   if (location.hash !== `#${target}`) history.replaceState(null, "", `#${target}`);
   if (target === "study") updateReadingProgress();
+  updateGreeting(target);
   if (focus) {
     // Focus the view without letting the browser scroll it back into view: the
     // new view belongs at the top of the page, filters included.
     $("main").focus({ preventScroll: true });
   }
   window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function updateGreeting(view) {
+  const greeting = $("topbar-greeting");
+  const sub = $("topbar-sub");
+  if (!greeting || !sub) return;
+  if (view === "home") {
+    const model = dashboardModel(lessons, progressState());
+    if (model.opened === 0) {
+      greeting.textContent = "Welcome to Akshar";
+      sub.textContent = "Start your first chapter to begin tracking your progress.";
+    } else if (model.percent === 100) {
+      greeting.textContent = "All chapters opened";
+      sub.textContent = "Amazing work — keep practising to retain it all.";
+    } else {
+      greeting.textContent = `Welcome back`;
+      sub.textContent = `You have opened ${model.opened} of ${model.totalChapters} chapters. Keep going.`;
+    }
+  } else if (view === "study") {
+    greeting.textContent = "Study";
+    sub.textContent = "Pick a chapter, read the notes, and practise.";
+  } else {
+    greeting.textContent = "Sources & limits";
+    sub.textContent = "How Akshar uses notes and AI.";
+  }
 }
 
 function wireViews() {
@@ -735,11 +784,127 @@ function renderLessonContent(text, language) {
   }
 }
 
+function appendInlineText(container, text) {
+  const pattern = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\$[^$]+\$)/g;
+  let start = 0;
+  for (const match of String(text).matchAll(pattern)) {
+    if (match.index > start) container.append(document.createTextNode(text.slice(start, match.index)));
+    const token = match[0];
+    if (token.startsWith("**")) {
+      container.append(el("strong", null, token.slice(2, -2)));
+    } else if (token.startsWith("*")) {
+      container.append(el("em", null, token.slice(1, -1)));
+    } else if (token.startsWith("`")) {
+      container.append(el("code", null, token.slice(1, -1)));
+    } else {
+      container.append(el("span", "generated-math", readableMath(token.slice(1, -1))));
+    }
+    start = match.index + token.length;
+  }
+  if (start < text.length) container.append(document.createTextNode(text.slice(start)));
+}
+
+function readableMath(expression) {
+  return expression
+    .replace(/\\(?:text|mathrm)\{([^{}]*)\}/g, "$1")
+    .replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g, "($1)/($2)")
+    .replace(/\\times\b/g, "×")
+    .replace(/\\cdot\b/g, "·")
+    .replace(/\\approx\b/g, "≈")
+    .replace(/\\degree\b/g, "°")
+    .trim();
+}
+
+function appendFormattedContent(container, text) {
+  container.textContent = "";
+  const normalized = String(text)
+    .replace(/\r\n?/g, "\n")
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+    .trim();
+  for (const block of classifyLessonBlocks(normalized)) {
+    if (block.type === "heading") {
+      const heading = el("h3", "generated-content__heading");
+      appendInlineText(heading, block.text);
+      container.append(heading);
+    } else if (block.type === "bullets" || block.type === "steps") {
+      const list = document.createElement(block.type === "steps" ? "ol" : "ul");
+      for (const item of block.items) {
+        const row = document.createElement("li");
+        appendInlineText(row, item);
+        list.append(row);
+      }
+      container.append(list);
+    } else if (block.type === "formula") {
+      const formula = el("p", "prose__formula");
+      appendInlineText(formula, block.text);
+      container.append(formula);
+    } else if (block.type === "definition") {
+      const definition = el("p", "prose__definition");
+      definition.append(el("span", "prose__term", `${block.term}: `));
+      appendInlineText(definition, block.text);
+      container.append(definition);
+    } else if (block.type === "labelled") {
+      const labelled = document.createElement("p");
+      labelled.append(el("strong", null, `${block.label}: `));
+      appendInlineText(labelled, block.text);
+      container.append(labelled);
+    } else if (block.type === "diagram") {
+      const diagram = document.createElement("pre");
+      diagram.textContent = block.lines.join("\n");
+      container.append(diagram);
+    } else {
+      const paragraph = document.createElement("p");
+      appendInlineText(paragraph, block.text);
+      container.append(paragraph);
+    }
+  }
+}
+
 function renderProgress() {
   const state = progressState();
   $("stat-lessons").textContent = String(Object.keys(state.lessons ?? {}).length);
   $("stat-attempts").textContent = String(state.attempts ?? 0);
   $("stat-best").textContent = state.best ? `${state.best.score} / ${state.best.total}` : "—";
+
+  const model = dashboardModel(lessons, state);
+  const percent = model.percent;
+
+  const ringFill = $("progress-ring-fill");
+  if (ringFill) {
+    const circumference = 2 * Math.PI * 52;
+    ringFill.style.strokeDashoffset = String(circumference * (1 - percent / 100));
+  }
+  const percentLabel = $("progress-percent");
+  if (percentLabel) percentLabel.textContent = `${percent}%`;
+
+  const motivation = $("dashboard-motivation");
+  if (motivation) {
+    if (model.opened === 0) {
+      motivation.textContent = "Start your first chapter to begin tracking your progress.";
+    } else if (percent === 100) {
+      motivation.textContent = "Amazing work — you have opened every chapter. Keep practising to retain it all.";
+    } else if (percent >= 50) {
+      motivation.textContent = `You are ${percent}% of the way through. Keep going — you are building real momentum.`;
+    } else {
+      motivation.textContent = `You have opened ${model.opened} of ${model.totalChapters} chapters. Every chapter you start counts.`;
+    }
+  }
+
+  const pathwayContainer = $("dashboard-pathways");
+  if (pathwayContainer) {
+    pathwayContainer.textContent = "";
+    for (const path of model.pathways) {
+      const row = el("div", "dashboard__pathway");
+      const label = el("span", "dashboard__pathway-label", path.goal);
+      const bar = el("div", "dashboard__pathway-bar");
+      const fill = el("span", "dashboard__pathway-fill");
+      fill.style.width = `${path.percent}%`;
+      bar.append(fill);
+      const value = el("span", "dashboard__pathway-value", `${path.percent}%`);
+      row.append(label, bar, value);
+      pathwayContainer.append(row);
+    }
+  }
 }
 
 function renderDashboard() {
@@ -874,6 +1039,26 @@ function renderLesson({ record = false } = {}) {
   });
 
   $("source-label").textContent = `Source · ${LANGUAGE_LABELS[lesson.language] ?? lesson.language}`;
+  const sourceLinks = $("source-links");
+  sourceLinks.textContent = "";
+  const references = Array.isArray(lesson.references) ? lesson.references : [];
+  for (const reference of references) {
+    try {
+      const url = new URL(reference.url);
+      if (url.protocol !== "https:") continue;
+      const link = el("a", null, reference.title);
+      link.href = url.href;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      const item = document.createElement("li");
+      item.append(link);
+      sourceLinks.append(item);
+    } catch {
+      continue;
+    }
+  }
+  sourceLinks.hidden = sourceLinks.childElementCount === 0;
+  $("source-references-label").hidden = sourceLinks.hidden;
   renderLessonContent(lesson.content, lesson.language);
   renderLessonTools();
   // Only chapters the reader actually navigated to are recorded as opened — the
@@ -1082,11 +1267,24 @@ async function probeAiStatus() {
     const response = await fetch("/api/gemma", { headers: { accept: "application/json" } });
     const body = await response.json();
     aiReady = Boolean(body?.aiAvailable);
+    aiMock = body?.provider === "mock";
   } catch {
     aiReady = false;
+    aiMock = false;
   }
   chip.dataset.state = aiReady ? "on" : "off";
-  text.textContent = aiReady ? "Gemma 4 ready" : "AI off — notes only";
+  text.textContent = aiMock ? "Local mock mode" : aiReady ? "Gemma 4 ready" : "AI off — notes only";
+  $("ai-intro").textContent = aiMock
+    ? "Local mock mode uses canned fixtures to exercise the study flow; these responses are not generated by Gemma 4."
+    : "Every answer below is generated from the notes you have open and is labelled as AI-generated. Practice questions include a quoted lesson excerpt, but their answers are not independently verified — check them against the notes.";
+  $("ai-heading").textContent = aiMock ? "Study flow · local mock" : "Study help from Gemma 4";
+  $("tab-ask").textContent = aiMock ? "Ask (mock)" : "Ask Gemma 4";
+  $("practice-empty").textContent = aiMock
+    ? "Local mock questions are canned fixtures, not Gemma output or official exam papers."
+    : "Akshar writes multiple-choice questions from the notes above. Each includes a matching excerpt for checking; answer accuracy still needs your review. These are generated questions, not official exam papers.";
+  $("summary-empty").textContent = aiMock
+    ? "A canned local fixture will exercise the summary panel; it is not generated by Gemma 4."
+    : "Gemma 4 writes a short summary of the notes above, in the language of the notes.";
   $("ai-off").hidden = aiReady;
   for (const id of ["summary-run", "ask-submit", "practice-run", "flashcards-run"]) {
     const button = $(id);
@@ -1158,7 +1356,10 @@ function renderSummary(text) {
   const box = $("summary-result");
   box.hidden = false;
   box.textContent = "";
-  box.append(el("strong", "disclosure", "AI-generated summary · Gemma 4"), el("p", null, text));
+  box.append(el("strong", "disclosure", aiMock ? "Local mock response · not Gemma 4" : "AI-generated summary · Gemma 4"));
+  const content = el("div", "generated-content");
+  appendFormattedContent(content, text);
+  box.append(content);
 }
 
 function wireExplain() {
@@ -1168,11 +1369,12 @@ function wireExplain() {
       return;
     }
     runWithButton($("summary-run"), async (signal) => {
-      setState("summary-state", "loading", "Gemma 4 is writing a summary of these notes…");
+      const startedAt = performance.now();
+      setState("summary-state", "loading", aiMock ? "Loading a canned local summary…" : "Gemma 4 is writing a summary of these notes…");
       try {
         const summary = await callApi("summary", {}, signal);
         summaryCache = summary;
-        setState("summary-state", null, "");
+        setState("summary-state", "success", `${aiMock ? "Mock summary loaded" : "Summary generated"} in ${formatGenerationDuration(performance.now() - startedAt)}.`);
         $("summary-empty").hidden = true;
         renderSummary(summary);
         $("summary-reset").hidden = false;
@@ -1204,9 +1406,12 @@ function renderThread() {
   thread.textContent = "";
   for (const turn of askHistory) {
     const wrap = el("div", `turn turn--${turn.role === "user" ? "user" : "assistant"}`);
+    const body = el("div", "turn__body");
+    if (turn.role === "assistant") appendFormattedContent(body, turn.content);
+    else body.textContent = turn.content;
     wrap.append(
-      el("span", "turn__role", turn.role === "user" ? "You" : "Gemma 4 · AI-generated"),
-      el("p", "turn__body", turn.content),
+      el("span", "turn__role", turn.role === "user" ? "You" : aiMock ? "Local mock response" : "Gemma 4 · AI-generated"),
+      body,
     );
     thread.append(wrap);
   }
@@ -1230,7 +1435,8 @@ function wireAsk() {
     input.value = "";
 
     runWithButton($("ask-submit"), async (signal) => {
-      setState("ask-state", "loading", "Gemma 4 is reading the notes to answer…");
+      const startedAt = performance.now();
+      setState("ask-state", "loading", aiMock ? "Loading a canned local reply…" : "Gemma 4 is reading the notes to answer…");
       const pending = renderPendingAnswer();
       try {
         const answer = await callApi(
@@ -1239,7 +1445,7 @@ function wireAsk() {
           signal,
         );
         askHistory.push({ role: "assistant", content: answer });
-        setState("ask-state", null, "");
+        setState("ask-state", "success", `${aiMock ? "Mock reply loaded" : "Answered"} in ${formatGenerationDuration(performance.now() - startedAt)}.`);
         renderThread();
         const turns = $("ask-thread").querySelectorAll(".turn");
         if (turns.length) turns[turns.length - 1].scrollIntoView({ block: "nearest" });
@@ -1336,9 +1542,10 @@ function markQuestion(index) {
   }
   feedback.hidden = false;
   feedback.dataset.kind = correct ? "correct" : "wrong";
-  feedback.textContent = correct
+  const verdict = correct
     ? `Correct. ${question.explanation}`
     : `Not correct — the answer is ${question.answer}. ${question.explanation}`;
+  appendFormattedContent(feedback, `${verdict}\n\nLesson evidence: “${question.evidence}”`);
 }
 
 function chooseAnswer(index, value) {
@@ -1360,7 +1567,10 @@ function renderQuizForm() {
   practiceQuestions.forEach((question, index) => {
     const fieldset = el("fieldset", "question");
     fieldset.dataset.index = String(index);
-    fieldset.append(el("legend", null, `Q${index + 1}. ${question.question}`));
+    const legend = el("legend");
+    legend.append(document.createTextNode(`Q${index + 1}. `));
+    appendInlineText(legend, question.question);
+    fieldset.append(legend);
     for (const key of ["A", "B", "C", "D"]) {
       const row = el("label", "option");
       const input = document.createElement("input");
@@ -1368,10 +1578,13 @@ function renderQuizForm() {
       input.name = `q${index}`;
       input.value = key;
       input.addEventListener("change", () => chooseAnswer(index, key));
-      row.append(input, el("span", "option__text", `${key}. ${question.options[key]}`));
+      const optionText = el("span", "option__text");
+      optionText.append(document.createTextNode(`${key}. `));
+      appendInlineText(optionText, question.options[key]);
+      row.append(input, optionText);
       fieldset.append(row);
     }
-    const feedback = el("p", "feedback");
+    const feedback = el("div", "feedback generated-content");
     feedback.hidden = true;
     fieldset.append(feedback);
     form.append(fieldset);
@@ -1425,10 +1638,17 @@ function wrapReview(review, index, question, chosen) {
   const item = el("div", "review__item");
   const verdict = !chosen ? "not answered" : chosen === question.answer ? "correct" : "not correct";
   item.append(el("p", "review__verdict", `Q${index + 1} — ${verdict}.`));
-  item.append(
-    el("p", null, `Correct answer: ${question.answer}. ${question.options[question.answer]}`),
-  );
-  item.append(el("p", null, `Why: ${question.explanation}`));
+  const answer = el("p");
+  answer.append(el("strong", null, "Correct answer: "));
+  appendInlineText(answer, `${question.answer}. ${question.options[question.answer]}`);
+  item.append(answer);
+  const explanation = el("div", "generated-content");
+  appendFormattedContent(explanation, `Why: ${question.explanation}`);
+  item.append(explanation);
+  const evidence = el("p");
+  evidence.append(el("strong", null, "Lesson evidence: "));
+  appendInlineText(evidence, `“${question.evidence}”`);
+  item.append(evidence);
   if (chosen) item.append(el("p", "review__yours", `You chose ${chosen}.`));
   review.append(item);
 }
@@ -1447,7 +1667,11 @@ function renderQuizGraded(answers) {
   score.tabIndex = -1;
   score.append(
     el("span", "score__value", `${summary.correct} / ${summary.total}`),
-    el("span", "score__label", `${summary.percent}% correct · AI-generated questions, not an official exam`),
+    el(
+      "span",
+      "score__label",
+      `${summary.percent}% correct · ${aiMock ? "local mock questions" : "AI-generated questions"}, not an official exam`,
+    ),
   );
   card.append(score);
 
@@ -1526,13 +1750,15 @@ function renderQuizGraded(answers) {
 function wirePractice() {
   $("practice-run").addEventListener("click", () => {
     runWithButton($("practice-run"), async (signal) => {
-      setState("practice-state", "loading", "Gemma 4 is writing questions from these notes…");
+      const startedAt = performance.now();
+      setState("practice-state", "loading", aiMock ? "Loading canned local questions…" : "Gemma 4 is writing questions from these notes…");
       try {
         const questions = await callApi("mcqs", { count: Number($("practice-count").value) }, signal);
         practiceQuestions = questions;
         $("practice-empty").hidden = true;
         setState("practice-state", null, "");
         renderQuizForm();
+        setState("practice-state", "success", `${aiMock ? "Mock questions loaded" : "Questions generated"} in ${formatGenerationDuration(performance.now() - startedAt)}.`);
       } catch (error) {
         if (error?.name === "AbortError") return;
         $("quiz").hidden = true;
@@ -1571,8 +1797,13 @@ function renderCards(cards) {
   list.hidden = false;
   cards.forEach((card, index) => {
     const details = el("details", "card");
-    details.append(el("summary", null, `Card ${index + 1} · ${card.question}`));
-    details.append(el("p", "card__answer", card.answer));
+    const heading = el("summary");
+    heading.append(document.createTextNode(`Card ${index + 1} · `));
+    appendInlineText(heading, card.question);
+    details.append(heading);
+    const answer = el("div", "card__answer generated-content");
+    appendFormattedContent(answer, card.answer);
+    details.append(answer);
     list.append(details);
   });
 }
@@ -1580,7 +1811,8 @@ function renderCards(cards) {
 function wireFlashcards() {
   $("flashcards-run").addEventListener("click", () => {
     runWithButton($("flashcards-run"), async (signal) => {
-      setState("flashcards-state", "loading", "Gemma 4 is writing flashcards from these notes…");
+      const startedAt = performance.now();
+      setState("flashcards-state", "loading", aiMock ? "Loading canned local flashcards…" : "Gemma 4 is writing flashcards from these notes…");
       try {
         const cards = await callApi(
           "flashcards",
@@ -1588,7 +1820,7 @@ function wireFlashcards() {
           signal,
         );
         $("flashcards-empty").hidden = true;
-        setState("flashcards-state", null, "");
+        setState("flashcards-state", "success", `${aiMock ? "Mock flashcards loaded" : "Flashcards generated"} in ${formatGenerationDuration(performance.now() - startedAt)}.`);
         renderCards(cards);
         $("flashcards-run").textContent = "Build a new set";
       } catch (error) {
